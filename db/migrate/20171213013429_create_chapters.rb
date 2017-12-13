@@ -1,10 +1,11 @@
 class CreateChapters < ActiveRecord::Migration[5.1]
   def change
     create_table :chapters do |t|
-      t.integer :id
+      t.primary_key :id
       t.string :book
       t.integer :ch_num
       t.integer :verse_count
+      t.text :themes, array: true, default: []
 
       t.timestamps
     end
