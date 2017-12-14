@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  id: 
+  read_at: 2017-12-12 23:34:25
+  personal_shadowing: false
+
+two:
+  id: 
+  read_at: 2017-12-12 23:34:25
+  personal_shadowing: false
