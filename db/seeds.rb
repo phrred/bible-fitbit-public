@@ -27,15 +27,6 @@ umd_kairos.save
 
 co2016 = Group.create!(name: "2016", group_type: "peer_class")
 
-sam_chiou = User.create!(
-	email: "samuel.chiou@gpmail.org", 
-	name: "Sam Chiou", 
-	gender: "male",
-	ministry: umd_klesis,
-	peer_class: co2016,
-	lifetime_count: Count.create(count: 1, year: 0)
-)
-
 json = ActiveSupport::JSON.decode(File.read('db/seeds/bible.json'))
 
 json.each do |book|

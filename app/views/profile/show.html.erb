@@ -3,7 +3,10 @@
 Welcome back <%=@user_name%>, you've signed in from <%= @user_email %>
 
 <%= simple_form_for @user, url: profile_path(@user) do |f| %>
-  <%= f.input :name %>
-  <%= f.input :email %>
+  <%= f.input :name, :label => 'Put yo name' %>
+	<%= f.input :ministry, :label => 'Your ministry' %>
+	<%= f.input :peer_class, :label => 'Your peer class' %>
+	<%= f.input :gender, as: :radio_buttons %>
   <%= f.button :submit %>
-<% end %>
+<% end -%>
+
