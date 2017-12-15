@@ -34,8 +34,13 @@ gem 'jbuilder', '~> 2.5'
 # gem 'capistrano-rails', group: :development
 
 gem 'ancestry'
+gem 'simple_form'
+gem 'faraday'
+
 gem "omniauth-google-oauth2", "~> 0.2.1"
 gem "paranoia", "~> 2.2"
+gem 'jquery-rails'
+gem 'select2-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

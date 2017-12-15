@@ -13,27 +13,19 @@ require 'date'
 Group.destroy_all
 User.destroy_all
 Count.destroy_all
+Chapter.destroy_all
 
 
-umd = Group.create!(name: "umd")
-umd_klesis = Group.create!(name: "umd_klesis")
-umd_kairos = Group.create!(name: "umd_kairos")
+umd = Group.create!(name: "umd", group_type: "ministry")
+umd_klesis = Group.create!(name: "umd_klesis", group_type: "ministry")
+umd_kairos = Group.create!(name: "umd_kairos", group_type: "ministry")
 
 umd_klesis.parent = umd
 umd_klesis.save
 umd_kairos.parent = umd
 umd_kairos.save
 
-co2016 = Group.create!(name: "2016")
-
-sam_chiou = User.create!(
-	email: "samuel.chiou@gpmail.org", 
-	name: "Sam Chiou", 
-	gender: "male",
-	ministry: umd_klesis,
-	peer_class: co2016,
-	lifetime_count: Count.create(count: 1, year: 0)
-)
+co2016 = Group.create!(name: "2016", group_type: "peer_class")
 
 json = ActiveSupport::JSON.decode(File.read('db/seeds/bible.json'))
 

@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(version: 20171215051536) do
 
   create_table "groups", force: :cascade do |t|
     t.string "name"
+    t.integer "group_type"
     t.bigint "members_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
