@@ -34,6 +34,9 @@ gem 'jbuilder', '~> 2.5'
 # gem 'capistrano-rails', group: :development
 
 gem 'ancestry'
+gem 'simple_form'
+gem 'faraday'
+
 gem "omniauth-google-oauth2", "~> 0.2.1"
 gem "paranoia", "~> 2.2"
 

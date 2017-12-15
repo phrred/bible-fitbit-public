@@ -1,3 +1,9 @@
 <h1>This is the user profile page. Yay</h1>
 
 Welcome back <%=@user_name%>, you've signed in from <%= @user_email %>
+
+<%= simple_form_for @user, url: profile_path(@user) do |f| %>
+  <%= f.input :name %>
+  <%= f.input :email %>
+  <%= f.button :submit %>
+<% end %>
