@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   get 'signout', to: 'sessions#destroy', as: 'signout'
 	get "profile", to: "profile#show"
   get "log_reading", to: "log_reading#show"
-  get "search", to: "log_reading#search"
+  post "search", to: "log_reading#search"
 
   resources :sessions, only: [:create, :destroy]
   resource :home, only: [:show]
