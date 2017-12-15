@@ -31,7 +31,7 @@ sam_chiou = User.create!(
 	gender: "male",
 	ministry: umd_klesis,
 	peer_class: co2016,
-	lifetime_count: Count.create!(count: 1, year: 0)
+	lifetime_count: Count.create(count: 1, year: 0)
 )
 
 p "Seeded db."
