@@ -36,6 +36,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'ancestry'
 gem 'simple_form'
 gem 'faraday'
+gem "select2-rails"
 
 gem "omniauth-google-oauth2", "~> 0.2.1"
 gem "paranoia", "~> 2.2"
