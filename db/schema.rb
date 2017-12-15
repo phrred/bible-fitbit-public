@@ -52,7 +52,6 @@ ActiveRecord::Schema.define(version: 20171215024429) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["book"], name: "index_chapters_on_book"
-    t.index ["ch_num"], name: "index_chapters_on_ch_num", unique: true
   end
 
   create_table "counts", force: :cascade do |t|
@@ -64,18 +63,14 @@ ActiveRecord::Schema.define(version: 20171215024429) do
 
   create_table "groups", force: :cascade do |t|
     t.string "name"
-    t.bigint "parent_group_id"
-    t.bigint "children_groups_id"
     t.bigint "members_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "ancestry"
     t.index ["ancestry"], name: "index_groups_on_ancestry"
-    t.index ["children_groups_id"], name: "index_groups_on_children_groups_id"
     t.index ["id"], name: "index_groups_on_id"
     t.index ["members_id"], name: "index_groups_on_members_id"
     t.index ["name"], name: "index_groups_on_name", unique: true
-    t.index ["parent_group_id"], name: "index_groups_on_parent_group_id"
   end
 
   create_table "notifications", force: :cascade do |t|
@@ -91,6 +86,7 @@ ActiveRecord::Schema.define(version: 20171215024429) do
     t.string "provider"
     t.string "uid"
     t.string "name"
+    t.string "email"
     t.string "oauth_token"
     t.datetime "oauth_expires_at"
     t.datetime "created_at", null: false
