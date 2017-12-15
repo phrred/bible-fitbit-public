@@ -3,7 +3,7 @@ class CreateChapters < ActiveRecord::Migration[5.1]
     create_table :chapters do |t|
       t.string :book
       t.integer :ch_num
-      t.integer :verse_count
+      t.integer :verse_count, :null => true
       t.text :themes, array: true, default: []
 
       t.timestamps

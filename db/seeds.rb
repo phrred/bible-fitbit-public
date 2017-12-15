@@ -8,6 +8,7 @@
 
 require 'date'
 
+
 # purge all
 Group.destroy_all
 User.destroy_all
@@ -34,4 +35,11 @@ sam_chiou = User.create!(
 	lifetime_count: Count.create(count: 1, year: 0)
 )
 
+json = ActiveSupport::JSON.decode(File.read('db/seeds/bible.json'))
+
+json.each do |book|
+  book['chapters'].each do |chapter|
+  	Chapter.create!(book: book['book'], ch_num: chapter['chapter'], verse_count: chapter['verses'])
+  end
+end
 p "Seeded db."
