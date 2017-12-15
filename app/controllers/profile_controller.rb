@@ -1,9 +1,8 @@
 class ProfileController < ApplicationController
 	def show
-		#auth_hash = request.env["omniauth.auth"]
-		#email = auth_hash["info"]["email"]
-
-		user = User.where(id: 1).take
-		@email = user.email
+		session_email = session[:email]
+		user = User.where(email: session_email).take
+		@user_name = user.name
+		@user_email = user.email
 	end
 end

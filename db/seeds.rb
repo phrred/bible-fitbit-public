@@ -26,7 +26,7 @@ umd_kairos.save
 co2016 = Group.create!(name: "2016")
 
 sam_chiou = User.create!(
-	email: "foo.bar@fake.com", 
+	email: "samuel.chiou@gpmail.org", 
 	name: "Sam Chiou", 
 	gender: "male",
 	ministry: umd_klesis,

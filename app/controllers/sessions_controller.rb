@@ -14,7 +14,8 @@ class SessionsController < ApplicationController
     else
 	    user = OathUser.from_omniauth(auth_hash)
 	    session[:user_id] = user.id
-	    redirect_to root_path
+      session[:email] = user.email
+			redirect_to action: "show", controller: "profile"
 	end
   end
 
