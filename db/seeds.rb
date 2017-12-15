@@ -8,7 +8,12 @@
 
 require 'date'
 
+# purge all
 Group.destroy_all
+User.destroy_all
+Count.destroy_all
+
+
 umd = Group.create!(name: "umd")
 umd_klesis = Group.create!(name: "umd_klesis")
 umd_kairos = Group.create!(name: "umd_kairos")
@@ -29,3 +34,4 @@ sam_chiou = User.create!(
 	lifetime_count: Count.create!(count: 1, year: 0)
 )
 
+p "Seeded db."
