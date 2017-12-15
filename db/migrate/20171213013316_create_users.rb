@@ -3,7 +3,7 @@ class CreateUsers < ActiveRecord::Migration[5.1]
     create_table :users do |t|
       t.string :email
       t.string :name
-      t.string :gender
+      t.boolean :gender
       t.references :ministry
       t.references :peer_class
       t.references :lifetime_count
