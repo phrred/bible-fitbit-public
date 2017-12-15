@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171215024429) do
+ActiveRecord::Schema.define(version: 20171215051536) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,8 +21,10 @@ ActiveRecord::Schema.define(version: 20171215024429) do
     t.bigint "chapters_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
     t.index ["challenge_id"], name: "index_challenge_read_entries_on_challenge_id"
     t.index ["chapters_id"], name: "index_challenge_read_entries_on_chapters_id"
+    t.index ["deleted_at"], name: "index_challenge_read_entries_on_deleted_at"
     t.index ["user_id"], name: "index_challenge_read_entries_on_user_id"
   end
 
@@ -38,6 +40,8 @@ ActiveRecord::Schema.define(version: 20171215024429) do
     t.datetime "end_time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_challenges_on_deleted_at"
     t.index ["receiver_class_id"], name: "index_challenges_on_receiver_class_id"
     t.index ["receiver_ministry_id"], name: "index_challenges_on_receiver_ministry_id"
     t.index ["sender_ministry_id"], name: "index_challenges_on_sender_ministry_id"
@@ -51,7 +55,9 @@ ActiveRecord::Schema.define(version: 20171215024429) do
     t.text "themes", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
     t.index ["book"], name: "index_chapters_on_book"
+    t.index ["deleted_at"], name: "index_chapters_on_deleted_at"
   end
 
   create_table "counts", force: :cascade do |t|
@@ -59,6 +65,8 @@ ActiveRecord::Schema.define(version: 20171215024429) do
     t.integer "year"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_counts_on_deleted_at"
   end
 
   create_table "groups", force: :cascade do |t|
@@ -67,7 +75,9 @@ ActiveRecord::Schema.define(version: 20171215024429) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "ancestry"
+    t.datetime "deleted_at"
     t.index ["ancestry"], name: "index_groups_on_ancestry"
+    t.index ["deleted_at"], name: "index_groups_on_deleted_at"
     t.index ["id"], name: "index_groups_on_id"
     t.index ["members_id"], name: "index_groups_on_members_id"
     t.index ["name"], name: "index_groups_on_name", unique: true
@@ -79,6 +89,8 @@ ActiveRecord::Schema.define(version: 20171215024429) do
     t.json "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_notifications_on_deleted_at"
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
@@ -100,7 +112,9 @@ ActiveRecord::Schema.define(version: 20171215024429) do
     t.bigint "chapter_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
     t.index ["chapter_id"], name: "index_read_events_on_chapter_id"
+    t.index ["deleted_at"], name: "index_read_events_on_deleted_at"
     t.index ["user_id"], name: "index_read_events_on_user_id"
   end
 
@@ -114,7 +128,9 @@ ActiveRecord::Schema.define(version: 20171215024429) do
     t.bigint "annual_counts_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
     t.index ["annual_counts_id"], name: "index_users_on_annual_counts_id"
+    t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["lifetime_count_id"], name: "index_users_on_lifetime_count_id"
     t.index ["ministry_id"], name: "index_users_on_ministry_id"
