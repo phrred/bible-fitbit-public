@@ -1,9 +1,15 @@
 class ProfileController < ApplicationController
 	def show
 		session_email = session[:email]
+
+		@ministry_names = Group.where(group_type: "ministry").pluck(:name)
+		@classes = Group.where(group_type: "peer_class").pluck(:name)
+		
 		@user = User.where(email: session_email).take
 		if @user != nil
-			redirect_to root_path
+			#redirect_to root_path
+			@user_ministry = @user.ministry
+			@user_peer_class = @user.peer_class
 			@user_name = @user.name
 			@user_email = @user.email
 		else
@@ -24,6 +30,6 @@ class ProfileController < ApplicationController
 			ministry: minstry,
 			lifetime_count: new_lifetime
 		)
-		redirect_to action: "show", controller: "profile"
+		#redirect_to action: "show", controller: "profile"
 	end
 end
