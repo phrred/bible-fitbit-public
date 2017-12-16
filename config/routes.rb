@@ -5,13 +5,17 @@ Rails.application.routes.draw do
   get 'auth/failure', to: redirect('/')
   get 'signout', to: 'sessions#destroy', as: 'signout'
 	get "profile", to: "profile#show"
+  post "create_user", to: "profile#create"
   get "log_reading", to: "log_reading#show"
   get "search", to: "log_reading#search"
+  get "challenges", to: "challenges#show"
+  post "create_challenge", to: "challenges#create"
 
   resources :sessions, only: [:create, :destroy]
   resource :home, only: [:show]
 	resources :profile
   resource :log_reading, only: [:show]
+  resources :challenges
 
 
   root to: "home#show"

@@ -7,7 +7,7 @@
 
 Welcome back <%=@user_name%>, you've signed in from <%= @user_email %>
 
-<%= simple_form_for @user, url: profile_path(@user) do |f| %>
+<%= simple_form_for @user, url: create_user_path, :method => :post do |f| %>
   <%= f.input :name, :label => 'Put yo name' %>
 	<%= f.input :peer_class, collection: @classes, :label => 'Peer class', selected: @user_peer_class%>
 	<%= f.input :ministry, collection: @ministry_names, :label => 'Smallest ministry group', selected: @user_ministry%>

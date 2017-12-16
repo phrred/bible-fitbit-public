@@ -10,27 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171215051536) do
+ActiveRecord::Schema.define(version: 20171216013630) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "challenge_read_entries", force: :cascade do |t|
+    t.datetime "read_at", default: [], array: true
     t.bigint "challenge_id"
     t.bigint "user_id"
-    t.bigint "chapters_id"
+    t.bigint "read_events_id"
+    t.integer "chapters", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
     t.index ["challenge_id"], name: "index_challenge_read_entries_on_challenge_id"
-    t.index ["chapters_id"], name: "index_challenge_read_entries_on_chapters_id"
     t.index ["deleted_at"], name: "index_challenge_read_entries_on_deleted_at"
+    t.index ["read_events_id"], name: "index_challenge_read_entries_on_read_events_id"
     t.index ["user_id"], name: "index_challenge_read_entries_on_user_id"
   end
 
   create_table "challenges", force: :cascade do |t|
     t.bigint "sender_ministry_id"
     t.bigint "receiver_ministry_id"
+    t.text "valid_books", default: [], array: true
     t.boolean "sender_gender"
     t.boolean "receiver_gender"
     t.bigint "sender_peer_id"
@@ -67,6 +70,16 @@ ActiveRecord::Schema.define(version: 20171215051536) do
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
     t.index ["deleted_at"], name: "index_counts_on_deleted_at"
+  end
+
+  create_table "crono_jobs", force: :cascade do |t|
+    t.string "job_id", null: false
+    t.text "log"
+    t.datetime "last_performed_at"
+    t.boolean "healthy"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["job_id"], name: "index_crono_jobs_on_job_id", unique: true
   end
 
   create_table "groups", force: :cascade do |t|
@@ -107,7 +120,6 @@ ActiveRecord::Schema.define(version: 20171215051536) do
   end
 
   create_table "read_events", force: :cascade do |t|
-    t.datetime "read_at"
     t.boolean "personal_shadowing"
     t.bigint "user_id"
     t.bigint "chapter_id"
