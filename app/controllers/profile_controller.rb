@@ -37,14 +37,17 @@ class ProfileController < ApplicationController
 				peer_class: input_peer_class
 			)
 		else
+			year = DateTime.now.year
 			new_lifetime = Count.create(year: 0, count: 0)
+			current_annual = Count.create(year: DateTime.now.year, count: 0)
 			@user = User.create!(
 				name: input_name,
 				email: session_email,
 				gender: input_gender,
 				peer_class: input_peer_class,
 				ministry: input_ministry,
-				lifetime_count: new_lifetime
+				lifetime_count: new_lifetime,
+				annual_count: current_annual
 			)
 		end
 
