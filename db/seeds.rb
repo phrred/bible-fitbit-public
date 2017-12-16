@@ -24,7 +24,6 @@ umd_kairos.parent = umd
 umd_kairos.save
 
 co2016 = Group.create!(name: "2016", group_type: "peer_class")
-co2017 = Group.create!(name: "2017", group_type: "peer_class")
 
 test_count = Count.create(year: 0, count: 5)
 test = User.create!(
@@ -36,13 +35,7 @@ test = User.create!(
 )
 test.save
 
-p "test"
-p test
-test.update!(
-	name: "test again",
-	ministry: umd_kairos,
-	peer_class: co2017
-)
+#umd_klesis.ministry_members << test
 
 json = ActiveSupport::JSON.decode(File.read('db/seeds/bible.json'))
 

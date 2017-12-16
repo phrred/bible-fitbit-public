@@ -8,8 +8,8 @@ class ProfileController < ApplicationController
 		@user = User.where(email: session_email).take
 		if @user != nil
 			#redirect_to root_path
-			@user_ministry = @user.ministry
-			@user_peer_class = @user.peer_class
+			@user_ministry = @user.ministry.name
+			@user_peer_class = @user.peer_class.name
 			@user_name = @user.name
 			@user_email = @user.email
 			@user_gender = if @user.gender then "male" else "female" end
@@ -35,15 +35,11 @@ class ProfileController < ApplicationController
 		p input_ministry.name
 
 		if @user != nil
-			original = User.find_by(email: session_email)
-			p "original===="
-			p original
-			p "happening here"
 			# remove from original groups (regardless of change to keep simpler)
-			input_ministry.members.delete(@user)
-			input_peer_class.members.delete(@user)
+			#input_ministry.members_as_ministry.delete(@user)
+			#input_peer_class.members_as_peer_class.delete(@user)
 
-			original.update!(
+			@user.update!(
 				name: input_name,
 				email: session_email,
 				gender: input_gender,
@@ -63,13 +59,8 @@ class ProfileController < ApplicationController
 		end
 
 		# add association for user to be considered a member of the specified ministry and peer class
-		input_ministry.members << @user
-		input_peer_class.members << @user
-
-		p "final ministry"
-		p @user.ministry
-		p "final peer clas"
-		p @user.peer_class
+		input_ministry.ministry_members << @user
+		input_peer_class.class_members << @user
 
 		redirect_to action: "show", controller: "profile"
 	end
