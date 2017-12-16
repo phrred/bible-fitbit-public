@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   get "log_reading", to: "log_reading#show"
   get "search", to: "log_reading#search"
 
+	post "profile", to: "profile#update"
+
   resources :sessions, only: [:create, :destroy]
   resource :home, only: [:show]
 	resources :profile
