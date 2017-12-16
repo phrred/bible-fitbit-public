@@ -2,26 +2,12 @@
     $(document).ready(function() { $("#chapter_book").select2(); });
  </script>  
 
-  <%= simple_form_for(@selected_book, url: search_path, :method => :post) do |f| %>
+<div>
+  <%= simple_form_for(@selected_book, url: search_path, :method => :post, remote: true) do |f| %>
   	<%= f.input :book, collection: @book_names, :include_blank => 'Select Book', label: false, selected: @previous_book %>
   	<%= f.button :submit, 'Select', data: { disable_with: false }%>
-<% end %>
-
-
-<table cellpadding="0" cellspacing="0" id="our_table">
-  <tr>
-    <td>a</td>
-    <td>b</td>
-    <td>c</td>
-  </tr>
-  <tr>
-    <td>d</td>
-    <td>e</td>
-    <td>f</td>
-  </tr>
-  <tr>
-    <td>g</td>
-    <td>h</td>
-    <td>i</td>
-  </tr>
-</table>
+  <% end %>
+</div>
+<div id="log_table" >
+    <%= render partial: 'log_table', locals: {chapters: @chapter_num}  %>
+</div>
