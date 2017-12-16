@@ -38,8 +38,6 @@ test = User.create!(
 )
 test.save
 
-#umd_klesis.ministry_members << test
-
 json = ActiveSupport::JSON.decode(File.read('db/seeds/bible.json'))
 
 json.each do |book|
