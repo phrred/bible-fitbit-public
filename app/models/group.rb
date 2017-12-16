@@ -3,5 +3,5 @@ class Group < ApplicationRecord
 	has_ancestry
 	acts_as_paranoid
 	
-	has_many :members, :class_name => 'User'
+	has_many :members, :class_name => 'User', :foreign_key => 'ministry_id'
 end
