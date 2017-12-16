@@ -29,6 +29,7 @@ test_count = Count.create(year: 0, count: 5)
 test = User.create!(
 	name: "test",
 	email: "test@gpmail.org",
+	gender: true,
 	ministry: umd_klesis,
 	peer_class: co2016,
 	lifetime_count: test_count

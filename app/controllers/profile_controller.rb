@@ -28,17 +28,7 @@ class ProfileController < ApplicationController
 		input_peer_class = Group.where(group_type: "peer_class", name: input[:peer_class]).take
 		input_gender = if input[:gender] == "male" then true else false end
 
-		p "peer_class"
-		p input_peer_class.name
-
-		p "ministry"
-		p input_ministry.name
-
 		if @user != nil
-			# remove from original groups (regardless of change to keep simpler)
-			#input_ministry.members_as_ministry.delete(@user)
-			#input_peer_class.members_as_peer_class.delete(@user)
-
 			@user.update!(
 				name: input_name,
 				email: session_email,
@@ -57,10 +47,6 @@ class ProfileController < ApplicationController
 				lifetime_count: new_lifetime
 			)
 		end
-
-		# add association for user to be considered a member of the specified ministry and peer class
-		input_ministry.ministry_members << @user
-		input_peer_class.class_members << @user
 
 		redirect_to action: "show", controller: "profile"
 	end
