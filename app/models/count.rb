@@ -1,5 +1,7 @@
 class Count < ApplicationRecord
 	acts_as_paranoid
-	
-	belongs_to :user
+
+	def owner
+		User.where("lifetime_count_id = ? OR annual_count_id = ?", self.id, self.id).take
+	end
 end

@@ -85,7 +85,6 @@ ActiveRecord::Schema.define(version: 20171216013630) do
   create_table "groups", force: :cascade do |t|
     t.string "name"
     t.integer "group_type"
-    t.bigint "members_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "ancestry"
@@ -93,7 +92,6 @@ ActiveRecord::Schema.define(version: 20171216013630) do
     t.index ["ancestry"], name: "index_groups_on_ancestry"
     t.index ["deleted_at"], name: "index_groups_on_deleted_at"
     t.index ["id"], name: "index_groups_on_id"
-    t.index ["members_id"], name: "index_groups_on_members_id"
     t.index ["name"], name: "index_groups_on_name", unique: true
   end
 
@@ -138,11 +136,11 @@ ActiveRecord::Schema.define(version: 20171216013630) do
     t.bigint "ministry_id"
     t.bigint "peer_class_id"
     t.bigint "lifetime_count_id"
-    t.bigint "annual_counts_id"
+    t.bigint "annual_count_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
-    t.index ["annual_counts_id"], name: "index_users_on_annual_counts_id"
+    t.index ["annual_count_id"], name: "index_users_on_annual_count_id"
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["lifetime_count_id"], name: "index_users_on_lifetime_count_id"

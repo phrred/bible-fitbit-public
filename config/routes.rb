@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   get "challenges", to: "challenges#show"
   post "create_challenge", to: "challenges#create"
 
+	post "profile", to: "profile#update"
+
   resources :sessions, only: [:create, :destroy]
   resource :home, only: [:show]
 	resources :profile
