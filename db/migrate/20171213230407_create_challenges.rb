@@ -6,7 +6,7 @@ class CreateChallenges < ActiveRecord::Migration[5.1]
       t.boolean :sender_gender, :null => true
       t.boolean :receiver_gender, :null => true
       t.references :sender_peer, :null => true
-      t.references :receiver_class, :null => true
+      t.references :receiver_peer, :null => true
       t.boolean :winner
       t.datetime :start_time
       t.datetime :end_time
