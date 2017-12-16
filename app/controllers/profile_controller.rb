@@ -12,6 +12,7 @@ class ProfileController < ApplicationController
 			@user_peer_class = @user.peer_class
 			@user_name = @user.name
 			@user_email = @user.email
+			@user_gender = if @user.gender then "male" else "female" end
 		else
 			@user = User.new
 		end

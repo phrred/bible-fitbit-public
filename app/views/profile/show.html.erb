@@ -3,15 +3,12 @@
     $(document).ready(function() { $("#user_peer_class").select2(); });
  </script> 
 
-<h1>This is the user profile page. Yay</h1>
-
-Welcome back <%=@user_name%>, you've signed in from <%= @user_email %>
+Currently signed in as <%=@user_name%>.
 
 <%= simple_form_for @user, url: profile_path(@user) do |f| %>
   <%= f.input :name, :label => 'Put yo name' %>
 	<%= f.input :peer_class, collection: @classes, :label => 'Peer class', selected: @user_peer_class%>
 	<%= f.input :ministry, collection: @ministry_names, :label => 'Smallest ministry group', selected: @user_ministry%>
-	<%= f.input :gender, as: :radio_buttons %>
+	<%= f.input :gender, collection: ["male", "female"], selected: @user_gender%>
   <%= f.button :submit,  data: { disable_with: false }%>
 <% end -%>
-
