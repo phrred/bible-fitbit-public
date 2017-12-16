@@ -8,13 +8,11 @@
 
 require 'date'
 
-
 # purge all
-Group.destroy_all
-User.destroy_all
-Count.destroy_all
-Chapter.destroy_all
-
+Group.all.map { |g| g.really_destroy! }
+User.all.map { |u| u.really_destroy! }
+Count.all.map { |c| c.really_destroy! }
+Chapter.all.map { |c| c.really_destroy! }
 
 umd = Group.create!(name: "umd", group_type: "ministry")
 umd_klesis = Group.create!(name: "umd_klesis", group_type: "ministry")
@@ -26,6 +24,19 @@ umd_kairos.parent = umd
 umd_kairos.save
 
 co2016 = Group.create!(name: "2016", group_type: "peer_class")
+
+test_count = Count.create(year: 0, count: 5)
+annual_count = Count.create(year: 2017, count: 10)
+test = User.create!(
+	name: "test",
+	email: "test@gpmail.org",
+	gender: true,
+	ministry: umd_klesis,
+	peer_class: co2016,
+	lifetime_count: test_count,
+	annual_count: annual_count
+)
+test.save
 
 json = ActiveSupport::JSON.decode(File.read('db/seeds/bible.json'))
 

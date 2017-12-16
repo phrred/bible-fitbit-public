@@ -7,8 +7,8 @@ class CreateUsers < ActiveRecord::Migration[5.1]
       t.references :ministry
       t.references :peer_class
       t.references :lifetime_count
-      t.references :annual_counts
-      
+      t.references :annual_count
+
       t.timestamps
     end
     add_index :users, :email, unique: true
