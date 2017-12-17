@@ -4,8 +4,7 @@ class CreateUserShadowings < ActiveRecord::Migration[5.1]
       t.references :user
       t.string :book
       t.integer :shadowing, array: true, default: []
-      t.boolean :is_shadowed
-
+      
       t.timestamps
     end
   end
