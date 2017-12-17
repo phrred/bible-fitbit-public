@@ -120,7 +120,6 @@ ActiveRecord::Schema.define(version: 20171216032747) do
     t.bigint "user_id"
     t.string "book"
     t.integer "shadowing", default: [], array: true
-    t.boolean "is_shadowed"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
