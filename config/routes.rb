@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 	get "profile", to: "profile#show"
   get "log_reading", to: "log_reading#show"
   post "search", to: "log_reading#search"
+	get "dashboard", to: "dashboard#show"
 
 	post "profile", to: "profile#update"
 
