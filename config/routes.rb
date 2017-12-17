@@ -11,8 +11,10 @@ Rails.application.routes.draw do
   post "create_challenge", to: "challenges#create"
   post "search", to: "log_reading#search"
 	get "dashboard", to: "dashboard#show"
-
 	post "profile", to: "profile#update"
+  post "update", to: "log_reading#update"
+  post "resetBook", to: "log_reading#resetBook"
+  post "resetBible", to: "log_reading#resetBible"
 
   resources :sessions, only: [:create, :destroy]
   resource :home, only: [:show]

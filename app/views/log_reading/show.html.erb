@@ -4,10 +4,15 @@
 
 <div>
   <%= simple_form_for(@selected_book, url: search_path, :method => :post, remote: true) do |f| %>
-  	<%= f.input :book, collection: @book_names, :include_blank => 'Select Book', label: false, selected: @previous_book %>
+  	<%= f.input :book, collection: @book_names, :include_blank => 'Select Book', label: false, selected: @previous_book_name, :input_html => {:id => "book_dropdown"} %>
   	<%= f.button :submit, 'Select', data: { disable_with: false }%>
   <% end %>
 </div>
 <div id="log_table" >
+	<% if @chapter_num != nil %>
     <%= render partial: 'log_table', locals: {chapters: @chapter_num}  %>
+    <% end %>
 </div>
+
+<button id="reset_book" type="button">Reset Book Progress</button>
+<button id="reset_bible" type="button">Rest Bible Progress</button>

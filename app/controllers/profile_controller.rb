@@ -15,6 +15,7 @@ class ProfileController < ApplicationController
 			@user_name = @user.name
 			@user_email = @user.email
 			@user_gender = if @user.gender then "male" else "female" end
+			session[:uid] = @user.id
 		else
 			@user = User.new
 		end
@@ -62,6 +63,23 @@ class ProfileController < ApplicationController
 		UserShadowing.create!(new_shadowings)
 
 		end
+
+	def create
+		user =  params[:user]
+		peer_class = Group.where(group_type: "peer_class", name: user[:peer_class]).take
+		ministry = Group.where(group_type: "ministry", name: user[:ministry]).take
+		new_lifetime = Count.create(year: 0, count: 0)
+		@user = User.create!(
+			name: user[:name],
+			email: session[:email],
+			gender: user[:gender],
+			peer_class: peer_class,
+			ministry: ministry,
+			lifetime_count: new_lifetime
+		)
+		ministry.members << @user
+		peer_class.members << @user
+		session[:uid] = @user.id
 
 		redirect_to action: "show", controller: "profile"
 	end

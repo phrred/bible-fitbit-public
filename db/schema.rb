@@ -10,7 +10,6 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171216013630) do
 ActiveRecord::Schema.define(version: 20171216032747) do
 
   # These are extensions that must be enabled in order to support this database
@@ -20,14 +19,12 @@ ActiveRecord::Schema.define(version: 20171216032747) do
     t.datetime "read_at", default: [], array: true
     t.bigint "challenge_id"
     t.bigint "user_id"
-    t.bigint "read_events_id"
     t.integer "chapters", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
     t.index ["challenge_id"], name: "index_challenge_read_entries_on_challenge_id"
     t.index ["deleted_at"], name: "index_challenge_read_entries_on_deleted_at"
-    t.index ["read_events_id"], name: "index_challenge_read_entries_on_read_events_id"
     t.index ["user_id"], name: "index_challenge_read_entries_on_user_id"
   end
 
