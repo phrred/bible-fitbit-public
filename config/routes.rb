@@ -7,9 +7,10 @@ Rails.application.routes.draw do
 	get "profile", to: "profile#show"
   post "create_user", to: "profile#create"
   get "log_reading", to: "log_reading#show"
-  get "search", to: "log_reading#search"
   get "challenges", to: "challenges#show"
   post "create_challenge", to: "challenges#create"
+  post "search", to: "log_reading#search"
+	get "dashboard", to: "dashboard#show"
 
 	post "profile", to: "profile#update"
 

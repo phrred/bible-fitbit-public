@@ -11,6 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20171216013630) do
+ActiveRecord::Schema.define(version: 20171216032747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,7 +38,7 @@ ActiveRecord::Schema.define(version: 20171216013630) do
     t.boolean "sender_gender"
     t.boolean "receiver_gender"
     t.bigint "sender_peer_id"
-    t.bigint "receiver_class_id"
+    t.bigint "receiver_peer_id"
     t.boolean "winner"
     t.datetime "start_time"
     t.datetime "end_time"
@@ -45,8 +46,8 @@ ActiveRecord::Schema.define(version: 20171216013630) do
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
     t.index ["deleted_at"], name: "index_challenges_on_deleted_at"
-    t.index ["receiver_class_id"], name: "index_challenges_on_receiver_class_id"
     t.index ["receiver_ministry_id"], name: "index_challenges_on_receiver_ministry_id"
+    t.index ["receiver_peer_id"], name: "index_challenges_on_receiver_peer_id"
     t.index ["sender_ministry_id"], name: "index_challenges_on_sender_ministry_id"
     t.index ["sender_peer_id"], name: "index_challenges_on_sender_peer_id"
   end
@@ -119,6 +120,7 @@ ActiveRecord::Schema.define(version: 20171216013630) do
 
   create_table "read_events", force: :cascade do |t|
     t.boolean "personal_shadowing"
+    t.datetime "read_at"
     t.bigint "user_id"
     t.bigint "chapter_id"
     t.datetime "created_at", null: false
@@ -127,6 +129,17 @@ ActiveRecord::Schema.define(version: 20171216013630) do
     t.index ["chapter_id"], name: "index_read_events_on_chapter_id"
     t.index ["deleted_at"], name: "index_read_events_on_deleted_at"
     t.index ["user_id"], name: "index_read_events_on_user_id"
+  end
+
+  create_table "user_shadowings", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "book"
+    t.integer "shadowing", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_user_shadowings_on_deleted_at"
+    t.index ["user_id"], name: "index_user_shadowings_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|

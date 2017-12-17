@@ -1,4 +1,6 @@
 class ProfileController < ApplicationController
+	include ApplicationHelper
+
 	def show
 		session_email = session[:email]
 
@@ -49,6 +51,16 @@ class ProfileController < ApplicationController
 				lifetime_count: new_lifetime,
 				annual_count: current_annual
 			)
+
+		new_shadowings = bible_books.pluck(:name).map { |book_name|
+			{
+				user: @user,
+				book: book_name,
+				shadowing: []
+			}
+		}
+		UserShadowing.create!(new_shadowings)
+
 		end
 
 		redirect_to action: "show", controller: "profile"
