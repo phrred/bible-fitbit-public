@@ -1,0 +1,99 @@
+Hello <%= @user.name %>, you have come to this page to issue a challenge.
+Please begin by inputting your side of the challenge.
+<script>
+    $(document).ready(function() { $("#your_ministry").select2(); });
+    $(document).ready(function() { $("#opp_ministry").select2(); });
+    $(document).ready(function() { $("#opp_class").select2(); });
+    $(document).ready(function() { $("#books").select2(); });
+});
+</script>  
+
+<%= simple_form_for @new_challenge, url: create_challenge_path, :method => :post, remote: true do |f| %>
+	<%= f.input :sender_ministry, collection: @grouping_options, :label => 'Choose which ministry group you would like to compete with', value_method: lambda { |obj| return obj[:name] }, selected: @user_ministry, input_html: {id: "your_ministry"}%>
+	<%= f.input :sender_gender, label: "Would you like only " + @gender + " to compete?", as: :radio_buttons %>
+	<%= f.input :sender_peer, label: "Would you like only your peers class of " + @peer_class + " to compete?",  as: :radio_buttons%>
+	<br>
+	Now enter your opponents information.
+	<%= f.input :receiver_ministry, collection: @ministry_names, :label => "Your opponent's ministry group", selected: nil, input_html: {id: "opp_ministry"}%>
+  	<%= f.collection_check_boxes :receiver_gender, [[true, 'Brothers'] ,[false, 'Sisters']], :first, :last %>
+  	<%= f.input :receiver_class, collection: @other_peers, :label => "Would you like to select an opponent's peer class?", :include_blank => 'Optional', selected: nil, input_html: {id: "opp_class"}%>
+
+  	<%= f.input :valid_books, collection: @books, :label => "Would you like to limit which books are allowed?", label_method: lambda {|obj| return obj[:book]},value_method: lambda {|obj| return obj[:book]}, input_html: { multiple: "multiple", id: "books" }, selected: nil%>
+	<br>
+	<br>
+  	<%= f.button :submit,  data: { disable_with: false }%>
+<% end -%>
+
+Current Challenges
+<div id ="current_challenge_table">
+<%= render partial: 'current_challenge_table' %>
+</div>
+
+Old Challenges
+<table>
+	<% @old_challenges.each do |challenge| %>
+		<tr> 
+			<td><%= challenge.sender_ministry.name %></td>
+			<td><%= challenge.receiver_ministry.name %></td>
+			<td><%= challenge.winner ? challenge.sender_ministry.name : challenge.receiver_ministry.name %> Won</td>
+		</tr>
+	<% end %>
+</table>
+
+Rankings
+<canvas id="rankingChart" width="400" height="200"></canvas>
+<script>
+var originalLineDraw = Chart.controllers.line.prototype.draw;
+Chart.helpers.extend(Chart.controllers.line.prototype, {
+  draw: function() {
+    originalLineDraw.apply(this, arguments);
+
+    var chart = this.chart;
+    var ctx = chart.chart.ctx;
+
+    var index = chart.config.data.lineAtIndex;
+    if (index) {
+      var xaxis = chart.scales['x-axis-0'];
+      var yaxis = chart.scales['y-axis-0'];
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(xaxis.getPixelForValue(undefined, index), yaxis.top);
+      ctx.strokeStyle = '#ff0000';
+      ctx.lineTo(xaxis.getPixelForValue(undefined, index), yaxis.bottom);
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+});
+var config = {
+  type: 'line',
+  data: {
+    labels: ...
+    datasets: [
+        ...
+    ],
+    lineAtIndex: 2
+  }
+};
+<% p("HELLO WORLD") %>
+new Chart(document.getElementById("rankingChart").getContext('2d'), {
+  type: 'line',
+  data: {
+    labels: ["1","2","3","4","5","6","7","8"],
+    datasets: [{ 
+        data: [1,2,3,4,5,6,7,8],
+        label: "Percentile Rankings",
+        borderColor: "#3e95cd",
+        fill: false
+      }]
+  },
+  options: {
+    title: {
+      display: true,
+      text: "Percentile Rankings"
+    }
+  },
+  lineAtIndex[1],
+});
+</script>

@@ -14,4 +14,5 @@
 //= require turbolinks
 //= require jquery
 //= require select2
+//= require Chart.min
 //= require_tree .
