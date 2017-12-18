@@ -57,7 +57,7 @@ $(document).on("click", "#reset_bible", function() {
      $.ajax({
      url: "resetBible",
      type: "POST",
-     data: {'book': $('#book_dropdown').val()},
+     data: {},
      dataType: "json",
      success: function(data) {
       location.reload();
@@ -65,16 +65,4 @@ $(document).on("click", "#reset_bible", function() {
      });
    }
 });
-
-// $(document).on("change", "#book_dropdown", function() {
-//   $.ajax({
-//      url: "search",
-//      type: "POST",
-//      data: {'book': $('#book_dropdown').val()},
-//      dataType: "json",
-//      success: function(data) {
-//       //do nothing
-//        }
-//      });
-// });
 
