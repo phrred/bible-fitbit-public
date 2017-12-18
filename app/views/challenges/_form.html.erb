@@ -1,0 +1,51 @@
+<script>
+$(document).on("change", "#your_ministry", function() {
+   //   $.ajax({    
+   //   url: "update_dropdown",    
+   //   type: "POST",    
+   //   data: {"your_ministry" : $('#your_ministry').val()},    
+ 		// 	dataType: "json",    
+ 		// 	success: function(data) { //do nothing
+ 		// 	}    
+ 		// });
+	var your_ministry = document.getElementById("your_ministry").value;
+	var remaining_groups = <%= @all_ministry_names.to_json.html_safe %>;
+	remaining_groups.splice(remaining_groups.indexOf(your_ministry),1);
+	var opp_ministry = document.getElementById("opp_ministry").value;
+	$('#opp_ministry').empty();
+	remaining_groups.forEach(function(name) {
+		$('#opp_ministry').append("<option>".concat(name.toString(),"</option>"));
+	});
+ });
+    $(document).ready(function() { $("#your_ministry").select2(); });
+    $(document).ready(function() { $("#opp_ministry").select2(); });
+    $(document).ready(function() { $("#opp_class").select2(); });
+    $(document).ready(function() { $("#books").select2(); });
+</script>
+<%= simple_form_for @new_challenge, url: create_challenge_path, :method => :post, remote: true, html: {id: "form"} do |f| %>
+	<%= f.input :sender_ministry, collection: @grouping_options, :label => 'Choose which ministry group you would like to compete as', value_method: lambda { |obj| return obj[:name] }, selected: @user_ministry, input_html: {id: "your_ministry"}%>
+	<%= f.input :sender_gender, label: "Would you like only " + @gender + " to compete?", as: :radio_buttons %>
+	<%= f.input :sender_peer, label: "Would you like only your peers class of " + @peer_class + " to compete?",  as: :radio_buttons%>
+	<br>
+	Now enter your opponents information.
+	<%= f.input :receiver_ministry, collection: @ministry_names, :label => "Your opponent's ministry group", selected: nil, input_html: {id: "opp_ministry"}%>
+  	<%= f.collection_check_boxes :receiver_gender, [[true, 'Brothers'] ,[false, 'Sisters']], :first, :last %>
+  	<%= f.input :receiver_class, collection: @other_peers, :label => "Would you like to select an opponent's peer class?", :include_blank => 'Optional', selected: nil, input_html: {id: "opp_class"}%>
+
+  	<%= f.input :valid_books, collection: @books, :label => "Would you like to limit which books are allowed?", label_method: lambda {|obj| return obj[:book]},value_method: lambda {|obj| return obj[:book]}, input_html: { multiple: "multiple", id: "books" }, selected: nil%>
+	<br>
+	<br>
+  	<%= f.button :submit,  data: { disable_with: false }%>
+<% end %>
+<script>
+	<% p(@ministry_names) %>
+	function my_function() {
+	<% p("RUNNING") %>
+	$('#opp_ministry').empty();
+	<% @ministry_names.each do |name| %>
+		<% p(name) %>
+		$('#opp_ministry').append("<option>" + "<%= name.to_s%>" + "</option>");
+	<% end %>
+	}
+	my_function();
+</script>

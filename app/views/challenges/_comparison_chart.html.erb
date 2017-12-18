@@ -1,0 +1,29 @@
+
+<canvas id="comparisonChart" width="400" height="200"></canvas>
+
+<script>
+var comparisonChart = new Chart(document.getElementById("comparisonChart"), {
+    type: 'bar',
+    data: {
+      labels: [<%= @group1.to_json.html_safe %>, <%= @group2.to_json.html_safe %>],
+      datasets: [
+        {
+          label: "0%",
+          backgroundColor: "#191970",
+          data: [<%= @group1_sum.to_json.html_safe %>]
+        }, {
+          label: "10%",
+          backgroundColor: "#191970",
+          data: [<%= @group2_sum.to_json.html_safe %>]
+        }
+      ]
+    },
+    options: {
+      legend: { display: false },
+      title: {
+        display: true,
+        text: <%= @title_text.to_json.html_safe%>
+      }
+    }
+});
+</script>
