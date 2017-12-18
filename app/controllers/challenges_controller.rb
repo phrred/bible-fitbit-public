@@ -1,23 +1,45 @@
 class ChallengesController < ApplicationController
+	skip_before_action :verify_authenticity_token  
 	def show
+		@group1 = Group.take(1)[0].name
+		@group2 = @group1
+		@title_text = @group1 + " vs. " + @group2
+		@comparison_sums = User.left_outer_joins(:annual_count).group(:ministry).sum("count")
+	  	@comparison_data = {}
+
 	  	@books = Chapter.order("created_at DESC").all.uniq{ |c| c.book }.reverse
 		session_email = session[:email]
 		@user = User.where(email: session_email).take
 		@peer_class = @user.peer_class.name
 		@other_peers = Group.where(group_type: "peer_class").order(:name).pluck(:name)
-		@other_peers.delete(@user.peer_class.name)
 		@new_challenge = Challenge.new()
 
+	  	@outstanding_challenges = ChallengeReadEntry.where(user: @user, accepted: nil)
+	  	p(@outstanding_challenges)
+
+
 		@ministry_names = Group.where(group_type: "ministry").order(:name).pluck(:name)
+		@all_ministry_names = Group.where(group_type: "ministry").order(:name).pluck(:name)
+		@comparison_sums.keys.each do |group|
+			@comparison_data[group.name] = @comparison_sums[group]
+		end
+		@all_ministry_names.each do |name|
+			if !@comparison_data.key?(name)
+				@comparison_data[name] = 0
+			end
+		end
 
 		@gender = @user.gender ? "brothers" : "sisters"
 		selected_ministry = @user.ministry
-		@grouping_options = []
+		@grouping_options = [selected_ministry]
+		selected_ministry.ancestors.each do |ministry|
+			@ministry_names.delete(ministry.name)
+			@grouping_options << ministry
+		end
 
-		while selected_ministry != nil
-			@ministry_names.delete(selected_ministry.name)
-			@grouping_options << selected_ministry
-			selected_ministry = selected_ministry.parent
+		@ministry_names.delete(selected_ministry.name)
+		selected_ministry.descendants.each do |ministry|
+			@ministry_names.delete(ministry.name)
 		end
 
 		@old_challenges = []
@@ -75,9 +97,9 @@ class ChallengesController < ApplicationController
 	end
 
 	def generate_your_percentile()
-		emails = User.all.order(:lifetime_count_id).pluck(:email)
-		your_rank = emails.index(@user.email)
-		@your_ranking = your_rank.to_f/emails.size()
+		count_ids = Count.where(year: 0).order(:count).pluck(:id)
+		your_rank = count_ids.index(@user.lifetime_count.id)
+		@your_ranking = your_rank*100/count_ids.size()
 	end
 
 	def initialize_chart_data(challenge)
@@ -136,6 +158,12 @@ class ChallengesController < ApplicationController
 		end
 	end
 
+	def create_challenge_read_entry(user, challenge)
+		ChallengeReadEntry.create!(
+			challenge: challenge,
+			user: user)
+	end
+
 	def create
 		session_email = session[:email]
 		@user = User.where(email: session_email).take
@@ -159,9 +187,71 @@ class ChallengesController < ApplicationController
 			valid_books: valid_books,
 			start_time: Date.today.beginning_of_week
 		)
+		sender_recipients = []
+		sender_ministry.descendants.each do |ministry|
+			User.where(ministry: ministry).each do |user|
+				sender_recipients << user
+			end
+		end
+		unless sender_gender.nil?
+			sender_recipients = sender_recipients.select { |user| user.gender == sender_gender }
+		end
+		unless sender_class.nil?
+			sender_recipients = sender_recipients.select { |user| user.peer_class == sender_class }
+		end
+
+		sender_recipients.each do |user|
+			create_challenge_read_entry(user, new_challenge)
+		end
+
+		receiver_recipients = []
+		receiver_ministry.descendants.each do |ministry|
+			receiver_recipients << User.where(ministry: ministry).take
+		end
+		unless receiver_gender.nil?
+			receiver_recipients = receiver_recipients.select { |user| user.gender == receiver_gender }
+		end
+		unless receiver_class.nil?
+			receiver_recipients = receiver_recipients.select { |user| user.peer_class == receiver_class }
+		end
+
+		receiver_recipients.each do |user|
+			create_challenge_read_entry(user, new_challenge)
+		end
 		show()
 		respond_to do |format|
 			format.js
+		end
+	end
+
+	def accept_challenge
+		#stub
+	end
+
+	def update_dropdown
+		@ministry_names = Group.where(group_type: "ministry").order(:name).pluck(:name)
+		@new_challenge = Challenge.new()
+		session_email = session[:email]
+		@user = User.where(email: session_email).take
+		@gender = @user.gender ? "brothers" : "sisters"
+		@peer_class = @user.peer_class.name
+		@other_peers = Group.where(group_type: "peer_class").order(:name).pluck(:name)
+
+		selected_ministry = Group.where(group_type: "ministry", name: params[:your_ministry]).take
+
+		@grouping_options = [selected_ministry]
+		selected_ministry.ancestors.each do |ministry|
+			@ministry_names.delete(ministry.name)
+			@grouping_options << ministry
+		end
+
+		@ministry_names.delete(selected_ministry.name)
+		selected_ministry.descendants.each do |ministry|
+			@ministry_names.delete(ministry.name)
+		end
+		@ministry_names << selected_ministry.name
+		respond_to do |format|
+			format.js {render :js => "my_function();"}
 		end
 	end
 
@@ -177,5 +267,85 @@ class ChallengesController < ApplicationController
 			user_group = user_group.parent
 		end
 		return false
+	end
+
+	def comparison_values
+		# chal = Challenge.take(1)[0]
+		# session_email = session[:email]
+		# @user = User.where(email: session_email).take
+		# p(@user)
+		# p(chal)
+		# ChallengeReadEntry.create!(
+		# 	user: @user,
+		# 	challenge: chal)
+		p(1)
+		p(params)
+		other_params = params[:challenge]
+		p(2)
+		p(other_params)
+		group1_model = Group.where(name: other_params[:group1])[0]
+		group2_model = Group.where(name: other_params[:group2])[0]
+		p(group1_model)
+		p(group2_model)
+		@group1 = group1_model.name
+		@group2 = group2_model.name
+		p("SAM")
+		@all_ministry_names = Group.where(group_type: "ministry").order(:name).pluck(:name)
+		temp_sums = User.left_outer_joins(:annual_count).group(:ministry).sum("count")
+		count_sums = {}
+		temp_sums.keys.each do |key|
+			count_sums[key.name] = temp_sums[key]
+		end
+		@all_ministry_names.each do |name|
+			if !count_sums.key?(name)
+				count_sums[name] = 0
+			end
+		end
+		@group1_sum = count_sums[@group1]
+		group1_model.descendants.each do |group|
+			@group1_sum += count_sums[group.name]
+		end
+		group1_model.ancestors.each do |group|
+			@group1_sum += count_sums[group.name]
+		end
+		@group2_sum = count_sums[@group2]
+		group2_model.descendants.each do |group|
+			@group2_sum += count_sums[group.name]
+		end
+		group2_model.ancestors.each do |group|
+			@group2_sum += count_sums[group.name]
+		end
+		@title_text = @group1 + " vs. " + @group2
+		p("HERRO FRED")
+		respond_to do |format|
+			format.js
+		end
+	end
+
+	def accept_challenge
+		p("accept")
+		challenge_request = ChallengeReadEntry.where(id: params[:challenge_request])
+		challenge_request.update(
+			accepted: true)
+		session_email = session[:email]
+		@user = User.where(email: session_email).take
+	  	@outstanding_challenges = ChallengeReadEntry.where(user: @user, accepted: nil)
+
+		respond_to do |format|
+			format.js
+		end
+	end
+	def reject_challenge
+		p("reject")
+		challenge_request = ChallengeReadEntry.where(id: params[:challenge_request])
+		challenge_request.update(
+			accepted: false)
+		session_email = session[:email]
+		@user = User.where(email: session_email).take
+	  	@outstanding_challenges = ChallengeReadEntry.where(user: @user, accepted: nil)
+
+		respond_to do |format|
+			format.js
+		end
 	end
 end

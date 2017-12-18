@@ -4,5 +4,6 @@ class ApplicationController < ActionController::Base
 
   def current_user
     @current_user ||= OathUser.find(session[:user_id]) if session[:user_id]
+    @pending_challenge_requests ||= ChallengeReadEntry.where(user: @current_user, accepted: nil)
   end
 end

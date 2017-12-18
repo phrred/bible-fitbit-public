@@ -10,7 +10,10 @@ Rails.application.routes.draw do
   get "search", to: "log_reading#search"
   get "challenges", to: "challenges#show"
   post "create_challenge", to: "challenges#create"
-
+  post "update_dropdown", to: "challenges#update_dropdown"
+  post "comparison_values", to: "challenges#comparison_values"
+  post "accept_challenge", to: "challenges#accept_challenge"
+  post "reject_challenge", to: "challenges#reject_challenge"
 	post "profile", to: "profile#update"
 
   resources :sessions, only: [:create, :destroy]

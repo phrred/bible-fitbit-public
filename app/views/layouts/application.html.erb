@@ -6,15 +6,47 @@
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+<style>
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333333;
+}
+
+li {
+    float: right;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: #111111;
+}
+</style>
   </head>
 
   <body>
-  	<div>
-      <% if current_user %>
-        Signed in as <strong><%= current_user.name %></strong>!
-        <%= link_to "Sign out", signout_path, id: "sign_out" %>
-      <% end %>
-    </div>
+      <header>
+        <ul class="nav navbar-nav">
+          <li><%=link_to'Log Out', signout_path%></li>
+          <li><%=link_to "Profile", profile_path %></li>
+          <% if @pending_challenge_requests.nil? %>
+          <li><%=link_to "Challenges", challenges_path%></li>
+          <% else %>
+          <li><%=link_to "Challenges", challenges_path + @pending_challenge_requests%></li> 
+          <% end %>
+          <li><%=link_to "Log Reading", log_reading_path%></li>
+          <li class="active"><a href="#">Dashboard</a></li>
+        </ul>
+  </header>
     <div>
 		<div class="container">
       	<% flash.each do |key, value| %>
