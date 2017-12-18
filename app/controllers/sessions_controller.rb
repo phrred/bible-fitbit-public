@@ -1,10 +1,11 @@
 class SessionsController < ApplicationController
+	skip_before_action :verify_user, only: [:create]
   def create
   	auth_hash = request.env['omniauth.auth']
 
     hd = nil
-    if auth_hash.extra && auth_hash.extra.id_info
-      hd = auth_hash.extra.id_info.hd
+    if auth_hash.extra && auth_hash.extra.raw_info
+      hd = auth_hash.extra.raw_info.hd
     end
 
     if hd != "gpmail.org"
@@ -15,8 +16,8 @@ class SessionsController < ApplicationController
 	    user = OathUser.from_omniauth(auth_hash)
 	    session[:user_id] = user.id
       session[:email] = user.email
-			redirect_to action: "show", controller: "profile"
-	end
+			redirect_to action: "show", controller: "home"
+		end
   end
 
   def destroy
