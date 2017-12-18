@@ -45,8 +45,10 @@ class ChallengesController < ApplicationController
 		@old_challenges = []
 		monday = Date.today.beginning_of_week
 		@grouping_options.each do |ministry|
-			Challenge.where("(sender_ministry_id = ? OR receiver_ministry_id = ?) AND winner IS NOT NULL", ministry, ministry).each do |challenge|
-					@old_challenges << challenge
+			ChallengeReadEntry.where(user: @user, accepted: true).each do |challenge_read_entry|
+					Challenge.where("id = ? AND winner IS NOT NULL", challenge_read_entry.challenge).each do |challenge|
+						@old_challenges << challenge
+					end
 			end
 		end
 		# test = Chapter.find(1,2,3).pluck(:id)
@@ -61,7 +63,6 @@ class ChallengesController < ApplicationController
 		@chart_challenge = Challenge.take(1)[0]
 		p("WHAT")
 		# p(@chart_challenge.sender_ministry.name)
-		@current_challenges = []
 		@sender_scores = []
 		@receiver_scores = []
 		@chart_data = {}
@@ -112,50 +113,50 @@ class ChallengesController < ApplicationController
 	end
 
 	def grab_current_challenges()
+		@current_challenges = []
 		monday = Date.today.beginning_of_week
-		@grouping_options.each do |ministry|
-			Challenge.where("(sender_ministry_id = ? OR receiver_ministry_id = ?) AND winner IS NULL", ministry, ministry).each do |challenge|
-				initialize_chart_data(challenge)
-				p("HERE")
-				p(@chart_data)
-				sender_group = challenge.sender_ministry
-				p(sender_group)
-				sender_number = 0
-				receiver_number = 0
-				sender_sum = 0
-				receiver_sum = 0
-				entries = ChallengeReadEntry.where(challenge: challenge)
-				if entries != nil
-					entries.each do |entry|
-						if is_user_in_group(@user, sender_group)
-							entry[:read_at].each do |date|
-								@chart_data[challenge][date][0] += 1
-							end
-							sender_number = sender_number + 1
-							sender_sum = sender_sum + entry[:chapters].size
-						else
-							entry[:read_at].each do |date|
-								@chart_data[challenge][date][1] += 1
-							end
-							receiver_number = reciever_number + 1
-							receiver_sum = receiver_sum + entry[:chapters].size
+		ChallengeReadEntry.where(user: @user, accepted: true).each do |challenge_read_entry|
+			challenge = challenge_read_entry.challenge
+			initialize_chart_data(challenge)
+			sender_group = challenge.sender_ministry
+			sender_number = 0
+			receiver_number = 0
+			sender_sum = 0
+			receiver_sum = 0
+			entries = ChallengeReadEntry.where(challenge: challenge)
+			if entries != nil
+				entries.each do |entry|
+					if is_user_in_group(@user, sender_group)
+						entry[:read_at].each do |date|
+							date = date.strftime("%B %d, %Y")
+							@chart_data[challenge][date][0] += 1
 						end
+						sender_number = sender_number + 1
+						sender_sum = sender_sum + entry[:chapters].size
+					else
+						entry[:read_at].each do |date|
+							date = date.strftime("%B %d, %Y")
+							@chart_data[challenge][date][1] += 1
+						end
+						receiver_number = reciever_number + 1
+						receiver_sum = receiver_sum + entry[:chapters].size
 					end
 				end
-				sender_number = sender_number != 0 ? sender_number.to_f : 1.0
-				receiver_number = receiver_number != 0 ? receiver_number.to_f : 1.0
-				@chart_data[challenge].each do |key, array|
-					if !key.friday?
-						@chart_data[challenge][key.tomorrow][0] += array[0]
-						@chart_data[challenge][key.tomorrow][1] += array[1]
-					end
-					@array = [array[0]/sender_number, array[1]/receiver_number]
-				end
-				@sender_scores << sender_sum/sender_number
-				@receiver_scores << receiver_sum/receiver_number
-				@current_challenges << challenge
 			end
+			sender_number = sender_number != 0 ? sender_number.to_f : 1.0
+			receiver_number = receiver_number != 0 ? receiver_number.to_f : 1.0
+			@chart_data[challenge].each do |key, array|
+				if !key.friday?
+					@chart_data[challenge][key.tomorrow][0] += array[0]
+					@chart_data[challenge][key.tomorrow][1] += array[1]
+				end
+				@array = [array[0]/sender_number, array[1]/receiver_number]
+			end
+			@sender_scores << sender_sum/sender_number
+			@receiver_scores << receiver_sum/receiver_number
+			@current_challenges << challenge
 		end
+		p(@current_challenges)
 	end
 
 	def create_challenge_read_entry(user, challenge)
@@ -172,7 +173,7 @@ class ChallengesController < ApplicationController
 		sender_class = challenge[:sender_peer] ? @user.peer_class : nil
 		sender_gender = challenge[:sender_gender] != "" ? @user.gender : nil
 		sender_ministry = Group.where(group_type: "ministry", name: challenge[:sender_ministry]).take
-		receiver_class = Group.where(group_type: "peer_class", name: challenge[:receiver_class]).take
+		receiver_class = Group.where(group_type: "peer_class", name: challenge[:receiver_peer]).take
 		receiver_ministry = Group.where(group_type: "ministry", name: challenge[:receiver_ministry]).take
 		receiver_gender = challenge[:receiver_gender].size == 2 ? challenge[:receiver_gender][1] : nil
 		valid_books = challenge[:valid_books].size > 0 ? challenge[:valid_books] : nil
@@ -183,11 +184,14 @@ class ChallengesController < ApplicationController
 			sender_gender: sender_gender,
 			receiver_gender: receiver_gender,
 			sender_peer: sender_class,
-			receiver_class: receiver_class,
+			receiver_peer_id: receiver_class,
 			valid_books: valid_books,
 			start_time: Date.today.beginning_of_week
 		)
 		sender_recipients = []
+		User.where(ministry: sender_ministry).each do |user|
+			sender_recipients << user
+		end
 		sender_ministry.descendants.each do |ministry|
 			User.where(ministry: ministry).each do |user|
 				sender_recipients << user
@@ -199,7 +203,8 @@ class ChallengesController < ApplicationController
 		unless sender_class.nil?
 			sender_recipients = sender_recipients.select { |user| user.peer_class == sender_class }
 		end
-
+		p("WHERE ARE THEY")
+		p(sender_recipients)
 		sender_recipients.each do |user|
 			create_challenge_read_entry(user, new_challenge)
 		end
@@ -218,6 +223,9 @@ class ChallengesController < ApplicationController
 		receiver_recipients.each do |user|
 			create_challenge_read_entry(user, new_challenge)
 		end
+		user_challenge_read_entry = ChallengeReadEntry.where(challenge: new_challenge, user: @user)[0]
+		p(user_challenge_read_entry)
+		user_challenge_read_entry.update(accepted: true)
 		show()
 		respond_to do |format|
 			format.js
