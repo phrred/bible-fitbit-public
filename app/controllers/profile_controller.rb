@@ -63,6 +63,7 @@ class ProfileController < ApplicationController
 		UserShadowing.create!(new_shadowings)
 
 		end
+	end
 
 	def create
 		user =  params[:user]

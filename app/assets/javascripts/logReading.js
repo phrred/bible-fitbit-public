@@ -21,55 +21,49 @@ $(function () {
 });
 
 $(document).on("click", "#save_reading", function() {
-   var chapters_highlighted = []
-   $('.record').each(function() {
-    chapters_highlighted.push($(this).html().trim())
-   })
-   $.ajax({
-   url: "update",
-   type: "POST",
-   data: {"date" : $('#date_input').val(), 'record': chapters_highlighted, 'book': $('#book_dropdown').val()},
-   dataType: "json",
-   success: function(data) {
-    location.reload();
-     }
-   });
-});
-
-$(document).on("click", "#save_reading", function() {
-   $.ajax({
-   url: "update",
-   type: "POST",
-   data: {"date" : $('#date_input').val(), 'record': chapters_highlighted, 'book': $('#book_dropdown').val()},
-   dataType: "json",
-   success: function(data) {
-    location.reload();
-     }
-   });
+  if (confirm('Are you sure ?')) {
+     var chapters_highlighted = []
+     $('.record').each(function() {
+      chapters_highlighted.push($(this).html().trim())
+     })
+     $.ajax({
+     url: "update",
+     type: "POST",
+     data: {"date" : $('#date_input').val(), 'record': chapters_highlighted, 'book': $('#book_dropdown').val()},
+     dataType: "json",
+     success: function(data) {
+      location.reload();
+       }
+     });
+   }
 });
 
 $(document).on("click", "#reset_book", function() {
-   $.ajax({
-   url: "resetBook",
-   type: "POST",
-   data: {'book': $('#book_dropdown').val()},
-   dataType: "json",
-   success: function(data) {
-    location.reload();
-     }
-   });
+   if (confirm('Are you sure ?')) {
+    $.ajax({
+     url: "resetBook",
+     type: "POST",
+     data: {'book': $('#book_dropdown').val()},
+     dataType: "json",
+     success: function(data) {
+      location.reload();
+       }
+     });
+   }
 });
 
 $(document).on("click", "#reset_bible", function() {
-   $.ajax({
-   url: "resetBible",
-   type: "POST",
-   data: {'book': $('#book_dropdown').val()},
-   dataType: "json",
-   success: function(data) {
-    location.reload();
-     }
-   });
+   if (confirm('Are you sure ?')) {
+     $.ajax({
+     url: "resetBible",
+     type: "POST",
+     data: {'book': $('#book_dropdown').val()},
+     dataType: "json",
+     success: function(data) {
+      location.reload();
+       }
+     });
+   }
 });
 
 // $(document).on("change", "#book_dropdown", function() {

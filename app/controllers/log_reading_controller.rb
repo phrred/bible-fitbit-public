@@ -44,14 +44,18 @@ class LogReadingController < ApplicationController
     date = params[:date]
     book = params[:book]
     user = User.find(session[:uid])
-    challenges = ChallengeReadEntry.join(:challenges).where(valid_books:)
+    readEntry = ChallengeReadEntry.where(user: user)
+    if readEntry != nil
+      challenges = readEntry.map { |entry| entry.challenge.valid_books.include?(book) }
+    end
     chapters.each { |chapter_num|  
       chapter = Chapter.find_by(book: book, ch_num: chapter_num)
       if(ReadEvent.where(read_at: date, user: user, chapter: chapter).take == nil)
         ReadEvent.create!(read_at: date, user: user , chapter: chapter)
         if challenges != nil
           challenges.each { |challenge_entry| 
-            valid_books = challenge_entry.challenge.valid_books
+            challenge_entry.chapters << chapter.id
+            challenge_entry.save
           }
         end
         user_shadowing = UserShadowing.find_by(user: user, book: chapter.book)
