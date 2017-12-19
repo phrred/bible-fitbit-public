@@ -7,7 +7,7 @@
 
 
 <%= simple_form_for(@user, url: profile_path, :method => :update) do |f| %>
-  <%= f.input :name, :label => 'Put yo name' %>
+  <%= f.input :name, :label => 'Put yo name', input_html: {value: @user_name} %>
 	<%= f.input :peer_class, collection: @classes, :label => 'Peer class'%>
 	<%= f.input :ministry, collection: @ministry_names, :label => 'Smallest ministry group'%>
 	<%= f.input :gender, collection: ["male", "female"]%>
