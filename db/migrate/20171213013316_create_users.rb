@@ -7,7 +7,7 @@ class CreateUsers < ActiveRecord::Migration[5.1]
       t.references :ministry
       t.references :peer_class
       t.references :lifetime_count
-      t.references :annual_count
+      t.integer :annual_counts, array: true, default: []
 
       t.timestamps
     end

@@ -4,13 +4,13 @@ $(function () {
   $("#our_table td")
     .mousedown(function () {
       isMouseDown = true;
-      $(this).toggleClass("highlighted");
-      isHighlighted = $(this).hasClass("highlighted");
+      $(this).toggleClass("record");
+      isHighlighted = $(this).hasClass("record");
       return false; // prevent text selection
     })
     .mouseover(function () {
       if (isMouseDown) {
-        $(this).toggleClass("highlighted", isHighlighted);
+        $(this).toggleClass("record", isHighlighted);
       }
     });
 
@@ -18,9 +18,6 @@ $(function () {
     .mouseup(function () {
       isMouseDown = false;
     });
-<<<<<<< Updated upstream
-});
-=======
 });
 
 $(document).on("click", "#save_reading", function() {
@@ -69,16 +66,3 @@ $(document).on("click", "#reset_bible", function() {
    }
 });
 
-// $(document).on("change", "#book_dropdown", function() {
-//   $.ajax({
-//      url: "search",
-//      type: "POST",
-//      data: {'book': $('#book_dropdown').val()},
-//      dataType: "json",
-//      success: function(data) {
-//       //do nothing
-//        }
-//      });
-// });
-
->>>>>>> Stashed changes

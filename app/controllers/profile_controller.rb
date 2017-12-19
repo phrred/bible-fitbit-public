@@ -22,6 +22,7 @@ class ProfileController < ApplicationController
 			@user_name = @user.name
 			@user_email = @user.email
 			@user_gender = if @user.gender then "male" else "female" end
+			session[:uid] = @user.id
 		else
 			@user = User.new
 		end
@@ -52,16 +53,17 @@ class ProfileController < ApplicationController
       p "creating new user"
 			year = DateTime.now.year
 			new_lifetime = Count.create(year: 0, count: 0)
-			current_annual = Count.create(year: DateTime.now.year, count: 0)
-			@user = User.create!(
+			current_annual = Count.create!(year: Time.now.year, count: 0)
+			@user = User.create(
 				name: input_name,
 				email: session_email,
 				gender: input_gender,
 				peer_class: input_peer_class,
 				ministry: input_ministry,
 				lifetime_count: new_lifetime,
-				annual_count: current_annual
 			)
+			@user.annual_counts << current_annual.id
+			@user.save
       session[:user_id] = @user.id
 
       new_shadowings = bible_books.pluck(:name).map { |book_name|
@@ -74,6 +76,24 @@ class ProfileController < ApplicationController
       UserShadowing.create!(new_shadowings)
       redirect_to action: "show", controller: "home"
 		end
+	end
+
+	def create
+		user =  params[:user]
+		peer_class = Group.where(group_type: "peer_class", name: user[:peer_class]).take
+		ministry = Group.where(group_type: "ministry", name: user[:ministry]).take
+		new_lifetime = Count.create(year: 0, count: 0)
+		@user = User.create!(
+			name: user[:name],
+			email: session[:email],
+			gender: user[:gender],
+			peer_class: peer_class,
+			ministry: ministry,
+			lifetime_count: new_lifetime
+		)
+		ministry.members << @user
+		peer_class.members << @user
+		session[:uid] = @user.id
 
 	end
 end

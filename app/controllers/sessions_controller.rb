@@ -9,25 +9,19 @@ class SessionsController < ApplicationController
     end
 
     if hd != "gpmail.org"
-      p "not a gpmail gmail"
       # Hosted domain doesn't match
       flash[:error] = 'Only gpmail emails allowed'
       redirect_to action: "show", controller: "login"
     else
-      p "yes it is a gpmail"
 	    oath_user = OathUser.from_omniauth(auth_hash)
 	    session[:oath_user_id] = oath_user.id
-      p "setting the session email"
       session[:user_email] = oath_user.email
-      p session[:user_email] 
 
       user = User.where(email: oath_user.email).take
       if user
-        p "there is an existing user"
         session[:user_id] = user.id
         redirect_to action: "show", controller: "home"
       else
-        p "there is no existing user"
         redirect_to action: "new", controller: "profile"
       end
 		end
