@@ -52,7 +52,7 @@ class ProfileController < ApplicationController
 				annual_count: current_annual
 			)
 
-		new_shadowings = bible_books.pluck(:name).map { |book_name|
+		new_shadowings = bible_books.map { |book_name|
 			{
 				user: @user,
 				book: book_name,

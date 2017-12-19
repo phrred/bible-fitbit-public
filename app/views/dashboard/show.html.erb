@@ -7,3 +7,34 @@
 <% else %>
 	Percentage of <%=@last_book_read%> read: <%=@percentage_of_last_book%>
 <% end %>
+
+<canvas id="bible_percent" width="800" height="450"></canvas>
+<script>
+new Chart(document.getElementById("bible_percent"), {
+    type: 'doughnut',
+    data: {
+      labels: ["Read", "Not Read"],
+      datasets: [
+        {
+          label: "Percentages",
+          backgroundColor: ["#3e95cd", "#8e5ea2"],
+          data: [<%= @percentage_of_bible.to_json.html_safe%>,<%=(100-@percentage_of_bible).to_json.html_safe%>]
+        }
+      ]
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'What percent of the bible have you read?'
+      }
+    }
+});
+</script>
+
+<div id = "book_percentages">
+	<%= render partial: 'book_percentages' %>
+</div>
+
+<div id = "book_repetitions">
+	<%= render partial: "book_repetitions" %>
+</div>

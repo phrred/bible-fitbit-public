@@ -1,0 +1,53 @@
+<select id = "book_dropdown2">
+  <%= bible_books.each do |book| %>
+  <option><%= book %></option>
+  <% end %>
+</select>
+<canvas id="test_value" width="800" height="450"></canvas>
+<script>
+	var initial_labels = <%= Array(1..50).to_json.html_safe %>;
+	initial_labels.unshift("Genesis");
+	var initial_data = <%= @book_repetitions["Genesis"].to_json.html_safe %>;
+	var book_repetitions_chart = new Chart(document.getElementById("test_value"), {
+	    type: 'horizontalBar',
+	    data: {
+	      labels: initial_labels,
+	      datasets: [
+	        {
+	          label: "Number of times read",
+	          backgroundColor: ["#45B39D"],
+	          data: initial_data
+	        }
+	      ]
+	    },
+	    options: {
+	      legend: { display: false },
+	      title: {
+	        display: true,
+	        text: 'How many times have you read each chapter of Genesis'
+	      },
+	      scales: {
+			xAxes: [{
+		      id: 'x-axis-0',
+		      ticks: {
+		        beginAtZero:true,
+		        suggestedMax: <%=@x_axis_max%>
+	    		},
+	    }]
+	    }}
+	});
+	var book_repetitions = <%= @book_repetitions.to_json.html_safe %>;
+	$(document).on("change", "#book_dropdown2", function() {
+	  var dropdown = document.getElementById("book_dropdown2");
+	  var chosen_book = dropdown.options[dropdown.selectedIndex].text;
+	  book_repetitions_chart.data.datasets[0].data = book_repetitions[chosen_book];
+	  book_repetitions_chart.options.title.text = "How many times have you read each chapter of " + chosen_book;
+	  var labels = new Array(book_repetitions[chosen_book].length);
+	  labels[0] = chosen_book;
+	  for (i = 1; i < labels.length; i++) { 
+	    labels[i] = "Chapter" + i;
+	  }
+	  book_repetitions_chart.data.labels = labels;
+	  book_repetitions_chart.update();
+	 });
+</script>
