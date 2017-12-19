@@ -51,18 +51,9 @@ class ChallengesController < ApplicationController
 					end
 			end
 		end
-		# test = Chapter.find(1,2,3).pluck(:id)
-
-		# ChallengeReadEntry.create!(
-		# 	user: @user,
-		# 	chapters: test,
-		# 	challenge: Challenge.find(2),
-		#   	read_at: [Date.today.beginning_of_week, Date.today.beginning_of_week, Date.today.beginning_of_week])
 
 		@chart_challenge_id = Challenge.take(1).pluck(:id)[0]
 		@chart_challenge = Challenge.take(1)[0]
-		p("WHAT")
-		# p(@chart_challenge.sender_ministry.name)
 		@sender_scores = []
 		@receiver_scores = []
 		@chart_data = {}
@@ -87,12 +78,6 @@ class ChallengesController < ApplicationController
 				@chart_labels[challenge]["y1_data"] << value_array[1]
  			end
  		end
- 		# p(@chart_labels[@chart_challenge]["x_labels"])
- 		# p(@chart_labels[@chart_challenge]["y0_name"])
- 		# p(@chart_labels[@chart_challenge]["y1_name"])
- 		# p(@chart_labels[@chart_challenge]["y0_data"])
- 		# p(@chart_labels[@chart_challenge]["y1_data"])
- 		# p(@chart_labels[@chart_challenge]["title"])
 
  		generate_your_percentile()
 	end
@@ -101,6 +86,11 @@ class ChallengesController < ApplicationController
 		count_ids = Count.where(year: 0).order(:count).pluck(:id)
 		your_rank = count_ids.index(@user.lifetime_count.id)
 		@your_ranking = your_rank*100/count_ids.size()
+		@next_percentile = (@your_ranking/10+1).floor*10
+		@next_percentile_id = (@next_percentile/100*count_ids.size()).floor
+		p("HI")
+		p(@next_percentile_id)
+		@next_ten_percent = Count.where(id: count_ids[@next_percentile_id]).pluck(:count)
 	end
 
 	def initialize_chart_data(challenge)
@@ -169,7 +159,7 @@ class ChallengesController < ApplicationController
 		session_email = session[:email]
 		@user = User.where(email: session_email).take
 		challenge =  params[:challenge]
-		p(challenge[:sender_peer])
+
 		sender_class = challenge[:sender_peer] ? @user.peer_class : nil
 		sender_gender = challenge[:sender_gender] != "" ? @user.gender : nil
 		sender_ministry = Group.where(group_type: "ministry", name: challenge[:sender_ministry]).take
@@ -203,8 +193,7 @@ class ChallengesController < ApplicationController
 		unless sender_class.nil?
 			sender_recipients = sender_recipients.select { |user| user.peer_class == sender_class }
 		end
-		p("WHERE ARE THEY")
-		p(sender_recipients)
+
 		sender_recipients.each do |user|
 			create_challenge_read_entry(user, new_challenge)
 		end
@@ -224,7 +213,6 @@ class ChallengesController < ApplicationController
 			create_challenge_read_entry(user, new_challenge)
 		end
 		user_challenge_read_entry = ChallengeReadEntry.where(challenge: new_challenge, user: @user)[0]
-		p(user_challenge_read_entry)
 		user_challenge_read_entry.update(accepted: true)
 		show()
 		respond_to do |format|
