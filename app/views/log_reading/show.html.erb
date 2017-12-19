@@ -1,7 +1,7 @@
 <script>
-    $(document).ready(function() { $("#chapter_book").select2(); });
+    $(document).ready(function() { $("#book_dropdown").select2(); });
  </script>  
-
+<div style="background-color: #FFFF00"><%= @warning%></div>
 <div>
   <%= simple_form_for(@selected_book, url: search_path, :method => :post, remote: true) do |f| %>
   	<%= f.input :book, collection: @book_names, :include_blank => 'Select Book', label: false, selected: @previous_book_name, :input_html => {:id => "book_dropdown"} %>

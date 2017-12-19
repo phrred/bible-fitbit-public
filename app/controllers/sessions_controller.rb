@@ -16,7 +16,7 @@ class SessionsController < ApplicationController
 	    session[:user_id] = user.id
       session[:email] = user.email
 			redirect_to action: "show", controller: "profile"
-	end
+    end
   end
 
   def destroy
