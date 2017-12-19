@@ -16,6 +16,7 @@ class SessionsController < ApplicationController
 	    oath_user = OathUser.from_omniauth(auth_hash)
 	    session[:oath_user_id] = oath_user.id
       session[:user_email] = oath_user.email
+      session[:user_name] = oath_user.name
 
       user = User.where(email: oath_user.email).take
       if user

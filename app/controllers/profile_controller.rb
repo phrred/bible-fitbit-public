@@ -6,6 +6,7 @@ class ProfileController < ApplicationController
     @user = User.new
 		@ministry_names = Group.where(group_type: "ministry").pluck(:name)
 		@classes = Group.where(group_type: "peer_class").pluck(:name)
+    @user_name = session[:user_name]
   end
 
 	def show
@@ -29,7 +30,6 @@ class ProfileController < ApplicationController
 	end
 
 	def update 
-    p "entered profile#update"
 		session_email = session[:user_email]
 		@user = User.where(email: session_email).take
 
@@ -40,7 +40,6 @@ class ProfileController < ApplicationController
 		input_gender = if input[:gender] == "male" then true else false end
 
 		if @user != nil
-      p "updating existing user"
 			@user.update!(
 				name: input_name,
 				email: session_email,
