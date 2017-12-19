@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 	get "profile", to: "profile#show"
   post "create_user", to: "profile#create"
   get "log_reading", to: "log_reading#show"
+	get "login", to: "login#show"
   get "challenges", to: "challenges#show"
   post "create_challenge", to: "challenges#create"
   post "update_dropdown", to: "challenges#update_dropdown"
@@ -22,6 +23,7 @@ Rails.application.routes.draw do
   resource :home, only: [:show]
 	resources :profile
   resource :log_reading, only: [:show]
+	resources :login
   resources :challenges
 
 
