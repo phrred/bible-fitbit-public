@@ -1,0 +1,55 @@
+// Load plugins
+var gulp = require('gulp'),
+sass = require('gulp-sass'),
+autoprefixer = require('gulp-autoprefixer'),
+minifycss = require('gulp-minify-css'),
+uglify = require('gulp-uglify'),
+imagemin = require('gulp-imagemin'),
+rename = require('gulp-rename'),
+concat = require('gulp-concat'),
+cache = require('gulp-cache'),
+del = require('del')
+
+var paths = {
+  // SCSS Files
+  scss: 'src/styles/main.scss',
+};
+
+// Styles
+gulp.task('styles', function() {
+  return gulp.src(paths.scss)
+    .pipe(sass())
+    .pipe(autoprefixer('last 2 version'))
+    .pipe(minifycss())
+    .pipe(concat('stylesheet.min.css'))
+    pipe(gulp.dest('dist/styles'))
+  }
+);
+
+// Images
+gulp.task('images', function() {
+  return gulp.src('src/images/**/*')
+    .pipe(cache(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true })))
+    .pipe(gulp.dest('dist/images'));
+});
+
+// Clean
+gulp.task('clean', function() {
+  return del(['dist/styles', 'dist/images']);
+});
+
+// Default task
+gulp.task('default', ['clean'], function() {
+  gulp.start('styles', 'images', 'watch');
+});
+
+// Watch
+gulp.task('watch', function() {
+
+  // Watch .scss files
+  gulp.watch('src/styles/**/*.scss', ['styles']);
+
+  // Watch image files
+  gulp.watch('src/images/**/*', ['images']);
+
+});
