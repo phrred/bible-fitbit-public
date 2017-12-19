@@ -5,6 +5,7 @@
 </select>
 <canvas id="book_percents" width="800" height="450"></canvas>
 <script>
+$(document).ready(function() { $("#book_dropdown1").select2(); });
 var initial_data = parseFloat(<%=@book_percentages["Genesis"].to_json.html_safe%>);
 var book_percent_chart = new Chart(document.getElementById("book_percents"), {
     type: 'doughnut',

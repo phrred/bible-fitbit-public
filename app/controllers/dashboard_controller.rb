@@ -1,9 +1,13 @@
 class DashboardController < ApplicationController
 	include ApplicationHelper
 
-	def show
+	def config_dashboard
+		@_ = Challenge.new()
 		session_email = session[:email]
 		@user = User.where(email: session_email).take
+	end
+	def show
+		config_dashboard()
 		@user_shadowings = UserShadowing.where(user_id: @user)
 		chapters_read = @user_shadowings.count()
 		@percentage_of_bible = chapters_read.to_f / bible_chapter_count
@@ -21,7 +25,24 @@ class DashboardController < ApplicationController
 		end
 		see_book_percent_read()
 		how_many_reps()
+		set_up_pace_chart()
+		pace_chart_start = Date.today.beginning_of_week - 21
+		while !@your_pace.key?(pace_chart_start)
+			pace_chart_start += 7
+		end
+		@pace_chart_range_labels = [
+			pace_chart_start,
+			pace_chart_start + 7,
+			pace_chart_start + 14,
+			pace_chart_start + 21]
+
+		@pace_chart_range_values = [
+			@your_pace[pace_chart_start],
+			@your_pace[pace_chart_start + 7],
+			@your_pace[pace_chart_start + 14],
+			@your_pace[pace_chart_start + 21]]
 	end
+
 
 	def see_book_percent_read	
 		@book_percentages = {}
@@ -51,5 +72,72 @@ class DashboardController < ApplicationController
 			@book_repetitions[book].unshift(@book_repetitions[book].min)
 		end
 		@x_axis_max += 5
+	end
+
+	def set_up_pace_chart
+		@your_pace = {}
+		date = Date.today.beginning_of_week
+		while(@your_pace.size < 52)
+			@your_pace[date] = 0
+			date = date - 7
+		end
+		read_events_for_user = ReadEvent.where(user: @user)
+		read_events_for_user.each do |read_event|
+			if @your_pace.key?(read_event.date.beginning_of_week)
+				@your_pace[read_event.date.beginning_of_week] += 1
+			else
+				@your_pace[read_event.date.beginning_of_week] = 1
+			end
+		end
+		@suggested_max = @your_pace.values.max + 5
+	end
+
+	def past_pace
+		config_dashboard()
+		set_up_pace_chart()
+		pace_chart_start = params[:week].to_date - 28
+		while !@your_pace.key?(pace_chart_start)
+			pace_chart_start += 7
+		end
+		@pace_chart_range_labels = [
+			pace_chart_start,
+			pace_chart_start + 7,
+			pace_chart_start + 14,
+			pace_chart_start + 21]
+
+		@pace_chart_range_values = [
+			@your_pace[pace_chart_start],
+			@your_pace[pace_chart_start + 7],
+			@your_pace[pace_chart_start + 14],
+			@your_pace[pace_chart_start + 21]]
+
+		respond_to do |format|
+			format.js
+		end
+	end
+
+	def future_pace
+		config_dashboard()
+		set_up_pace_chart()
+		pace_chart_start = params[:week].to_date + 28
+		while !@your_pace.key?(pace_chart_start)
+			pace_chart_start -= 7
+		end
+		pace_chart_start -= 21
+		@pace_chart_range_labels = [
+			pace_chart_start,
+			pace_chart_start + 7,
+			pace_chart_start + 14,
+			pace_chart_start + 21]
+
+		@pace_chart_range_values = [
+			@your_pace[pace_chart_start],
+			@your_pace[pace_chart_start + 7],
+			@your_pace[pace_chart_start + 14],
+			@your_pace[pace_chart_start + 21]]
+
+		respond_to do |format|
+			format.js
+		end
 	end
 end

@@ -5,6 +5,7 @@
 </select>
 <canvas id="test_value" width="800" height="450"></canvas>
 <script>
+    $(document).ready(function() { $("#book_dropdown2").select2(); });
 	var initial_labels = <%= Array(1..50).to_json.html_safe %>;
 	initial_labels.unshift("Genesis");
 	var initial_data = <%= @book_repetitions["Genesis"].to_json.html_safe %>;

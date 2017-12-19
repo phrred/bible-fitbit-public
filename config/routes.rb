@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   get "challenges", to: "challenges#show"
   post "create_challenge", to: "challenges#create"
   post "search", to: "log_reading#search"
+  post "future_pace", to: "dashboard#future_pace"
+  post "past_pace", to: "dashboard#past_pace"
 	get "dashboard", to: "dashboard#show"
 
 	post "profile", to: "profile#update"
