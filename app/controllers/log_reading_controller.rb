@@ -6,16 +6,16 @@ class LogReadingController < ApplicationController
   def show
   	@book_names = @@chapters.map { |b| b.book  }
   	@previous_book = nil
-  	userId = session[:uid]
+  	userId = session[:user_id]
     user = User.find(userId)
     @warning = session[:warning]
     session[:warning] = nil
   	prev_book = ReadEvent.where(user: userId).order("created_at").last
-    last_read_event = ReadEvent.joins(:chapter).where(chapters: {book: prev_book.chapter.book}).order("read_at").last
-    if last_read_event != nil
-      @last_read_date = last_read_event.read_at.strftime('%a %b %d %Y')
-    end
     if prev_book != nil
+      last_read_event = ReadEvent.joins(:chapter).where(chapters: {book: prev_book.chapter.book}).order("read_at").last
+      if last_read_event != nil
+        @last_read_date = last_read_event.read_at.strftime('%a %b %d %Y')
+      end
       @selected_book = prev_book.chapter
       @displayed_book = @selected_book.book
       @previous_book_name = @selected_book.book
@@ -30,7 +30,7 @@ class LogReadingController < ApplicationController
   end
 
   def search
-  	userId = session[:uid]
+  	userId = session[:user_id]
     user = User.find(userId)
     @submitted_date = ReadEvent.new;
   	@selected_book =  params[:chapter][:book]
@@ -54,15 +54,15 @@ class LogReadingController < ApplicationController
     date = params[:date]
     year = date.to_time.strftime('%Y').to_i
     @displayed_book = params[:book]
-    user = User.find(session[:uid])
+    user = User.find(session[:user_id])
     lifetime_count = user.lifetime_count
     annual_counts = user.annual_counts
     annual_count = nil
-    if annual_counts = nil
-      annual_count = Counts.create!(count: 0, year: Time.current.year)
+    if annual_counts.empty?
+      annual_count = Count.create!(count: 0, year: Time.current.year)
       user.annual_counts << annual_count.id
     else
-      annual_count = annual_counts select { |c| c.year == year  }
+      annual_count = annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0]
     end
     readEntry = ChallengeReadEntry.where(user: user)
     if readEntry != nil
@@ -104,7 +104,7 @@ class LogReadingController < ApplicationController
 
   def resetBook
     @displayed_book = params[:book]
-    user = User.find(session[:uid])
+    user = User.find(session[:user_id])
     user_shadowing = UserShadowing.find_by(user: user, book: @displayed_book)
     if user_shadowing != nil
       user_shadowing.shadowing = []
@@ -113,7 +113,7 @@ class LogReadingController < ApplicationController
   end
 
   def resetBible
-    user = User.find(session[:uid])
+    user = User.find(session[:user_id])
     user_shadowings = UserShadowing.where(user: user)
     user_shadowings.each { |s|
       s.shadowing = []

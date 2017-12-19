@@ -13,7 +13,7 @@ class SessionsController < ApplicationController
       flash[:error] = 'Only gpmail emails allowed'
       redirect_to action: "show", controller: "login"
     else
-	    oath_user_iduser = OathUser.from_omniauth(auth_hash)
+	    oath_user = OathUser.from_omniauth(auth_hash)
 	    session[:oath_user_id] = oath_user.id
       session[:user_email] = oath_user.email
 

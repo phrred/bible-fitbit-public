@@ -53,16 +53,17 @@ class ProfileController < ApplicationController
       p "creating new user"
 			year = DateTime.now.year
 			new_lifetime = Count.create(year: 0, count: 0)
-			current_annual = Count.create(year: DateTime.now.year, count: 0)
-			@user = User.create!(
+			current_annual = Count.create!(year: Time.now.year, count: 0)
+			@user = User.create(
 				name: input_name,
 				email: session_email,
 				gender: input_gender,
 				peer_class: input_peer_class,
 				ministry: input_ministry,
 				lifetime_count: new_lifetime,
-				annual_count: current_annual
 			)
+			@user.annual_counts << current_annual.id
+			@user.save
       session[:user_id] = @user.id
 
       new_shadowings = bible_books.pluck(:name).map { |book_name|
