@@ -1,3 +1,9 @@
-<h1>Home#show</h1>
-<%= link_to "Sign in with Google", "/auth/google_oauth2", id: "sign_in" %>
-<h2>There will soon be a beautiful dashboard here.</h2>
+<h1>This is the dashboard</h1>
+<div>
+	Percentage of bible read: <%=@percentage_of_bible%>%
+</div>
+<% if not @last_book_read %>
+  You have not read any books.
+<% else %>
+	Percentage of <%=@last_book_read%> read: <%=@percentage_of_last_book%>
+<% end %>
