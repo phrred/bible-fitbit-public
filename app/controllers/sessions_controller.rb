@@ -11,17 +11,26 @@ class SessionsController < ApplicationController
     if hd != "gpmail.org"
       # Hosted domain doesn't match
       flash[:error] = 'Only gpmail emails allowed'
-      redirect_to root_path
+      redirect_to action: "show", controller: "login"
     else
-	    user = OathUser.from_omniauth(auth_hash)
-	    session[:user_id] = user.id
-      session[:email] = user.email
-			redirect_to action: "show", controller: "profile"
-    end
+	    oath_user_iduser = OathUser.from_omniauth(auth_hash)
+	    session[:oath_user_id] = oath_user.id
+      session[:user_email] = oath_user.email
+
+      user = User.where(email: oath_user.email).take
+      if user
+        session[:user_id] = user.id
+        redirect_to action: "show", controller: "home"
+      else
+        redirect_to action: "new", controller: "profile"
+      end
+		end
   end
 
   def destroy
+    session[:oath_user_id] = nil
     session[:user_id] = nil
+    session[:user_email] = nil
     redirect_to root_path
   end
 end
