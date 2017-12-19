@@ -6,13 +6,13 @@ $(function () {
   $("#our_table td")
     .mousedown(function () {
       isMouseDown = true;
-      $(this).toggleClass("highlighted");
-      isHighlighted = $(this).hasClass("highlighted");
+      $(this).toggleClass("record");
+      isHighlighted = $(this).hasClass("record");
       return false; // prevent text selection
     })
     .mouseover(function () {
       if (isMouseDown) {
-        $(this).toggleClass("highlighted", isHighlighted);
+        $(this).toggleClass("record", isHighlighted);
       }
     });
 

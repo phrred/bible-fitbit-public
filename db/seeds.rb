@@ -25,17 +25,17 @@ umd_kairos.save
 
 co2016 = Group.create!(name: "2016", group_type: "peer_class")
 
-test_count = Count.create(year: 0, count: 5)
-annual_count = Count.create(year: 2017, count: 10)
-test = User.create!(
+test_count = Count.create!(year: 0, count: 5)
+annual_count = Count.create!(year: 2017, count: 10)
+test = User.create(
 	name: "test",
 	email: "test@gpmail.org",
 	gender: true,
 	ministry: umd_klesis,
 	peer_class: co2016,
 	lifetime_count: test_count,
-	annual_count: annual_count
 )
+test.annual_counts << annual_count.id
 test.save
 
 json = ActiveSupport::JSON.decode(File.read('db/seeds/bible.json'))

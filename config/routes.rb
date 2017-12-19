@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 	get "profile", to: "profile#show"
   post "create_user", to: "profile#create"
   get "log_reading", to: "log_reading#show"
+	get "login", to: "login#show"
   get "challenges", to: "challenges#show"
   post "create_challenge", to: "challenges#create"
   post "update_dropdown", to: "challenges#update_dropdown"
@@ -15,13 +16,16 @@ Rails.application.routes.draw do
   post "reject_challenge", to: "challenges#reject_challenge"
   post "search", to: "log_reading#search"
 	get "dashboard", to: "dashboard#show"
-
 	post "profile", to: "profile#update"
+  post "update", to: "log_reading#update"
+  post "resetBook", to: "log_reading#resetBook"
+  post "resetBible", to: "log_reading#resetBible"
 
   resources :sessions, only: [:create, :destroy]
   resource :home, only: [:show]
 	resources :profile
   resource :log_reading, only: [:show]
+	resources :login
   resources :challenges
 
 

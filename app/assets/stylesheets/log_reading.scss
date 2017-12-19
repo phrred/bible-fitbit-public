@@ -11,6 +11,10 @@ table td {
   border:1px solid #fff;
 }
 
+table td.record {
+  background-color:#999 !important;
+}
+
 table td.highlighted {
-  background-color:#999;
+  background-color:#900;
 }

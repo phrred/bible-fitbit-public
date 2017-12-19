@@ -1,4 +1,4 @@
-<% if @outstanding_challenges.size > 0 %>
+<% if !@outstanding_challenges.nil? and @outstanding_challenges.size > 0 %>
 Outstanding Challenge Requests
 <table>
 	<tr>

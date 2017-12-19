@@ -147,11 +147,10 @@ ActiveRecord::Schema.define(version: 20171216032747) do
     t.bigint "ministry_id"
     t.bigint "peer_class_id"
     t.bigint "lifetime_count_id"
-    t.bigint "annual_count_id"
+    t.integer "annual_counts", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
-    t.index ["annual_count_id"], name: "index_users_on_annual_count_id"
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["lifetime_count_id"], name: "index_users_on_lifetime_count_id"

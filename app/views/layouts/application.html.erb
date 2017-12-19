@@ -32,26 +32,27 @@ li a:hover {
 }
 </style>
   </head>
-
   <body>
+    <% if !session[:user_id].nil? %>
       <header>
         <ul class="nav navbar-nav">
           <li><%=link_to'Log Out', signout_path%></li>
           <li><%=link_to "Profile", profile_path %></li>
-          <% if @pending_challenge_requests.nil? %>
-          <li><%=link_to "Challenges", challenges_path%></li>
+          <% if @pending_challenge_requests.size > 0 %>
+            <li><%=link_to "Challenges " + String(@pending_challenge_requests.size), challenges_path%></li> 
           <% else %>
-          <li><%=link_to "Challenges", challenges_path + @pending_challenge_requests%></li> 
+            <li><%=link_to "Challenges", challenges_path%></li>
           <% end %>
           <li><%=link_to "Log Reading", log_reading_path%></li>
           <li class="active"><a href="#">Dashboard</a></li>
         </ul>
   </header>
+  <% end %>
     <div>
 		<div class="container">
       	<% flash.each do |key, value| %>
         	<div class="alert alert-<%= key %>"><%= value %>
-        	</di>
+        	</div>
       	<% end %>
     	<%= yield %>
     </div>

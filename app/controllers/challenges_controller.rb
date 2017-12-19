@@ -4,8 +4,16 @@ class ChallengesController < ApplicationController
 		@group1 = Group.take(1)[0].name
 		@group2 = @group1
 		@title_text = @group1 + " vs. " + @group2
-		@comparison_sums = User.left_outer_joins(:annual_count).group(:ministry).sum("count")
-	  	@comparison_data = {}
+		@comparison_data = {}
+		@all_users = User.all
+		year = Date.today.to_time.strftime('%Y').to_i
+		@all_users.each do |a_user|
+			if @comparison_data.key?(a_user.ministry.name)
+				@comparison_data[a_user.ministry.name] += a_user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
+			else
+				@comparison_data[a_user.ministry.name] = a_user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
+			end
+		end
 
 	  	@books = Chapter.order("created_at DESC").all.uniq{ |c| c.book }.reverse
 		session_email = session[:email]
@@ -20,9 +28,7 @@ class ChallengesController < ApplicationController
 
 		@ministry_names = Group.where(group_type: "ministry").order(:name).pluck(:name)
 		@all_ministry_names = Group.where(group_type: "ministry").order(:name).pluck(:name)
-		@comparison_sums.keys.each do |group|
-			@comparison_data[group.name] = @comparison_sums[group]
-		end
+
 		@all_ministry_names.each do |name|
 			if !@comparison_data.key?(name)
 				@comparison_data[name] = 0
@@ -52,32 +58,8 @@ class ChallengesController < ApplicationController
 			end
 		end
 
-		@chart_challenge_id = Challenge.take(1).pluck(:id)[0]
-		@chart_challenge = Challenge.take(1)[0]
-		@sender_scores = []
-		@receiver_scores = []
-		@chart_data = {}
-		@chart_labels = {}
-		@x_axis_labels = []
+
 		grab_current_challenges()
-
-		@chart_data.keys.each do |challenge|
-			@chart_labels[challenge] = {}
-			@chart_labels[challenge]["x_labels"] = []
-			@chart_labels[challenge]["y0_name"] = challenge.sender_ministry.name
-			@chart_labels[challenge]["y1_name"] = challenge.receiver_ministry.name
-			@chart_labels[challenge]["y0_data"] = []
-			@chart_labels[challenge]["y1_data"] = []
-			@chart_labels[challenge]["title"] = challenge.sender_ministry.name + " vs. " + challenge.receiver_ministry.name + " (Total Chapters to Date on Average per Person)"
-
-			@chart_data[challenge].keys.each do |date|
-				@chart_labels[challenge]["x_labels"] << date.to_date
-			end
-			@chart_data[challenge].values.each do |value_array|
-				@chart_labels[challenge]["y0_data"] << value_array[0]
-				@chart_labels[challenge]["y1_data"] << value_array[1]
- 			end
- 		end
 
  		generate_your_percentile()
 	end
@@ -104,7 +86,14 @@ class ChallengesController < ApplicationController
 
 	def grab_current_challenges()
 		@current_challenges = []
+		@sender_scores = []
+		@receiver_scores = []
+		@chart_labels = {}
+		@x_axis_labels = []
+		session_email = session[:email]
+		@user = User.where(email: session_email).take
 		monday = Date.today.beginning_of_week
+		@chart_data = {}
 		ChallengeReadEntry.where(user: @user, accepted: true).each do |challenge_read_entry|
 			challenge = challenge_read_entry.challenge
 			initialize_chart_data(challenge)
@@ -146,7 +135,24 @@ class ChallengesController < ApplicationController
 			@receiver_scores << receiver_sum/receiver_number
 			@current_challenges << challenge
 		end
-		p(@current_challenges)
+
+		@chart_data.keys.each do |challenge|
+			@chart_labels[challenge] = {}
+			@chart_labels[challenge]["x_labels"] = []
+			@chart_labels[challenge]["y0_name"] = challenge.sender_ministry.name
+			@chart_labels[challenge]["y1_name"] = challenge.receiver_ministry.name
+			@chart_labels[challenge]["y0_data"] = []
+			@chart_labels[challenge]["y1_data"] = []
+			@chart_labels[challenge]["title"] = challenge.sender_ministry.name + " vs. " + challenge.receiver_ministry.name + " (Total Chapters to Date on Average per Person)"
+
+			@chart_data[challenge].keys.each do |date|
+				@chart_labels[challenge]["x_labels"] << date.to_date
+			end
+			@chart_data[challenge].values.each do |value_array|
+				@chart_labels[challenge]["y0_data"] << value_array[0]
+				@chart_labels[challenge]["y1_data"] << value_array[1]
+ 			end
+ 		end
 	end
 
 	def create_challenge_read_entry(user, challenge)
@@ -213,7 +219,7 @@ class ChallengesController < ApplicationController
 			create_challenge_read_entry(user, new_challenge)
 		end
 		user_challenge_read_entry = ChallengeReadEntry.where(challenge: new_challenge, user: @user)[0]
-		user_challenge_read_entry.update(accepted: true)
+		# user_challenge_read_entry.update(accepted: true)
 		show()
 		respond_to do |format|
 			format.js
@@ -286,12 +292,18 @@ class ChallengesController < ApplicationController
 		@group1 = group1_model.name
 		@group2 = group2_model.name
 		p("SAM")
-		@all_ministry_names = Group.where(group_type: "ministry").order(:name).pluck(:name)
-		temp_sums = User.left_outer_joins(:annual_count).group(:ministry).sum("count")
 		count_sums = {}
-		temp_sums.keys.each do |key|
-			count_sums[key.name] = temp_sums[key]
+		@all_ministry_names = Group.where(group_type: "ministry").order(:name).pluck(:name)
+		@all_users = User.all
+		year = Date.today.to_time.strftime('%Y').to_i
+		@all_users.each do |a_user|
+			if count_sums.key?(a_user.ministry.name)
+				count_sums[a_user.ministry.name] += a_user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
+			else
+				count_sums[a_user.ministry.name] = a_user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
+			end
 		end
+
 		@all_ministry_names.each do |name|
 			if !count_sums.key?(name)
 				count_sums[name] = 0
@@ -326,6 +338,7 @@ class ChallengesController < ApplicationController
 		session_email = session[:email]
 		@user = User.where(email: session_email).take
 	  	@outstanding_challenges = ChallengeReadEntry.where(user: @user, accepted: nil)
+		grab_current_challenges()
 
 		respond_to do |format|
 			format.js
