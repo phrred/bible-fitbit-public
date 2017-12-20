@@ -50,7 +50,6 @@ class DashboardController < ApplicationController
 			chapters_read = @user_shadowings.where(book: book).count()
 			@book_percentages[book] = chapters_read.to_f/Chapter.where(book: book).count()
 		end
-		p(@book_percentages)
 	end
 
 	def how_many_reps
@@ -61,7 +60,7 @@ class DashboardController < ApplicationController
 			@book_repetitions[book] = []
 			Chapter.where(book: book).pluck(:id).each do |id|
 				if !@user_reading.nil? and @user_reading.key?id
-					if user_readings[id] > @x_axis_max
+					if @user_readings[id] > @x_axis_max
 						@x_axis_max = user_readings[id]
 					end
 					@book_repetitions[book] << @user_readings[id]
