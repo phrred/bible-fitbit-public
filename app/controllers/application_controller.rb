@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   helper_method :current_user
+  helper_method :verify_oath_user
   before_action :verify_user
 
   def current_user
@@ -9,9 +10,20 @@ class ApplicationController < ActionController::Base
   end
 
   def verify_user
-	if not current_user()
-		redirect_to controller: 'login', action: 'show'
-	end
+    if not current_user()
+      redirect_to controller: 'login', action: 'show'
+    end
   end
+
+  def current_oath_user
+    @current_oath_user ||= OathUser.where(session[:oath_user_id]) if session[:oath_user_id]
+  end
+
+  def verify_oath_user
+    if not current_oath_user()
+      redirect_to controller: 'login', action: 'show'
+    end
+  end
+
 
 end
