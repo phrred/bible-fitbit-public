@@ -24,14 +24,13 @@ Rails.application.routes.draw do
   post "resetBible", to: "log_reading#resetBible"
 
   resources :sessions, only: [:create, :destroy]
-  resource :home, only: [:show]
 	resources :profile
   resource :log_reading, only: [:show]
 	resources :login
   resources :challenges
 
 
-  root to: "home#show"
+  root to: "dashboard#show"
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
