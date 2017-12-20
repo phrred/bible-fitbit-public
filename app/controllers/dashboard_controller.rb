@@ -67,10 +67,6 @@ class DashboardController < ApplicationController
 		count_ids = Count.where(year: 0).order(:count).pluck(:id)
 		your_rank = count_ids.index(@user.lifetime_count.id)
 		@your_ranking_percentile = your_rank*100.0/(count_ids.size() - 1)
-		p("PERCENTILE")
-		p(count_ids)
-		p(your_rank)
-		p(@your_ranking)
 		@next_percentile = @your_ranking_percentile == 100.0 ? 100.0 : (@your_ranking_percentile/10+1).floor*10
 		@next_percentile_id = (@next_percentile/100*(count_ids.size()-1)).floor
 		@next_ten_percent = Count.where(id: count_ids[@next_percentile_id]).pluck(:count)
@@ -107,23 +103,25 @@ class DashboardController < ApplicationController
 
 	def set_up_pace_chart
 		@your_pace = {}
-		read_events_for_user = ReadEvent.where(user: @user)
-		read_events_for_user.each do |read_event|
-			if @your_pace.key?(read_event.read_at.beginning_of_week)
-				@your_pace[read_event.read_at.beginning_of_week] += 1
-			else
-				@your_pace[read_event.read_at.beginning_of_week] = 1
-			end
-		end
 		date = Date.today.beginning_of_week
 		while(@your_pace.size < 52)
 			@your_pace[date] = 0
 			date = date - 7
 		end
+		read_events_for_user = ReadEvent.where(user: @user)
+		read_events_for_user.each do |read_event|
+			read_event_date = read_event.read_at.beginning_of_week.to_date
+			if @your_pace.key?(read_event_date)
+				@your_pace[read_event_date] += 1
+			else
+				@your_pace[read_event_date] = 1
+			end
+		end
 		while @your_pace.keys.min < date
 			@your_pace[date] = 0
 			date = date - 7
 		end
+		p(@your_pace.keys)
 		@suggested_max = @your_pace.values.max + 5
 	end
 
