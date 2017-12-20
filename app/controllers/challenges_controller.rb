@@ -60,17 +60,9 @@ class ChallengesController < ApplicationController
 
 		grab_current_challenges()
 
- 		generate_your_percentile()
 	end
 
-	def generate_your_percentile()
-		count_ids = Count.where(year: 0).order(:count).pluck(:id)
-		your_rank = count_ids.index(@user.lifetime_count.id)
-		@your_ranking = your_rank*100/count_ids.size()
-		@next_percentile = (@your_ranking/10+1).floor*10
-		@next_percentile_id = (@next_percentile/100*count_ids.size()).floor
-		@next_ten_percent = Count.where(id: count_ids[@next_percentile_id]).pluck(:count)
-	end
+
 
 	def initialize_chart_data(challenge)
 		date = challenge.start_time
@@ -223,33 +215,6 @@ class ChallengesController < ApplicationController
 		end
 	end
 
-	def update_dropdown
-		@ministry_names = Group.where(group_type: "ministry").order(:name).pluck(:name)
-		@new_challenge = Challenge.new()
-		session_email = session[:email]
-		@user = User.where(email: session_email).take
-		@gender = @user.gender ? "brothers" : "sisters"
-		@peer_class = @user.peer_class.name
-		@other_peers = Group.where(group_type: "peer_class").order(:name).pluck(:name)
-
-		selected_ministry = Group.where(group_type: "ministry", name: params[:your_ministry]).take
-
-		@grouping_options = [selected_ministry]
-		selected_ministry.ancestors.each do |ministry|
-			@ministry_names.delete(ministry.name)
-			@grouping_options << ministry
-		end
-
-		@ministry_names.delete(selected_ministry.name)
-		selected_ministry.descendants.each do |ministry|
-			@ministry_names.delete(ministry.name)
-		end
-		@ministry_names << selected_ministry.name
-		respond_to do |format|
-			format.js {render :js => "my_function();"}
-		end
-	end
-
 	def is_user_in_group(user, group)
 		if user[:peer_class] == group
 			return true
@@ -262,49 +227,6 @@ class ChallengesController < ApplicationController
 			user_group = user_group.parent
 		end
 		return false
-	end
-
-	def comparison_values
-		other_params = params[:challenge]
-		group1_model = Group.where(name: other_params[:group1])[0]
-		group2_model = Group.where(name: other_params[:group2])[0]
-		@group1 = group1_model.name
-		@group2 = group2_model.name
-		count_sums = {}
-		@all_ministry_names = Group.where(group_type: "ministry").order(:name).pluck(:name)
-		@all_users = User.all
-		year = Date.today.to_time.strftime('%Y').to_i
-		@all_users.each do |a_user|
-			if count_sums.key?(a_user.ministry.name)
-				count_sums[a_user.ministry.name] += a_user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
-			else
-				count_sums[a_user.ministry.name] = a_user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
-			end
-		end
-
-		@all_ministry_names.each do |name|
-			if !count_sums.key?(name)
-				count_sums[name] = 0
-			end
-		end
-		@group1_sum = count_sums[@group1]
-		group1_model.descendants.each do |group|
-			@group1_sum += count_sums[group.name]
-		end
-		group1_model.ancestors.each do |group|
-			@group1_sum += count_sums[group.name]
-		end
-		@group2_sum = count_sums[@group2]
-		group2_model.descendants.each do |group|
-			@group2_sum += count_sums[group.name]
-		end
-		group2_model.ancestors.each do |group|
-			@group2_sum += count_sums[group.name]
-		end
-		@title_text = @group1 + " vs. " + @group2
-		respond_to do |format|
-			format.js
-		end
 	end
 
 	def accept_challenge

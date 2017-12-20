@@ -1,13 +1,5 @@
 <script>
 $(document).on("change", "#your_ministry", function() {
-   //   $.ajax({    
-   //   url: "update_dropdown",    
-   //   type: "POST",    
-   //   data: {"your_ministry" : $('#your_ministry').val()},    
- 		// 	dataType: "json",    
- 		// 	success: function(data) { //do nothing
- 		// 	}    
- 		// });
 	var your_ministry = document.getElementById("your_ministry").value;
 	var remaining_groups = <%= @all_ministry_names.to_json.html_safe %>;
 	remaining_groups.splice(remaining_groups.indexOf(your_ministry),1);
