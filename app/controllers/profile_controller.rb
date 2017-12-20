@@ -75,7 +75,7 @@ class ProfileController < ApplicationController
         }
       }
       UserShadowing.create!(new_shadowings)
-      redirect_to action: "show", controller: "home"
+      redirect_to action: "show", controller: "dashboard"
     end
   end
 
