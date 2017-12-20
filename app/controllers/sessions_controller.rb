@@ -21,7 +21,7 @@ class SessionsController < ApplicationController
       user = User.where(email: oath_user.email).take
       if user
         session[:user_id] = user.id
-        redirect_to action: "show", controller: "home"
+        redirect_to action: "show", controller: "dashboard"
       else
         redirect_to action: "new", controller: "profile"
       end
