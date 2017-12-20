@@ -38,13 +38,13 @@ li a:hover {
         <ul class="nav navbar-nav">
           <li><%=link_to'Log Out', signout_path%></li>
           <li><%=link_to "Profile", profile_path %></li>
-          <% if @pending_challenge_requests.size > 0 %>
+          <% if !@pending_challenge_requests.nil? and @pending_challenge_requests.size > 0 %>
             <li><%=link_to "Challenges " + String(@pending_challenge_requests.size), challenges_path%></li> 
           <% else %>
             <li><%=link_to "Challenges", challenges_path%></li>
           <% end %>
           <li><%=link_to "Log Reading", log_reading_path%></li>
-          <li class="active"><%=link_to "Dashboard", dashboard_path%></li>
+          <li ><%=link_to "Dashboard", dashboard_path%></li>
         </ul>
   </header>
   <% end %>

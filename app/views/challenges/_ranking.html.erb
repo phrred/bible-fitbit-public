@@ -1,0 +1,95 @@
+Rankings
+You need to read <%= @next_ten_percent[0] - @user.lifetime_count.count %> to get to the <%=@next_percentile%> percentile.
+<input id="clickMe" type="button" value="clickMe"/>
+<div id="ranking">
+  <canvas id="rankingChart" width="400" height="200"></canvas>
+</div>
+<script>
+var your_ranking = <%=@your_ranking.to_json.html_safe%>;
+var rankingChart = new Chart(document.getElementById("rankingChart").getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: ["","Percentile","","","","","","",""],
+      datasets: [
+        {
+          label: "Your Ranking: <%=@your_ranking.to_json.html_safe%>",
+          type: "line",
+          borderColor: "#000000",
+          borderWidth: 3,
+          pointRadius: 0,
+          data: [your_ranking,your_ranking,your_ranking],
+          fill: false
+        },
+        {
+          label: "0%",
+          backgroundColor: "#191970",
+          data: [0,0,0]
+        }, {
+          label: "10%",
+          backgroundColor: "#191970",
+          data: [0,10,0]
+        }, {
+          label: "20%",
+          backgroundColor: "#191970",
+          data: [0,10,0]
+        }, {
+          label: "30%",
+          backgroundColor: "#191970",
+          data: [0,10,0]
+        }, {
+          label: "40%",
+          backgroundColor: "#191970",
+          data: [0,10,0]
+        }, {
+          label: "50%",
+          backgroundColor: "#191970",
+          data: [0,10,0]
+        }, {
+          label: "60%",
+          backgroundColor: "#191970",
+          data: [0,10,0]
+        }, {
+          label: "70%",
+          backgroundColor: "#191970",
+          data: [0,10,0]
+        }, {
+          label: "80%",
+          backgroundColor: "#191970",
+          data: [0,10,0]
+        }, {
+          label: "90%",
+          backgroundColor: "#191970",
+          data: [0,10,0]
+        }, {
+          label: "100%",
+          backgroundColor: "#191970",
+          data: [0,10,0]
+        }
+      ]
+    },
+    options: {
+      legend: {
+        display: false
+      },
+      title: {
+        display: true,
+        text: 'Your Percentile in Chapters Read: ' + your_ranking + "%"
+      },
+    scales: {
+      xAxes: [{
+          stacked: true,
+          display: false
+      }],
+      yAxes: [{
+          stacked: true,
+          display: false
+      }]
+  }
+    }
+});
+
+document.getElementById("clickMe").onclick = function () { 
+  rankingChart.data.datasets[0].data = [75,75,75];
+  rankingChart.update();
+};
+</script>

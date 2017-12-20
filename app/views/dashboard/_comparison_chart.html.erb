@@ -23,6 +23,15 @@ var comparisonChart = new Chart(document.getElementById("comparisonChart"), {
       title: {
         display: true,
         text: <%= @title_text.to_json.html_safe%>
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero:true,
+            suggestedMin: 0,
+            suggestedMax: <%=@y_axis_max%>
+          }
+        }]
       }
     }
 });
