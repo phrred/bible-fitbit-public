@@ -223,10 +223,6 @@ class ChallengesController < ApplicationController
 		end
 	end
 
-	def accept_challenge
-		#stub
-	end
-
 	def update_dropdown
 		@ministry_names = Group.where(group_type: "ministry").order(:name).pluck(:name)
 		@new_challenge = Challenge.new()
