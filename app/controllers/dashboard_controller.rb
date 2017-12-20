@@ -9,6 +9,11 @@ class DashboardController < ApplicationController
 	end
 	def show
 		config_dashboard()
+		@group1 = Group.take(1)[0].name
+		@group2 = @group1
+		@title_text = @group1 + " vs. " + @group2
+		@y_axis_max = 10
+
 		@user_shadowings = UserShadowing.where(user_id: @user)
 		chapters_read = @user_shadowings.count()
 		@percentage_of_bible = chapters_read.to_f / bible_chapter_count
@@ -27,6 +32,8 @@ class DashboardController < ApplicationController
 		see_book_percent_read()
 		how_many_reps()
 		set_up_pace_chart()
+ 		generate_your_percentile()
+
 		pace_chart_start = Date.today.beginning_of_week - 21
 		while !@your_pace.key?(pace_chart_start)
 			pace_chart_start += 7
@@ -44,6 +51,14 @@ class DashboardController < ApplicationController
 			@your_pace[pace_chart_start + 21]]
 	end
 
+	def generate_your_percentile()
+		count_ids = Count.where(year: 0).order(:count).pluck(:id)
+		your_rank = count_ids.index(@user.lifetime_count.id)
+		@your_ranking = your_rank*100/count_ids.size()
+		@next_percentile = (@your_ranking/10+1).floor*10
+		@next_percentile_id = (@next_percentile/100*count_ids.size()).floor
+		@next_ten_percent = Count.where(id: count_ids[@next_percentile_id]).pluck(:count)
+	end
 
 	def see_book_percent_read	
 		@book_percentages = {}
@@ -140,6 +155,50 @@ class DashboardController < ApplicationController
 			@your_pace[pace_chart_start + 14],
 			@your_pace[pace_chart_start + 21]]
 
+		respond_to do |format|
+			format.js
+		end
+	end
+
+	def comparison_values
+		other_params = params[:challenge]
+		group1_model = Group.where(name: other_params[:sender_ministry])[0]
+		group2_model = Group.where(name: other_params[:receiver_ministry])[0]
+		@group1 = group1_model.name
+		@group2 = group2_model.name
+		count_sums = {}
+		@all_ministry_names = Group.where(group_type: "ministry").order(:name).pluck(:name)
+		@all_users = User.all
+		year = Date.today.to_time.strftime('%Y').to_i
+		@all_users.each do |a_user|
+			if count_sums.key?(a_user.ministry.name)
+				count_sums[a_user.ministry.name] += a_user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
+			else
+				count_sums[a_user.ministry.name] = a_user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
+			end
+		end
+
+		@all_ministry_names.each do |name|
+			if !count_sums.key?(name)
+				count_sums[name] = 0
+			end
+		end
+		@group1_sum = count_sums[@group1]
+		group1_model.descendants.each do |group|
+			@group1_sum += count_sums[group.name]
+		end
+		group1_model.ancestors.each do |group|
+			@group1_sum += count_sums[group.name]
+		end
+		@group2_sum = count_sums[@group2]
+		group2_model.descendants.each do |group|
+			@group2_sum += count_sums[group.name]
+		end
+		group2_model.ancestors.each do |group|
+			@group2_sum += count_sums[group.name]
+		end
+		@title_text = @group1 + " vs. " + @group2
+		@y_axis_max = [@group1_sum, @group2_sum].max + 5
 		respond_to do |format|
 			format.js
 		end
