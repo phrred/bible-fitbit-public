@@ -42,6 +42,7 @@ class DashboardController < ApplicationController
 		how_many_reps()
 		set_up_pace_chart()
  		generate_your_percentile()
+ 		generate_top_10()
 
 		pace_chart_start = Date.today.beginning_of_week - 21
 		while !@your_pace.key?(pace_chart_start)
@@ -63,7 +64,21 @@ class DashboardController < ApplicationController
 		@initial_repetition_labels.unshift(@last_book_read)
 	end
 
-	def generate_your_percentile()
+	def generate_top_10
+		@top_10 = Array.new(10)
+		top_10_ids = Count.where(year: Date.today.year).order(:count).reverse_order.limit(10).pluck(:id)
+		User.all.each do |user|
+			user.annual_counts.each do |count_id|
+				rank = top_10_ids.index(count_id)
+				if rank != -1
+					@top_10[rank] = {"gender"=>user.gender,"count"=>Count.where(id: count_id).take.count}
+					break
+				end
+			end
+		end
+	end
+
+	def generate_your_percentile
 		count_ids = Count.where(year: 0).order(:count).pluck(:id)
 		your_rank = count_ids.index(@user.lifetime_count.id)
 		@your_ranking_percentile = your_rank*100.0/(count_ids.size() - 1)
