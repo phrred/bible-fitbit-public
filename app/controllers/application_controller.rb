@@ -4,10 +4,8 @@ class ApplicationController < ActionController::Base
   before_action :verify_user
 
   def current_user
-    p "user email"
-    p session[:user_email]
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
-    #@current_user ||= OathUser.find(session[:oath_user_id]) if session[:oath_user_id]
+    @pending_challenge_requests ||= ChallengeReadEntry.where(user: @current_user, accepted: nil)
   end
 
   def verify_user

@@ -1,3 +1,4 @@
+<% if !@current_challenges.nil?%>
 <table>
 	<% @current_challenges.each_with_index do |challenge, index| %>
 		<tr class="trigger"> 
@@ -40,3 +41,4 @@ new Chart(document.getElementById("<%= "challengeChart" + challenge.id.to_s%>").
 });
 <% end %>
 </script>
+<% end %>

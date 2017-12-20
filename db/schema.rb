@@ -17,6 +17,7 @@ ActiveRecord::Schema.define(version: 20171216032747) do
 
   create_table "challenge_read_entries", force: :cascade do |t|
     t.datetime "read_at", default: [], array: true
+    t.boolean "accepted"
     t.bigint "challenge_id"
     t.bigint "user_id"
     t.integer "chapters", default: [], array: true

@@ -1,28 +1,14 @@
+<div id="challenge_requests">
+	<%= render partial: 'challenge_requests' %>
+</div>
+
 Hello <%= @user.name %>, you have come to this page to issue a challenge.
 Please begin by inputting your side of the challenge.
-<script>
-    $(document).ready(function() { $("#your_ministry").select2(); });
-    $(document).ready(function() { $("#opp_ministry").select2(); });
-    $(document).ready(function() { $("#opp_class").select2(); });
-    $(document).ready(function() { $("#books").select2(); });
-});
-</script>  
 
-<%= simple_form_for @new_challenge, url: create_challenge_path, :method => :post, remote: true do |f| %>
-	<%= f.input :sender_ministry, collection: @grouping_options, :label => 'Choose which ministry group you would like to compete with', value_method: lambda { |obj| return obj[:name] }, selected: @user_ministry, input_html: {id: "your_ministry"}%>
-	<%= f.input :sender_gender, label: "Would you like only " + @gender + " to compete?", as: :radio_buttons %>
-	<%= f.input :sender_peer, label: "Would you like only your peers class of " + @peer_class + " to compete?",  as: :radio_buttons%>
-	<br>
-	Now enter your opponents information.
-	<%= f.input :receiver_ministry, collection: @ministry_names, :label => "Your opponent's ministry group", selected: nil, input_html: {id: "opp_ministry"}%>
-  	<%= f.collection_check_boxes :receiver_gender, [[true, 'Brothers'] ,[false, 'Sisters']], :first, :last %>
-  	<%= f.input :receiver_class, collection: @other_peers, :label => "Would you like to select an opponent's peer class?", :include_blank => 'Optional', selected: nil, input_html: {id: "opp_class"}%>
+<div id="form">
+<%= render partial: 'form' %>
+</div>
 
-  	<%= f.input :valid_books, collection: @books, :label => "Would you like to limit which books are allowed?", label_method: lambda {|obj| return obj[:book]},value_method: lambda {|obj| return obj[:book]}, input_html: { multiple: "multiple", id: "books" }, selected: nil%>
-	<br>
-	<br>
-  	<%= f.button :submit,  data: { disable_with: false }%>
-<% end -%>
 
 Current Challenges
 <div id ="current_challenge_table">
@@ -41,59 +27,108 @@ Old Challenges
 </table>
 
 Rankings
+You need to read <%= @next_ten_percent[0] - @user.lifetime_count.count %> to get to the <%=@next_percentile%> percentile.
+<input id="clickMe" type="button" value="clickMe"/>
+<div id="ranking">
 <canvas id="rankingChart" width="400" height="200"></canvas>
+</div>
 <script>
-var originalLineDraw = Chart.controllers.line.prototype.draw;
-Chart.helpers.extend(Chart.controllers.line.prototype, {
-  draw: function() {
-    originalLineDraw.apply(this, arguments);
-
-    var chart = this.chart;
-    var ctx = chart.chart.ctx;
-
-    var index = chart.config.data.lineAtIndex;
-    if (index) {
-      var xaxis = chart.scales['x-axis-0'];
-      var yaxis = chart.scales['y-axis-0'];
-
-      ctx.save();
-      ctx.beginPath();
-      ctx.moveTo(xaxis.getPixelForValue(undefined, index), yaxis.top);
-      ctx.strokeStyle = '#ff0000';
-      ctx.lineTo(xaxis.getPixelForValue(undefined, index), yaxis.bottom);
-      ctx.stroke();
-      ctx.restore();
+var your_ranking = <%=@your_ranking.to_json.html_safe%>;
+var rankingChart = new Chart(document.getElementById("rankingChart").getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: ["","Percentile","","","","","","",""],
+      datasets: [
+      	{
+        	label: "Your Ranking: <%=@your_ranking.to_json.html_safe%>",
+        	type: "line",
+        	borderColor: "#000000",
+        	borderWidth: 3,
+        	pointRadius: 0,
+        	data: [your_ranking,your_ranking,your_ranking],
+        	fill: false
+        },
+        {
+          label: "0%",
+          backgroundColor: "#191970",
+          data: [0,0,0]
+        }, {
+          label: "10%",
+          backgroundColor: "#191970",
+          data: [0,10,0]
+        }, {
+          label: "20%",
+          backgroundColor: "#191970",
+          data: [0,10,0]
+        }, {
+          label: "30%",
+          backgroundColor: "#191970",
+          data: [0,10,0]
+        }, {
+          label: "40%",
+          backgroundColor: "#191970",
+          data: [0,10,0]
+        }, {
+          label: "50%",
+          backgroundColor: "#191970",
+          data: [0,10,0]
+        }, {
+          label: "60%",
+          backgroundColor: "#191970",
+          data: [0,10,0]
+        }, {
+          label: "70%",
+          backgroundColor: "#191970",
+          data: [0,10,0]
+        }, {
+          label: "80%",
+          backgroundColor: "#191970",
+          data: [0,10,0]
+        }, {
+          label: "90%",
+          backgroundColor: "#191970",
+          data: [0,10,0]
+        }, {
+          label: "100%",
+          backgroundColor: "#191970",
+          data: [0,10,0]
+        }
+      ]
+    },
+    options: {
+    	legend: {
+    		display: false
+    	},
+      title: {
+        display: true,
+        text: 'Your Percentile in Chapters Read: ' + your_ranking + "%"
+      },
+    scales: {
+	    xAxes: [{
+	        stacked: true,
+	        display: false
+	    }],
+	    yAxes: [{
+	        stacked: true,
+	        display: false
+	    }]
+	}
     }
-  }
 });
-var config = {
-  type: 'line',
-  data: {
-    labels: ...
-    datasets: [
-        ...
-    ],
-    lineAtIndex: 2
-  }
+
+document.getElementById("clickMe").onclick = function () { 
+	rankingChart.data.datasets[0].data = [75,75,75];
+	rankingChart.update();
 };
-<% p("HELLO WORLD") %>
-new Chart(document.getElementById("rankingChart").getContext('2d'), {
-  type: 'line',
-  data: {
-    labels: ["1","2","3","4","5","6","7","8"],
-    datasets: [{ 
-        data: [1,2,3,4,5,6,7,8],
-        label: "Percentile Rankings",
-        borderColor: "#3e95cd",
-        fill: false
-      }]
-  },
-  options: {
-    title: {
-      display: true,
-      text: "Percentile Rankings"
-    }
-  },
-  lineAtIndex[1],
-});
 </script>
+
+<%= simple_form_for @new_challenge, url: comparison_values_path, :method => :post, remote: true, html: {id: "random"} do |f| %>
+	<%= f.input :group1, collection: @all_ministry_names, :label => "Group 1", selected: nil, input_html: {id: "group1"}%>
+	<%= f.input :group2, collection: @all_ministry_names, :label => "Group 2", selected: nil, input_html: {id: "group2"}%>
+  	<%= f.button :submit,  data: { disable_with: false }%>
+  	<% end %>
+
+
+<div id="comparison_chart">
+<%= render partial: 'comparison_chart' %>
+</div>

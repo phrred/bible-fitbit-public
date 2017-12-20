@@ -1,0 +1,33 @@
+<% if !@outstanding_challenges.nil? and @outstanding_challenges.size > 0 %>
+Outstanding Challenge Requests
+<table>
+	<tr>
+		<td> Sender </td>
+		<td> Receiver </td>
+		<td> Accept </td>
+		<td> Reject </td>
+	</tr>
+	<% @outstanding_challenges.each_with_index do |challenge_requests, index| %>
+		<tr> 
+			<td><%= challenge_requests.challenge.sender_ministry.name%></td>
+			<td><%= challenge_requests.challenge.receiver_ministry.name %></td>
+			<td>
+
+<%= simple_form_for challenge_requests, url: accept_challenge_path, :method => :post, remote: true, html: {id: "random"} do |f| %>
+  	<%= hidden_field_tag(:challenge_request, challenge_requests.id) %>
+
+  	<%= f.button :submit, 'Accept', data: {disable_with: false }%>
+  	<% end %>
+
+			</td>
+			<td>
+
+<%= simple_form_for @new_challenge, url: reject_challenge_path, :method => :post, remote: true, html: {id: "random"} do |f| %>
+  	<%= hidden_field_tag(:challenge_request, challenge_requests.id) %>
+  	<%= f.button :submit, 'Reject', data: { disable_with: false }%>
+  	<% end %>
+			</td>
+		</tr>
+	<% end %>
+</table>
+<% end %>
