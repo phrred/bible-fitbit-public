@@ -45,4 +45,8 @@ json.each do |book|
   	Chapter.create!(book: book['book'], ch_num: chapter['chapter'], verse_count: chapter['verses'])
   end
 end
+
+File.readlines('db/seeds/groups.txt').each do |line|
+	Group.create!(name: line.strip, group_type: "ministry")
+end
 p "Seeded db."
