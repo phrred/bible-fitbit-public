@@ -1,0 +1,13 @@
+Top 10 Leaderboard
+<table>
+<% @top_10.each do |ranker| %>
+	<% if ranker.nil? %>
+	<% break %>
+	<% end %>
+	<tr bgcolor=<%= ranker["gender"] ? "#AED6F1".to_json.html_safe : "#FF83FF".to_json.html_safe %> >
+		<td bgcolor="#FF0000"> 
+			<%=ranker["count"]%>
+		</td>
+	</tr>
+<% end %>
+</table>
