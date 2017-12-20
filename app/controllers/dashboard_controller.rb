@@ -93,10 +93,10 @@ class DashboardController < ApplicationController
 		@your_pace = {}
 		read_events_for_user = ReadEvent.where(user: @user)
 		read_events_for_user.each do |read_event|
-			if @your_pace.key?(read_event.date.beginning_of_week)
-				@your_pace[read_event.date.beginning_of_week] += 1
+			if @your_pace.key?(read_event.read_at.beginning_of_week)
+				@your_pace[read_event.read_at.beginning_of_week] += 1
 			else
-				@your_pace[read_event.date.beginning_of_week] = 1
+				@your_pace[read_event.read_at.beginning_of_week] = 1
 			end
 		end
 		date = Date.today.beginning_of_week
