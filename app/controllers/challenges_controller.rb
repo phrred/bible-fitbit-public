@@ -163,6 +163,10 @@ class ChallengesController < ApplicationController
 		receiver_gender = challenge[:receiver_gender].size == 2 ? challenge[:receiver_gender][1] : nil
 		valid_books = challenge[:valid_books].size > 0 ? challenge[:valid_books] : nil
 		valid_books.slice!(0)
+		start_date = Date.today
+		if start_date.cwday > 4:
+			start_date + 7
+		end
 		new_challenge = Challenge.create!(
 			sender_ministry: sender_ministry,
 			receiver_ministry: receiver_ministry,
