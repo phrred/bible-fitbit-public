@@ -16,8 +16,8 @@ class ChallengesController < ApplicationController
 		end
 
 	  	@books = Chapter.order("created_at DESC").all.uniq{ |c| c.book }.reverse
-		session_email = session[:email]
-		@user = User.where(email: session_email).take
+		user_id = session[:user_id]
+		@user = User.where(id: user_id).take
 		@peer_class = @user.peer_class.name
 		@other_peers = Group.where(group_type: "peer_class").order(:name).pluck(:name)
 		@new_challenge = Challenge.new()
@@ -87,8 +87,8 @@ class ChallengesController < ApplicationController
 		@receiver_scores = []
 		@chart_labels = {}
 		@x_axis_labels = []
-		session_email = session[:email]
-		@user = User.where(email: session_email).take
+		user_id = session[:user_id]
+		@user = User.where(id: user_id).take
 		monday = Date.today.beginning_of_week
 		@chart_data = {}
 		ChallengeReadEntry.where(user: @user, accepted: true).each do |challenge_read_entry|
@@ -159,8 +159,8 @@ class ChallengesController < ApplicationController
 	end
 
 	def create
-		session_email = session[:email]
-		@user = User.where(email: session_email).take
+		user_id = session[:user_id]
+		@user = User.where(id: user_id).take
 		challenge =  params[:challenge]
 
 		sender_class = challenge[:sender_peer] ? @user.peer_class : nil
@@ -226,8 +226,8 @@ class ChallengesController < ApplicationController
 	def update_dropdown
 		@ministry_names = Group.where(group_type: "ministry").order(:name).pluck(:name)
 		@new_challenge = Challenge.new()
-		session_email = session[:email]
-		@user = User.where(email: session_email).take
+		user_id = session[:user_id]
+		@user = User.where(id: user_id).take
 		@gender = @user.gender ? "brothers" : "sisters"
 		@peer_class = @user.peer_class.name
 		@other_peers = Group.where(group_type: "peer_class").order(:name).pluck(:name)
@@ -311,8 +311,8 @@ class ChallengesController < ApplicationController
 		challenge_request = ChallengeReadEntry.where(id: params[:challenge_request])
 		challenge_request.update(
 			accepted: true)
-		session_email = session[:email]
-		@user = User.where(email: session_email).take
+		user_id = session[:user_id]
+		@user = User.where(id: user_id).take
 	  	@outstanding_challenges = ChallengeReadEntry.where(user: @user, accepted: nil)
 		grab_current_challenges()
 
@@ -324,8 +324,8 @@ class ChallengesController < ApplicationController
 		challenge_request = ChallengeReadEntry.where(id: params[:challenge_request])
 		challenge_request.update(
 			accepted: false)
-		session_email = session[:email]
-		@user = User.where(email: session_email).take
+		user_id = session[:user_id]
+		@user = User.where(id: user_id).take
 	  	@outstanding_challenges = ChallengeReadEntry.where(user: @user, accepted: nil)
 
 		respond_to do |format|
