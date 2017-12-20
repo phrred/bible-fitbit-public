@@ -1,0 +1,48 @@
+<canvas id="pace_chart" width="800" height="400"></canvas>
+<script>
+new Chart(document.getElementById("pace_chart").getContext('2d'), {
+  type: 'line',
+  data: {
+    labels: <%= @pace_chart_range_labels.to_json.html_safe %>,
+    datasets: [{ 
+        data: <%= @pace_chart_range_values.to_json.html_safe %>,
+        label: "Your Pace",
+        borderColor: "#3e95cd",
+        fill: false
+      }]
+  },
+  options: {
+    title: {
+      display: true,
+      text: "Your Pace" + <%=@pace_chart_range_labels[0]%> + " " + <%=@pace_chart_range_labels[3] %>
+    },
+    scales: {
+      yAxes: [{
+          id: 'y-axis-0',
+          ticks: {
+            beginAtZero:true,
+            suggestedMax: <%=@suggested_max%>
+          },
+      }]
+    }
+  }
+});
+</script>
+<div style="text-align:center">
+  <div style="display:inline-block">
+<%= simple_form_for @_, url: past_pace_path, :method => :post, remote: true, html: {id: "past_pace"} do |f| %>
+    <%= hidden_field_tag(:week, @pace_chart_range_labels[0]) %>
+
+    <%= f.button :submit, '<', data: {disable_with: false }%>
+    <% end %>
+  </div>
+  <div style="display:inline-block">
+    <%= @pace_chart_range_labels[0] %> - <%= @pace_chart_range_labels[3] %>
+  </div>
+    <div style="display:inline-block">
+<%= simple_form_for @_, url: future_pace_path, :method => :post, remote: true, html: {id: "future_pace"} do |f| %>
+    <%= hidden_field_tag(:week, @pace_chart_range_labels[3]) %>
+
+    <%= f.button :submit, '>', data: {disable_with: false }%>
+    <% end %>
+  </div>
