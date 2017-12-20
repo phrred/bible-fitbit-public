@@ -14,7 +14,7 @@ new Chart(document.getElementById("pace_chart").getContext('2d'), {
   options: {
     title: {
       display: true,
-      text: "Your Pace" + <%=@pace_chart_range_labels[0]%> + " " + <%=@pace_chart_range_labels[3] %>
+      text: "Your Pace for weeks " + <%=@pace_chart_range_labels[0].to_json.html_safe%> + " - " + <%=@pace_chart_range_labels[3].to_json.html_safe %>
     },
     scales: {
       yAxes: [{

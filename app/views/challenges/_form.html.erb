@@ -30,12 +30,9 @@ $(document).on("change", "#your_ministry", function() {
   	<%= f.button :submit,  data: { disable_with: false }%>
 <% end %>
 <script>
-	<% p(@ministry_names) %>
 	function my_function() {
-	<% p("RUNNING") %>
 	$('#opp_ministry').empty();
 	<% @ministry_names.each do |name| %>
-		<% p(name) %>
 		$('#opp_ministry').append("<option>" + "<%= name.to_s%>" + "</option>");
 	<% end %>
 	}

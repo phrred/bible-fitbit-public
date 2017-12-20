@@ -1,15 +1,18 @@
 <select id = "book_dropdown2">
-  <%= bible_books.each do |book| %>
-  <option><%= book %></option>
+  <% bible_books.each do |book| %>
+  <% if book == @last_book_read %>
+  	<option selected="selected"><%= book %></option>
+  <% else %>
+	<option><%= book %></option>
+  <% end %>
   <% end %>
 </select>
-<canvas id="test_value" width="800" height="450"></canvas>
+<canvas id="repetitions_chart" width="800" height="450"></canvas>
 <script>
     $(document).ready(function() { $("#book_dropdown2").select2(); });
-	var initial_labels = <%= Array(1..50).to_json.html_safe %>;
-	initial_labels.unshift("Genesis");
-	var initial_data = <%= @book_repetitions["Genesis"].to_json.html_safe %>;
-	var book_repetitions_chart = new Chart(document.getElementById("test_value"), {
+	var initial_labels = <%= @initial_repetition_labels.to_json.html_safe %>;
+	var initial_data = <%= @book_repetitions[@last_book_read].to_json.html_safe %>;
+	var book_repetitions_chart = new Chart(document.getElementById("repetitions_chart"), {
 	    type: 'horizontalBar',
 	    data: {
 	      labels: initial_labels,
@@ -25,11 +28,15 @@
 	      legend: { display: false },
 	      title: {
 	        display: true,
-	        text: 'How many times have you read each chapter of Genesis'
+	        text: 'How many times have you read each chapter of ' + <%= @last_book_read.to_json.html_safe %>
 	      },
 	      scales: {
 			xAxes: [{
 		      id: 'x-axis-0',
+		      scaleLabel: {
+		      	display: true,
+			      labelString: "Number of Reads"
+			  },
 		      ticks: {
 		        beginAtZero:true,
 		        suggestedMax: <%=@x_axis_max%>
