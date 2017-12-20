@@ -23,7 +23,6 @@ class ChallengesController < ApplicationController
 		@new_challenge = Challenge.new()
 
 	  	@outstanding_challenges = ChallengeReadEntry.where(user: @user, accepted: nil)
-	  	p(@outstanding_challenges)
 
 
 		@ministry_names = Group.where(group_type: "ministry").order(:name).pluck(:name)
@@ -70,8 +69,6 @@ class ChallengesController < ApplicationController
 		@your_ranking = your_rank*100/count_ids.size()
 		@next_percentile = (@your_ranking/10+1).floor*10
 		@next_percentile_id = (@next_percentile/100*count_ids.size()).floor
-		p("HI")
-		p(@next_percentile_id)
 		@next_ten_percent = Count.where(id: count_ids[@next_percentile_id]).pluck(:count)
 	end
 
@@ -272,26 +269,11 @@ class ChallengesController < ApplicationController
 	end
 
 	def comparison_values
-		# chal = Challenge.take(1)[0]
-		# session_email = session[:email]
-		# @user = User.where(email: session_email).take
-		# p(@user)
-		# p(chal)
-		# ChallengeReadEntry.create!(
-		# 	user: @user,
-		# 	challenge: chal)
-		p(1)
-		p(params)
 		other_params = params[:challenge]
-		p(2)
-		p(other_params)
 		group1_model = Group.where(name: other_params[:group1])[0]
 		group2_model = Group.where(name: other_params[:group2])[0]
-		p(group1_model)
-		p(group2_model)
 		@group1 = group1_model.name
 		@group2 = group2_model.name
-		p("SAM")
 		count_sums = {}
 		@all_ministry_names = Group.where(group_type: "ministry").order(:name).pluck(:name)
 		@all_users = User.all
@@ -324,14 +306,12 @@ class ChallengesController < ApplicationController
 			@group2_sum += count_sums[group.name]
 		end
 		@title_text = @group1 + " vs. " + @group2
-		p("HERRO FRED")
 		respond_to do |format|
 			format.js
 		end
 	end
 
 	def accept_challenge
-		p("accept")
 		challenge_request = ChallengeReadEntry.where(id: params[:challenge_request])
 		challenge_request.update(
 			accepted: true)
@@ -345,7 +325,6 @@ class ChallengesController < ApplicationController
 		end
 	end
 	def reject_challenge
-		p("reject")
 		challenge_request = ChallengeReadEntry.where(id: params[:challenge_request])
 		challenge_request.update(
 			accepted: false)
