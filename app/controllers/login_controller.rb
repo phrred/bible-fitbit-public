@@ -1,6 +1,8 @@
 class LoginController < ApplicationController
 	skip_before_action :verify_user, only: [:show]
 	def show
-		p "here in the login controller"
+		if session[:user_id] != nil
+			redirect_to dashboard_path
+		end
 	end
 end

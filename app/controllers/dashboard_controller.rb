@@ -3,8 +3,8 @@ class DashboardController < ApplicationController
 
 	def config_dashboard
 		@_ = Challenge.new()
-		session_email = session[:email]
-		@user = User.where(email: session_email).take
+		user_id = session[:user_id]
+		@user = User.where(id: user_id).take
 		@all_ministry_names = Group.where(group_type: "ministry").order(:name).pluck(:name)
 	end
 	def show
