@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_oath_user
-    @current_oath_user ||= OathUser.where(session[:oath_user_id]) if session[:oath_user_id]
+    @current_oath_user ||= OathUser.find(session[:oath_user_id]) if session[:oath_user_id]
   end
 
   def verify_oath_user
