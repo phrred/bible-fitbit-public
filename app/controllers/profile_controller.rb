@@ -1,6 +1,7 @@
 class ProfileController < ApplicationController
   include ApplicationHelper
   skip_before_action :verify_user, only: [:new, :update]
+  skip_before_action :verify_user
 
   def new
     @user = User.new
