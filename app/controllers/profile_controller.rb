@@ -1,11 +1,12 @@
 class ProfileController < ApplicationController
   include ApplicationHelper
   skip_before_action :verify_user, only: [:new, :update]
+  skip_before_action :verify_user
 
   def new
     @user = User.new
-    @ministry_names = Group.where(group_type: "ministry").pluck(:name)
-    @classes = Group.where(group_type: "peer_class").pluck(:name)
+    @ministry_names = Group.where(group_type: "ministry").order(:name).pluck(:name)
+    @classes = Group.where(group_type: "peer_class").order(:name).pluck(:name)
     @user_name = session[:user_name]
   end
 
@@ -13,8 +14,8 @@ class ProfileController < ApplicationController
     verify_oath_user()
     session_email = session[:user_email]
 
-    @ministry_names = Group.where(group_type: "ministry").pluck(:name)
-    @classes = Group.where(group_type: "peer_class").pluck(:name)
+    @ministry_names = Group.where(group_type: "ministry").order(:name).pluck(:name)
+    @classes = Group.where(group_type: "peer_class").order(:name).pluck(:name)
     
     @user = User.where(email: session_email).take
     if @user != nil
@@ -74,7 +75,7 @@ class ProfileController < ApplicationController
         }
       }
       UserShadowing.create!(new_shadowings)
-      redirect_to action: "show", controller: "home"
+      redirect_to action: "show", controller: "dashboard"
     end
   end
 
