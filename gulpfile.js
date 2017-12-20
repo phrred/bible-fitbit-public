@@ -1,3 +1,5 @@
+// npm i --save-dev gulp gulp-sass gulp-autoprefixer gulp-minify-css gulp-uglify gulp-imagemin gulp-rename gulp-concat gulp-cache del
+
 // Load plugins
 var gulp = require('gulp'),
 sass = require('gulp-sass'),
