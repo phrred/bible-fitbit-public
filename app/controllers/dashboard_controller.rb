@@ -75,11 +75,6 @@ class DashboardController < ApplicationController
 
 	def set_up_pace_chart
 		@your_pace = {}
-		date = Date.today.beginning_of_week
-		while(@your_pace.size < 52)
-			@your_pace[date] = 0
-			date = date - 7
-		end
 		read_events_for_user = ReadEvent.where(user: @user)
 		read_events_for_user.each do |read_event|
 			if @your_pace.key?(read_event.date.beginning_of_week)
@@ -87,6 +82,15 @@ class DashboardController < ApplicationController
 			else
 				@your_pace[read_event.date.beginning_of_week] = 1
 			end
+		end
+		date = Date.today.beginning_of_week
+		while(@your_pace.size < 52)
+			@your_pace[date] = 0
+			date = date - 7
+		end
+		while @your_pace.keys.min < date
+			@your_pace[date] = 0
+			date = date - 7
 		end
 		@suggested_max = @your_pace.values.max + 5
 	end
