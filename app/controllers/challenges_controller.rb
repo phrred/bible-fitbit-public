@@ -164,7 +164,7 @@ class ChallengesController < ApplicationController
 		valid_books = challenge[:valid_books].size > 0 ? challenge[:valid_books] : nil
 		valid_books.slice!(0)
 		start_date = Date.today
-		if start_date.cwday > 4:
+		if start_date.cwday > 4
 			start_date + 7
 		end
 		new_challenge = Challenge.create!(
