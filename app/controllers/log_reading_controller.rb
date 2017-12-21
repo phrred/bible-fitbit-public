@@ -1,6 +1,6 @@
 class LogReadingController < ApplicationController
   skip_before_action :verify_authenticity_token
-  
+
   @@chapters = Chapter.order("created_at DESC").all.uniq{ |c| c.book }.reverse!
 
   def show
@@ -46,7 +46,7 @@ class LogReadingController < ApplicationController
     end
   	respond_to do |format|
   		format.js
-  	end	
+    end
   end
 
   def update
@@ -69,14 +69,14 @@ class LogReadingController < ApplicationController
       challenges = readEntry.map { |entry| entry.challenge.valid_books.include?(@displayed_book) }
     end
     chapters_read = []
-    chapters.each { |chapter_num|  
+    chapters.each { |chapter_num|
       chapter = Chapter.find_by(book: @displayed_book, ch_num: chapter_num)
       if ReadEvent.where(read_at: date, user: user, chapter: chapter).take == nil
         lifetime_count.count += 1
          annual_count.count += 1
         ReadEvent.create!(read_at: date, user: user , chapter: chapter)
         if challenges != nil
-          challenges.each { |challenge_entry| 
+          challenges.each { |challenge_entry|
             challenge_entry.chapters << chapter.id
             challenge_entry.save
           }
@@ -90,7 +90,7 @@ class LogReadingController < ApplicationController
           user_shadowing.shadowing << chapter_num
           user_shadowing.save
         end
-      else 
+      else
         chapters_read << chapter_num
       end
     }
@@ -117,7 +117,7 @@ class LogReadingController < ApplicationController
     user_shadowings = UserShadowing.where(user: user)
     user_shadowings.each { |s|
       s.shadowing = []
-      s.save 
+      s.save
     }
   end
 

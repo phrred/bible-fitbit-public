@@ -1,11 +1,11 @@
 Rankings
-You need to read <%= @next_ten_percent[0] - @user.lifetime_count.count %> to get to the <%=@next_percentile%> percentile.
-<input id="clickMe" type="button" value="clickMe"/>
+<br>
+You need to read <%= @next_ten_percent[0] - @user.lifetime_count.count %> to get to the <%=@next_percentile.to_json.html_safe%> percentile.
 <div id="ranking">
   <canvas id="rankingChart" width="400" height="200"></canvas>
 </div>
 <script>
-var your_ranking = <%=@your_ranking.to_json.html_safe%>;
+var your_ranking = <%=@your_ranking_percentile.to_json.html_safe%>;
 var rankingChart = new Chart(document.getElementById("rankingChart").getContext('2d'), {
     type: 'bar',
     data: {
@@ -87,9 +87,4 @@ var rankingChart = new Chart(document.getElementById("rankingChart").getContext(
   }
     }
 });
-
-document.getElementById("clickMe").onclick = function () { 
-  rankingChart.data.datasets[0].data = [75,75,75];
-  rankingChart.update();
-};
 </script>
