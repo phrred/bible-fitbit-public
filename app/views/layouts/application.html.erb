@@ -6,54 +6,37 @@
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-<style>
-ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #333333;
-}
-
-li {
-    float: right;
-}
-
-li a {
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 16px;
-    text-decoration: none;
-}
-
-li a:hover {
-    background-color: #111111;
-}
-</style>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800" rel="stylesheet">
   </head>
   <body>
     <% if !session[:user_id].nil? %>
       <header>
-        <ul class="nav navbar-nav">
-          <li><%=link_to'Log Out', signout_path%></li>
-          <li><%=link_to "Profile", profile_path %></li>
-          <% if !@pending_challenge_requests.nil? and @pending_challenge_requests.size > 0 %>
-            <li><%=link_to "Challenges " + String(@pending_challenge_requests.size), challenges_path%></li> 
-          <% else %>
-            <li><%=link_to "Challenges", challenges_path%></li>
-          <% end %>
-          <li><%=link_to "Log Reading", log_reading_path%></li>
-          <li ><%=link_to "Dashboard", dashboard_path%></li>
+        <ul class="Nav">
+          <div class="Nav_items-left">
+            <div class="Nav_logo">
+              <%=link_to "Bible Fitbit", dashboard_path%>
+            </div>
+            
+            <li class="Nav_item"><%=link_to "Profile", profile_path %></li>
+            <% if !@pending_challenge_requests.nil? and @pending_challenge_requests.size > 0 %>
+              <li class="Nav_item"><%=link_to "Challenges " + String(@pending_challenge_requests.size), challenges_path%></li> 
+            <% else %>
+              <li class="Nav_item"><%=link_to "Challenges", challenges_path%></li>
+            <% end %>
+            <li class="Nav_item"><%=link_to "Log Reading", log_reading_path%></li>
+          </div>
+          <div class="Nav_items-right">
+            <li class="Nav_item"><%=link_to'Log Out', signout_path%></li>
+          </div>
         </ul>
-  </header>
-  <% end %>
-    <div>
+      </header>
+    <% end %>
 		<div class="container">
-      	<% flash.each do |key, value| %>
-        	<div class="alert alert-<%= key %>"><%= value %>
-        	</div>
-      	<% end %>
+    	<% flash.each do |key, value| %>
+      	<div class="alert alert-<%= key %>">
+          <%= value %>
+      	</div>
+    	<% end %>
     	<%= yield %>
     </div>
   </body>
