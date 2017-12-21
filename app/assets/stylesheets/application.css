@@ -1,16 +1,1 @@
-/*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
- * vendor/assets/stylesheets directory can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
- * files in this directory. Styles in this file should be added after the last require_* statement.
- * It is generally better to create a new file per style scope.
- *
- *= require_tree .
- *= require_self
- *= require select2
- */
+.Login_title,.Nav_logo a{font-weight:500;text-transform:uppercase}.Button,.Login_title,.Nav_logo a{text-transform:uppercase}.Button,.Nav_item a,.Nav_logo a{text-decoration:none;color:#fff}*{padding:0;margin:0;font-family:Montserrat,sans-serif;font-size:13px;-webkit-box-sizing:border-box;box-sizing:border-box}h1{font-size:40px;margin-bottom:15px}.input{margin-bottom:10px;width:500px}.input label{width:25%;display:inline-block}.input input,.input select{width:40%;height:30px;padding:0 6.67px}.input .select2{display:none}.Cards{display:-webkit-box;display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap}.Nav,.Nav_items-left{display:-webkit-box;display:-ms-flexbox;-webkit-box-align:center}.Cards .Card{width:calc(50% - 20px);border:1px solid #eee;border-radius:3px;padding:20px;margin:10px}.Nav{position:fixed;background-color:salmon;height:75px;top:0;left:0;right:0;display:flex;list-style:none;-ms-flex-align:center;align-items:center;padding:20px;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.Nav_logo{margin-right:30px}.Nav_logo a{font-size:32px}.Nav_items-left{display:flex;-ms-flex-align:center;align-items:center}.Nav_item{padding:20px 10px}.Login{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;width:100%;height:100vh;text-align:center;color:#fff;background:url(/app/assets/images/login.jpg) salmon}.Login_title{font-size:54px;margin-bottom:15px}.Button{letter-spacing:1px;-webkit-transition:all .25s;transition:all .25s;padding:10px 20px;border:1px solid salmon;background-color:salmon;border-radius:3px}.Button:hover{cursor:pointer}.Button-light{color:#fff;border-color:#fff}.Button-light:hover{background:rgba(255,255,255,.15)}.Container{max-width:1000px;margin:75px auto 0;padding:60px}

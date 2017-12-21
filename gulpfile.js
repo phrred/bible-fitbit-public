@@ -14,7 +14,7 @@ del = require('del')
 
 var paths = {
   // SCSS Files
-  scss: 'src/styles/main.scss',
+  scss: 'src/stylesheets/main.scss',
 };
 
 // Styles
@@ -23,8 +23,8 @@ gulp.task('styles', function() {
     .pipe(sass())
     .pipe(autoprefixer('last 2 version'))
     .pipe(minifycss())
-    .pipe(concat('stylesheet.min.css'))
-    pipe(gulp.dest('dist/styles'))
+    .pipe(concat('application.css'))
+    .pipe(gulp.dest('app/assets/stylesheets'));
   }
 );
 
@@ -32,12 +32,12 @@ gulp.task('styles', function() {
 gulp.task('images', function() {
   return gulp.src('src/images/**/*')
     .pipe(cache(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true })))
-    .pipe(gulp.dest('dist/images'));
+    .pipe(gulp.dest('app/assets/images'));
 });
 
 // Clean
 gulp.task('clean', function() {
-  return del(['dist/styles', 'dist/images']);
+  return del(['app/assets/stylesheets', 'app/assets/images']);
 });
 
 // Default task
@@ -49,7 +49,7 @@ gulp.task('default', ['clean'], function() {
 gulp.task('watch', function() {
 
   // Watch .scss files
-  gulp.watch('src/styles/**/*.scss', ['styles']);
+  gulp.watch('src/stylesheets/**/*.scss', ['styles']);
 
   // Watch image files
   gulp.watch('src/images/**/*', ['images']);

@@ -1,61 +1,68 @@
-<h1>This is the dashboard</h1>
-<div>
-	Percentage of bible read: <%=@percentage_of_bible.round(2)%>%
-</div>
-<% if not @last_book_read %>
-  You have not read any books.
-<% else %>
-	Percentage of <%=@last_book_read%> read: <%=@percentage_of_last_book%>
-<% end %>
+<div class="Container">
+  <h1>Dashboard</h1>
+  <div>
+  	Percentage of bible read: <%=@percentage_of_bible.round(2)%>%
+  </div>
+  <% if not @last_book_read %>
+    You have not read any books.
+  <% else %>
+  	Percentage of <%=@last_book_read%> read: <%=@percentage_of_last_book%>
+  <% end %>
 
-<canvas id="bible_percent" width="800" height="450"></canvas>
-<script>
-new Chart(document.getElementById("bible_percent"), {
-    type: 'doughnut',
-    data: {
-      labels: ["Read", "Not Read"],
-      datasets: [
-        {
-          label: "Percentages",
-          backgroundColor: ["#3e95cd", "#8e5ea2"],
-          data: [<%= @percentage_of_bible.round(2).to_json.html_safe%>,<%=(100-@percentage_of_bible).round(2).to_json.html_safe%>]
+  <div class="Cards">
+
+    <div class="Card">
+      <canvas id="bible_percent" width="800" height="450"></canvas>
+    </div>
+    <script>
+    new Chart(document.getElementById("bible_percent"), {
+        type: 'doughnut',
+        data: {
+          labels: ["Read", "Not Read"],
+          datasets: [
+            {
+              label: "Percentages",
+              backgroundColor: ["#3e95cd", "#8e5ea2"],
+              data: [<%= @percentage_of_bible.round(2).to_json.html_safe%>,<%=(100-@percentage_of_bible).round(2).to_json.html_safe%>]
+            }
+          ]
+        },
+        options: {
+          title: {
+            display: true,
+            text: 'What percent of the bible have you read?'
+          }
         }
-      ]
-    },
-    options: {
-      title: {
-        display: true,
-        text: 'What percent of the bible have you read?'
-      }
-    }
-});
-</script>
+    });
+    </script>
 
-<div id = "your_ranking">
-  <%= render partial: 'your_ranking' %>
-</div>
+    <div class="Card" id = "your_ranking">
+      <%= render partial: 'your_ranking' %>
+    </div>
 
-<div id = "book_percentages">
-	<%= render partial: 'book_percentages' %>
-</div>
+    <div class="Card" id = "book_percentages">
+    	<%= render partial: 'book_percentages' %>
+    </div>
 
-<div id = "book_repetitions">
-	<%= render partial: "book_repetitions" %>
-</div>
+    <div class="Card" id = "book_repetitions">
+    	<%= render partial: "book_repetitions" %>
+    </div>
 
-<div id = "your_pace">
-  <%= render partial: "your_pace" %>
-</div>
-<%= simple_form_for @_, url: comparison_values_path, :method => :post, remote: true, html: {id: "random"} do |f| %>
-  <%= f.input :sender_ministry, collection: @all_ministry_names, :label => "Group 1", selected: nil, input_html: {id: "group1"}%>
-  <%= f.input :receiver_ministry, collection: @all_ministry_names, :label => "Group 2", selected: nil, input_html: {id: "group2"}%>
-    <%= f.button :submit,  'Compare the Groups!',data: { disable_with: false }%>
-    <% end %>
-<script>
-  $(document).ready(function() { $("#group1").select2(); });
-  $(document).ready(function() { $("#group2").select2(); });
-</script>
+    <div class="Card" id = "your_pace">
+      <%= render partial: "your_pace" %>
+    </div>
+    <%= simple_form_for @_, url: comparison_values_path, :method => :post, remote: true, html: {id: "random"} do |f| %>
+      <%= f.input :sender_ministry, collection: @all_ministry_names, :label => "Group 1", selected: nil, input_html: {id: "group1"}%>
+      <%= f.input :receiver_ministry, collection: @all_ministry_names, :label => "Group 2", selected: nil, input_html: {id: "group2"}%>
+        <%= f.button :submit,  'Compare the Groups!',data: { disable_with: false }%>
+        <% end %>
+    <script>
+      $(document).ready(function() { $("#group1").select2(); });
+      $(document).ready(function() { $("#group2").select2(); });
+    </script>
 
-<div id="comparison_chart">
-  <%= render partial: 'comparison_chart' %>
+    <div class="Card" id="comparison_chart">
+      <%= render partial: 'comparison_chart' %>
+    </div>
+  </div>
 </div>
