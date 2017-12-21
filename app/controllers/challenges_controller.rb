@@ -167,6 +167,7 @@ class ChallengesController < ApplicationController
 		if start_date.cwday > 4
 			start_date + 7
 		end
+		start_date = start_date.beginning_of_week
 		new_challenge = Challenge.create!(
 			sender_ministry: sender_ministry,
 			receiver_ministry: receiver_ministry,
@@ -175,7 +176,7 @@ class ChallengesController < ApplicationController
 			sender_peer: sender_class,
 			receiver_peer_id: receiver_class,
 			valid_books: valid_books,
-			start_time: Date.today.beginning_of_week
+			start_time: start_date
 		)
 		sender_recipients = []
 		User.where(ministry: sender_ministry).each do |user|
