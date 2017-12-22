@@ -57,12 +57,33 @@ class ChallengesController < ApplicationController
 			end
 		end
 
-
 		grab_current_challenges()
 
 	end
 
+	def create
+		@books = Chapter.order("created_at DESC").all.uniq{ |c| c.book }.reverse
+		user_id = session[:user_id]
+		@user = User.where(id: user_id).take
+		@peer_class = @user.peer_class.name
+		@other_peers = Group.where(group_type: "peer_class").order(:name).pluck(:name)
+		@new_challenge = Challenge.new()
+		@ministry_names = Group.where(group_type: "ministry").order(:name).pluck(:name)
+		@all_ministry_names = Group.where(group_type: "ministry").order(:name).pluck(:name)
+		@gender = @user.gender ? "brothers" : "sisters"
+		selected_ministry = @user.ministry
+		@grouping_options = [selected_ministry]
+		selected_ministry.ancestors.each do |ministry|
+			@ministry_names.delete(ministry.name)
+			@grouping_options << ministry
+		end
 
+		@ministry_names.delete(selected_ministry.name)
+		selected_ministry.descendants.each do |ministry|
+			@ministry_names.delete(ministry.name)
+		end
+
+	end
 
 	def initialize_chart_data(challenge)
 		date = challenge.start_time
@@ -150,7 +171,7 @@ class ChallengesController < ApplicationController
 			user: user)
 	end
 
-	def create
+	def create_challenge
 		user_id = session[:user_id]
 		@user = User.where(id: user_id).take
 		challenge =  params[:challenge]
@@ -213,6 +234,7 @@ class ChallengesController < ApplicationController
 		respond_to do |format|
 			format.js
 		end
+		redirect_to challenges_path
 	end
 
 	def is_user_in_group(user, group)
