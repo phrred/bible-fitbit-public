@@ -1,40 +1,69 @@
-$margin: 30px;
+$margin: 20px;
 $padding: 20px;
 
-$primary-color: salmon;
+$primary-color: #4D5382;
 
 * {
 	padding: 0;
 	margin: 0;
   font-family: Montserrat, sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   box-sizing: border-box;
 }
 
 h1 {
   font-size: 40px;
-  margin-bottom: $margin / 2;
+  margin-bottom: $margin;
+}
+
+h2 {
+  font-size: 30px;
+  margin-bottom: $margin;
+}
+
+h3 {
+  font-size: 20px;
+  margin-bottom: $margin;
+}
+
+p {
+  margin-bottom: $margin;
+}
+
+.strong {
+  font-weight: 600;
 }
 
 .input {
-  margin-bottom: $margin / 3;
+  margin-bottom: $margin;
   width: 500px;
+  display: flex;
 
   label {
-    width: 25%;
+    width: 50%;
     display: inline-block;
+    margin-right: $margin;
   }
 
   input,
   select {
-    width: 40%;
+    width: 50%;
     height: 30px;
     padding: 0 $padding / 3;
   }
 
-  .select2 {
-    display: none;
+  #books {
+    height: 300px;
   }
+}
+
+select {
+    height: 30px;
+    padding: 0 $padding / 3;
+  }
+
+.select2 {
+  display: none;
 }
 
 $border-color: #eee;
@@ -63,7 +92,7 @@ $border-radius: 3px;
   display: flex;
   list-style: none;
   align-items: center;
-  padding: $padding;
+  padding: 0 $padding;
   justify-content: space-between;
 
   &_logo { 
@@ -81,18 +110,27 @@ $border-radius: 3px;
   &_items-left {
     display: flex;
     align-items: center;
+    height: 100%;
   }
 
   &_items-right {
-
+    height: 100%;
   }
 
   &_item {
-    padding: $padding $padding / 2;
+    height: 100%;
     
     a {
       color: white;
       text-decoration: none;
+      height: 100%;
+      padding: 0 $padding / 2;
+      display: flex;
+      align-items: center;
+    }
+
+    &:hover {
+      background-color: rgba(255,255,255,0.25);
     }
   }
 }
@@ -129,6 +167,7 @@ $border-radius: 3px;
 
   &:hover {
     cursor: pointer;
+    background-color: lighten($primary-color, 10%);
   }
 
   &-light {
@@ -142,7 +181,7 @@ $border-radius: 3px;
 }
 
 .Container {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 60px;
   margin-top: 75px;

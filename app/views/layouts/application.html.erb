@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>BibleFitbit</title>
+    <title>Bible Fitbit</title>
     <%= csrf_meta_tags %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
@@ -17,15 +17,16 @@
               <%=link_to "Bible Fitbit", dashboard_path%>
             </div>
             
-            <li class="Nav_item"><%=link_to "Profile", profile_path %></li>
             <% if !@pending_challenge_requests.nil? and @pending_challenge_requests.size > 0 %>
               <li class="Nav_item"><%=link_to "Challenges " + String(@pending_challenge_requests.size), challenges_path%></li> 
             <% else %>
               <li class="Nav_item"><%=link_to "Challenges", challenges_path%></li>
             <% end %>
             <li class="Nav_item"><%=link_to "Log Reading", log_reading_path%></li>
+            <li class="Nav_item"><%=link_to "Profile", profile_path %></li>
           </div>
           <div class="Nav_items-right">
+            <!-- <li>Currently signed in as <%=@user_name%>.</li> -->
             <li class="Nav_item"><%=link_to'Log Out', signout_path%></li>
           </div>
         </ul>

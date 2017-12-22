@@ -19,15 +19,18 @@ $(document).on("change", "#your_ministry", function() {
 	<%= f.input :sender_gender, label: "Would you like only " + @gender + " to compete?", as: :radio_buttons %>
 	<%= f.input :sender_peer, label: "Would you like only your peers class of " + @peer_class + " to compete?",  as: :radio_buttons%>
 	<br>
-	Now enter your opponents information.
+	<p class="strong">Now enter your opponents information.</p>
 	<%= f.input :receiver_ministry, collection: @ministry_names, :label => "Your opponent's ministry group", selected: nil, input_html: {id: "opp_ministry"}%>
-  	<%= f.collection_check_boxes :receiver_gender, [[true, 'Brothers'] ,[false, 'Sisters']], :first, :last %>
-  	<%= f.input :receiver_peer, collection: @other_peers, :label => "Would you like to select an opponent's peer class?", :include_blank => 'Optional', selected: nil, input_html: {id: "opp_class"}%>
+  	<div class="input">
+      <label>Which genders?</label>
+      <%= f.collection_check_boxes :receiver_gender, [[true, 'Brothers'] ,[false, 'Sisters']], :first, :last %>
+  	</div>
+    <%= f.input :receiver_peer, collection: @other_peers, :label => "Would you like to select an opponent's peer class?", :include_blank => 'Optional', selected: nil, input_html: {id: "opp_class"}%>
 
   	<%= f.input :valid_books, collection: @books, :label => "Would you like to limit which books are allowed?", label_method: lambda {|obj| return obj[:book]},value_method: lambda {|obj| return obj[:book]}, input_html: { multiple: "multiple", id: "books" }, selected: nil%>
 	<br>
 	<br>
-  	<%= f.button :submit,  data: { disable_with: false }%>
+  	<%= f.button :submit,  data: { disable_with: false }, class: 'Button' %>
 <% end %>
 <script>
 	function my_function() {
