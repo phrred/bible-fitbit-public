@@ -3,15 +3,7 @@
   	<%= render partial: 'challenge_requests' %>
   </div>
 
-  <h1>Create a challenge</h1>
-
-  <p>Hello <%= @user.name %>, you have come to this page to issue a challenge.</p>
-  <p class="strong">Please begin by inputting your side of the challenge.</p>
-
-  <div id="form">
-  <%= render partial: 'form' %>
-  </div>
-
+  <%= link_to "Create Challenge", create_challenge_path %>
 
   <h2>Current Challenges</h2>
   <div id ="current_challenge_table">

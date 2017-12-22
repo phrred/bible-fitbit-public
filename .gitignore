@@ -18,5 +18,4 @@
 
 .byebug_history
 
-app/.DS_Store
-db/.DS_Store
+.DS_Store
