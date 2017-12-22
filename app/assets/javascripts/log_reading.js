@@ -1,4 +1,4 @@
-$(function () {
+function highlightTable() {
   var isMouseDown = false,
     isHighlighted;
   $("#our_table td")
@@ -18,7 +18,7 @@ $(function () {
     .mouseup(function () {
       isMouseDown = false;
     });
-});
+};
 
 $(document).on("click", "#save_reading", function() {
   if (confirm('Are you sure ?')) {
@@ -66,3 +66,4 @@ $(document).on("click", "#reset_bible", function() {
    }
 });
 
+$(document).on('turbolinks:load', highlightTable);

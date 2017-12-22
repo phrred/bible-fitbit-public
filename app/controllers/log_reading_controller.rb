@@ -34,6 +34,7 @@ class LogReadingController < ApplicationController
     user = User.find(userId)
     @submitted_date = ReadEvent.new;
   	@selected_book =  params[:chapter][:book]
+    @displayed_book = @selected_book
     last_read_event = ReadEvent.joins(:chapter).where(chapters: {book: @selected_book}).order("read_at").last
     if last_read_event != nil
       @last_read_date = last_read_event.read_at.strftime('%a %b %d %Y')
