@@ -11,6 +11,7 @@ $challenge-sidebar-color: #eee;
     background-color: $challenge-sidebar-color;
     height: calc(100vh - 75px);
     padding: $padding;
+    width: 500px;
   }
 
   &_buttonContainer {

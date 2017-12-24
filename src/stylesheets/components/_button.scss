@@ -1,7 +1,7 @@
 .Button {
   text-transform: uppercase;
   letter-spacing: 1px;
-  transition: all .25s;
+  transition: $transition;
   padding: ($padding / 2) $padding;
   border: solid 1px $primary-color;
   background-color: $primary-color;
@@ -22,5 +22,9 @@
     &:hover {
       background: rgba(255,255,255,0.15);
     }
+  }
+
+  &-small {
+    padding: $padding / 4;
   }
 }

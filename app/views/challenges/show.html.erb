@@ -2,29 +2,38 @@
   <div class="Challenge_left Container">
 
     <h2>Current Challenges</h2>
-    <div id ="current_challenge_table">
-    <%= render partial: 'current_challenge_table' %>
-    </div>
+    <% if !@current_challenges.empty?%>
+      <div id ="current_challenge_table">
+      <%= render partial: 'current_challenge_table' %>
+      </div>
+    <% else %>
+      <p>You're currently not in any challenges.</p>
+      <%= link_to "Create a Challenge", create_challenge_path, class: "Button" %>
+    <% end %>
 
-    <h2>Archived Challenges</h2>
-    <table>
-      <% if !@old_challenges.nil? %>
-      	<% @old_challenges.each do |challenge| %>
-      		<tr> 
-      			<td><%= challenge.sender_ministry.name %></td>
-      			<td><%= challenge.receiver_ministry.name %></td>
-      			<td><%= challenge.winner ? challenge.sender_ministry.name : challenge.receiver_ministry.name %> Won</td>
-      		</tr>
-      	<% end %>
-      <% else %>
-        <div>You have not been in a challenge yet!</div> 
-      <% end %>
-    </table>
+    <% if !@old_challenges.empty? %>
+      <div>
+        <h2>Archived Challenges</h2>
+        <table>
+          	<% @old_challenges.each do |challenge| %>
+          		<tr> 
+          			<td><%= challenge.sender_ministry.name %></td>
+          			<td><%= challenge.receiver_ministry.name %></td>
+          			<td><%= challenge.winner ? challenge.sender_ministry.name : challenge.receiver_ministry.name %> Won</td>
+          		</tr>
+          	<% end %>
+        </table>
+      </div>
+    <% end %>
   </div>
+  
   <div id="challenge_requests" class="Challenge_right">
     <div class="Challenge_buttonContainer">
-      <%= link_to "Create Challenge", create_challenge_path, class: "Button" %>
+      <%= link_to "Create a Challenge", create_challenge_path, class: "Button" %>
     </div>
-    <%= render partial: 'challenge_requests' %>
+    <% if !@outstanding_challenges.nil? and @outstanding_challenges.size > 0 %>
+      <%= render partial: 'challenge_requests' %>
+    <% end %>
   </div>
+
 </div>

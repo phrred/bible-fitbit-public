@@ -1,4 +1,3 @@
-<% if !@outstanding_challenges.nil? and @outstanding_challenges.size > 0 %>
 <h4>Outstanding Challenge Requests</h4>
 <table>
 	<% @outstanding_challenges.each_with_index do |challenge_requests, index| %>
@@ -10,7 +9,7 @@
 <%= simple_form_for challenge_requests, url: accept_challenge_path, :method => :post, remote: true, html: {id: "random"} do |f| %>
   	<%= hidden_field_tag(:challenge_request, challenge_requests.id) %>
 
-  	<%= f.button :submit, 'Accept', data: {disable_with: false }%>
+  	<%= f.button :submit, '✓', data: {disable_with: false }, class: 'Button Button-small' %>
   	<% end %>
 
 			</td>
@@ -18,10 +17,9 @@
 
 <%= simple_form_for @new_challenge, url: reject_challenge_path, :method => :post, remote: true, html: {id: "random"} do |f| %>
   	<%= hidden_field_tag(:challenge_request, challenge_requests.id) %>
-  	<%= f.button :submit, 'Reject', data: { disable_with: false }%>
+  	<%= f.button :submit, '☓', data: { disable_with: false }, class: 'Button Button-small' %>
   	<% end %>
 			</td>
 		</tr>
 	<% end %>
 </table>
-<% end %>
