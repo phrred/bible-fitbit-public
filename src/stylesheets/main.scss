@@ -1,5 +1,8 @@
+$border-color: #eee;
+$border-radius: 3px;
 $margin: 20px;
 $padding: 20px;
+$transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
 $primary-color: #4D5382;
 
@@ -66,123 +69,9 @@ select {
   display: none;
 }
 
-$border-color: #eee;
-$border-radius: 3px;
-
-.Cards {
-  display: flex;
-  flex-wrap: wrap;
-
-  .Card {
-    width: calc(50% - #{$padding});
-    border: solid 1px $border-color;
-    border-radius: $border-radius;
-    padding: $padding;
-    margin: $padding / 2;
-  }
-}
-
-.Nav {
-  position: fixed;
-  background-color: $primary-color;
-  height: 75px;
-  top: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  list-style: none;
-  align-items: center;
-  padding: 0 $padding;
-  justify-content: space-between;
-
-  &_logo { 
-    margin-right: $margin;
-
-    a {
-      font-size: 32px;
-      font-weight: 500;
-      text-transform: uppercase;
-      color: white;
-      text-decoration: none;
-    }   
-  }
-
-  &_items-left {
-    display: flex;
-    align-items: center;
-    height: 100%;
-  }
-
-  &_items-right {
-    height: 100%;
-  }
-
-  &_item {
-    height: 100%;
-    
-    a {
-      color: white;
-      text-decoration: none;
-      height: 100%;
-      padding: 0 $padding / 2;
-      display: flex;
-      align-items: center;
-    }
-
-    &:hover {
-      background-color: rgba(255,255,255,0.25);
-    }
-  }
-}
-
-.Login {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100vh;
-  text-align: center;
-  color: white;
-  background: url('/app/assets/images/login.jpg');
-  background-color: $primary-color;
-
-  &_title {
-    font-size: 54px;
-    font-weight: 500;
-    text-transform: uppercase;
-    margin-bottom: $margin / 2;
-  }
-}
-
-.Button {
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: all .25s;
-  padding: ($padding / 2) $padding;
-  border: solid 1px $primary-color;
-  background-color: $primary-color;
-  color: white;
-  border-radius: 3px;
-  text-decoration: none;
-
-  &:hover {
-    cursor: pointer;
-    background-color: lighten($primary-color, 10%);
-  }
-
-  &-light {
-    color: white;
-    border-color: white;
-
-    &:hover {
-      background: rgba(255,255,255,0.15);
-    }
-  }
-}
-
-.Container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 60px;
-  margin-top: 75px;
-}
+@import 'components/button';
+@import 'components/card';
+@import 'components/challenge';
+@import 'components/container';
+@import 'components/nav';
+@import 'components/login';

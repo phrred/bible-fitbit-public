@@ -1,0 +1,12 @@
+.Cards {
+  display: flex;
+  flex-wrap: wrap;
+
+  .Card {
+    width: calc(50% - #{$padding});
+    border: solid 1px $border-color;
+    border-radius: $border-radius;
+    padding: $padding;
+    margin: $padding / 2;
+  }
+}

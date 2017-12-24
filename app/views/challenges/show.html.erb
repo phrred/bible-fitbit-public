@@ -1,27 +1,30 @@
-<div class="Container">
-  <div id="challenge_requests">
-  	<%= render partial: 'challenge_requests' %>
+<div class="Challenge">
+  <div class="Challenge_left Container">
+
+    <h2>Current Challenges</h2>
+    <div id ="current_challenge_table">
+    <%= render partial: 'current_challenge_table' %>
+    </div>
+
+    <h2>Archived Challenges</h2>
+    <table>
+      <% if !@old_challenges.nil? %>
+      	<% @old_challenges.each do |challenge| %>
+      		<tr> 
+      			<td><%= challenge.sender_ministry.name %></td>
+      			<td><%= challenge.receiver_ministry.name %></td>
+      			<td><%= challenge.winner ? challenge.sender_ministry.name : challenge.receiver_ministry.name %> Won</td>
+      		</tr>
+      	<% end %>
+      <% else %>
+        <div>You have not been in a challenge yet!</div> 
+      <% end %>
+    </table>
   </div>
-
-  <%= link_to "Create Challenge", create_challenge_path %>
-
-  <h2>Current Challenges</h2>
-  <div id ="current_challenge_table">
-  <%= render partial: 'current_challenge_table' %>
+  <div id="challenge_requests" class="Challenge_right">
+    <div class="Challenge_buttonContainer">
+      <%= link_to "Create Challenge", create_challenge_path, class: "Button" %>
+    </div>
+    <%= render partial: 'challenge_requests' %>
   </div>
-
-  <h2>Archived Challenges</h2>
-  <table>
-    <% if !@old_challenges.nil? %>
-    	<% @old_challenges.each do |challenge| %>
-    		<tr> 
-    			<td><%= challenge.sender_ministry.name %></td>
-    			<td><%= challenge.receiver_ministry.name %></td>
-    			<td><%= challenge.winner ? challenge.sender_ministry.name : challenge.receiver_ministry.name %> Won</td>
-    		</tr>
-    	<% end %>
-    <% else %>
-      <div>You have not been in a challenge yet!</div> 
-    <% end %>
-  </table>
 </div>

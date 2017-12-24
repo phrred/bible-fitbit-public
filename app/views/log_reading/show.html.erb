@@ -1,17 +1,20 @@
 <script>
     $(document).ready(function() { $("#book_dropdown").select2(); });
  </script>  
-<div style="background-color: #FFFF00"><%= @warning%></div>
-<div>
-  <%= simple_form_for(@selected_book, url: search_path, :method => :post, remote: true) do |f| %>
-  	<%= f.input :book, collection: @book_names, :include_blank => 'Select Book', label: false, selected: @previous_book_name, :input_html => {:id => "book_dropdown", :onchange=>'$(this.form).submit();'} %>
-  <% end %>
-</div>
-<div id="log_table" >
-	<% if @chapter_num != nil %>
-    <%= render partial: 'log_table', locals: {chapters: @chapter_num}  %>
-    <% end %>
-</div>
 
-<button id="reset_book" type="button">Reset Book Progress</button>
-<button id="reset_bible" type="button">Reset Bible Progress</button>
+<div class="Container">
+  <div style="background-color: #FFFF00"><%= @warning%></div>
+  <div>
+    <%= simple_form_for(@selected_book, url: search_path, :method => :post, remote: true) do |f| %>
+    	<%= f.input :book, collection: @book_names, :include_blank => 'Select Book', label: false, selected: @previous_book_name, :input_html => {:id => "book_dropdown", :onchange=>'$(this.form).submit();'} %>
+    <% end %>
+  </div>
+  <div id="log_table" >
+  	<% if @chapter_num != nil %>
+      <%= render partial: 'log_table', locals: {chapters: @chapter_num}  %>
+      <% end %>
+  </div>
+
+  <button id="reset_book" type="button" class="Button">Reset Book Progress</button>
+  <button id="reset_bible" type="button" class="Button">Reset Bible Progress</button>
+</div>

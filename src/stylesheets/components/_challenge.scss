@@ -1,0 +1,20 @@
+$challenge-sidebar-color: #eee;
+
+.Challenge {
+  display: flex;
+
+  &_left {
+    width: 100%;
+  }
+
+  &_right {
+    background-color: $challenge-sidebar-color;
+    height: calc(100vh - 75px);
+    padding: $padding;
+  }
+
+  &_buttonContainer {
+    text-align: center;
+    margin-bottom: $margin;
+  }
+}

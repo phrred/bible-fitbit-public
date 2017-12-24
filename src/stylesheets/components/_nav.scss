@@ -1,0 +1,138 @@
+$nav-height: 75px;
+$nav-count-length: 20px;
+
+body {
+  margin-top: $nav-height;
+}
+
+.Nav {
+  position: fixed;
+  background-color: $primary-color;
+  height: $nav-height;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  list-style: none;
+  align-items: center;
+  padding: 0 $padding;
+  justify-content: space-between;
+
+  &_count {
+    height: $nav-count-length;
+    width: $nav-count-length;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.4);
+    border-radius: $nav-count-length / 2;
+    margin-left: $margin / 3;
+    font-size: 10px;
+  }
+
+  &_icon {
+    margin-right: $margin / 3;
+  }
+
+  &_logo { 
+    margin-right: $margin;
+
+    a {
+      font-size: 32px;
+      font-weight: 500;
+      text-transform: uppercase;
+      color: white;
+      text-decoration: none;
+    }   
+  }
+
+  &_items {
+    display: flex;
+    align-items: center;
+  }
+
+  &_items-left,
+  &_items-right {
+    height: 100%;
+  }
+
+  &_item {
+    
+    a {
+      color: white;
+      text-decoration: none;
+      padding: ($padding / 3) ($padding / 2);
+      border-radius: 500px;
+      margin-right: $margin / 2;
+      display: flex;
+      align-items: center;
+      transition: $transition;
+
+      &:hover {
+        background-color: rgba(255,255,255,0.25);
+      }
+    }
+  }
+}
+
+.NavMobile {
+  display: none;
+}
+
+@media (max-width: 780px) {
+  $nav-mobile-height: 100px;
+
+  .Nav {
+    display: none;
+  }
+
+  body {
+    margin-top: $nav-mobile-height;
+  }
+
+  .NavMobile {
+    position: fixed;
+    background-color: $primary-color;
+    height: $nav-mobile-height;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    list-style: none;
+    align-items: center;
+    padding: 0 $padding;
+    justify-content: center;
+
+    &_icon {
+      font-size: 40px !important;
+      margin-bottom: $margin / 3;
+    }
+
+    &_items {
+      display: flex;
+      align-items: center;
+    }
+
+    &_item {
+      height: 100%;
+      
+      a {
+        color: white;
+        text-decoration: none;
+        padding: ($padding / 3) ($padding / 2);
+        margin-right: $margin / 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: $transition;
+        font-size: 10px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+
+        &:hover {
+          background-color: rgba(255,255,255,0.25);
+        }
+      }
+    }
+  }
+}

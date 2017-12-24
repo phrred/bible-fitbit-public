@@ -1,0 +1,26 @@
+.Button {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all .25s;
+  padding: ($padding / 2) $padding;
+  border: solid 1px $primary-color;
+  background-color: $primary-color;
+  color: white;
+  border-radius: 3px;
+  text-decoration: none;
+  display: inline-block;
+
+  &:hover {
+    cursor: pointer;
+    background-color: lighten($primary-color, 10%);
+  }
+
+  &-light {
+    color: white;
+    border-color: white;
+
+    &:hover {
+      background: rgba(255,255,255,0.15);
+    }
+  }
+}
