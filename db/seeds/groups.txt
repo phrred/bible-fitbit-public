@@ -1,24 +1,24 @@
-Berkeley Praxis
-Berkeley College
-Berkeley Element
-Austin Praxis
-Austin College
-Davis Praxis
-Davis College
-Minneapolis Praxis 
-Minneapolis College
-Riverside Praxis
-Riverside College
-San Diego Praxis
-San Diego College
-Santa Cruz
-Hsinchu
-Irvine
-Santa Barbara
-Los Angeles
-Seattle
-Fairfax
-New Jersey
-Pittsburgh
-College Park
-North Carolina
+West Coast, California, Berkeley Praxis
+West Coast, California, Berkeley College
+West Coast, California, Berkeley Element
+Middle America, Texas, Austin Praxis
+Middle America, Texas, Austin College
+West Coast, California, Davis Praxis
+West Coast, California, Davis College
+Midwest, Minnesota, Minneapolis Praxis 
+Midwest, Minnesota, Minneapolis College
+West Coast, California, Riverside Praxis
+West Coast, California, Riverside College
+West Coast, California, San Diego Praxis
+West Coast, California, San Diego College
+West Coast, California,Santa Cruz
+Asia, Taiwan, Hsinchu
+West Coast, California, Irvine
+West Coast, California, Santa Barbara
+West Coast, California, Los Angeles
+West Coast, Washington, Seattle
+East Coast, Virginia, Fairfax
+East Coast,, New Jersey
+East Coast, Pennsylvania, Pittsburgh
+East Coast, Maryland, College Park
+East Coast,, North Carolina

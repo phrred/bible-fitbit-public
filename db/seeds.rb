@@ -8,45 +8,46 @@
 
 require 'date'
 
-# purge all
-Group.all.map { |g| g.really_destroy! }
-User.all.map { |u| u.really_destroy! }
-Count.all.map { |c| c.really_destroy! }
-Chapter.all.map { |c| c.really_destroy! }
-
-umd = Group.create!(name: "umd", group_type: "ministry")
-umd_klesis = Group.create!(name: "umd_klesis", group_type: "ministry")
-umd_kairos = Group.create!(name: "umd_kairos", group_type: "ministry")
-
-umd_klesis.parent = umd
-umd_klesis.save
-umd_kairos.parent = umd
-umd_kairos.save
-
-co2016 = Group.create!(name: "2016", group_type: "peer_class")
-
-test_count = Count.create!(year: 0, count: 5)
-annual_count = Count.create!(year: 2017, count: 10)
-test = User.create(
-	name: "test",
-	email: "test@gpmail.org",
-	gender: true,
-	ministry: umd_klesis,
-	peer_class: co2016,
-	lifetime_count: test_count,
-)
-test.annual_counts << annual_count.id
-test.save
+if Group.find_by(name: "45+").nil?
+	Group.create!(name: "45+", group_type: "peer_class")
+end
+(1996..2017).each do |year|
+	if Group.find_by(name: year.to_s).nil?
+		Group.create(name: year.to_s, group_type: "peer_class")
+	end
+end
 
 json = ActiveSupport::JSON.decode(File.read('db/seeds/bible.json'))
 
 json.each do |book|
   book['chapters'].each do |chapter|
-  	Chapter.create!(book: book['book'], ch_num: chapter['chapter'], verse_count: chapter['verses'])
+  	if Chapter.find_by(book: book['book'], ch_num: chapter['chapter'], verse_count: chapter['verses']).nil?
+  		Chapter.create!(book: book['book'], ch_num: chapter['chapter'], verse_count: chapter['verses'])
+  	end
   end
 end
 
 File.readlines('db/seeds/groups.txt').each do |line|
-	Group.create!(name: line.strip, group_type: "ministry")
+	line = line.strip;
+	groups = line.split(',')
+	region_name = groups[0].strip
+	state_name = groups[1].strip
+	group_name = groups[2].strip
+	region =  Group.find_by(name: region_name)
+	state =  Group.find_by(name: state_name)
+	group = Group.find_by(name: group_name)
+	if region.nil? && !region_name.blank?
+		region = Group.create!(name: region_name, group_type: "region")
+	end
+	if state.nil? && !state_name.blank?
+		state = Group.create!(name: state_name, group_type: "state")
+		state.parent = region
+		state.save
+	end
+	if group.nil? && !group_name.blank?
+		group = Group.create!(name: group_name, group_type: "ministry")
+		group.parent = state
+		group.save
+	end
 end
 p "Seeded db."
