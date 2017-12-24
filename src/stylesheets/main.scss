@@ -75,3 +75,16 @@ select {
 @import 'components/container';
 @import 'components/nav';
 @import 'components/login';
+
+table td {
+  width:100px;
+  height:100px;
+  text-align:center;
+  vertical-align:middle;
+  background-color:#ccc;
+  border:1px solid #fff;
+}
+
+table td.highlighted {
+  background-color:#999;
+}
