@@ -38,11 +38,23 @@ File.readlines('db/seeds/groups.txt').each do |line|
 	group = Group.find_by(name: group_name)
 	if region.nil? && !region_name.blank?
 		region = Group.create!(name: region_name, group_type: "region")
+		if !state.nil?
+			state.parent = region
+			state.save
+			if !group.nil?
+			group.parent = state
+			group.save
+			end
+		end
 	end
 	if state.nil? && !state_name.blank?
 		state = Group.create!(name: state_name, group_type: "state")
 		state.parent = region
 		state.save
+		if !group.nil?
+			group.parent = state
+			group.save
+		end
 	end
 	if group.nil? && !group_name.blank?
 		group = Group.create!(name: group_name, group_type: "ministry")
