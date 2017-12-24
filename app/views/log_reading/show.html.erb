@@ -2,7 +2,7 @@
     $(document).ready(function() { $("#book_dropdown").select2(); });
  </script>  
 
-<div class="Container">
+<div class="Container LogReading">
   <div style="background-color: #FFFF00"><%= @warning%></div>
   <div>
     <%= simple_form_for(@selected_book, url: search_path, :method => :post, remote: true) do |f| %>

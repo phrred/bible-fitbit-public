@@ -2,7 +2,7 @@ $border-color: #eee;
 $border-radius: 3px;
 $margin: 20px;
 $padding: 20px;
-$transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+$transition: all .3s;
 
 $primary-color: #4D5382;
 
@@ -73,18 +73,6 @@ select {
 @import 'components/card';
 @import 'components/challenge';
 @import 'components/container';
+@import 'components/log-reading';
 @import 'components/nav';
 @import 'components/login';
-
-table td {
-  width:100px;
-  height:100px;
-  text-align:center;
-  vertical-align:middle;
-  background-color:#ccc;
-  border:1px solid #fff;
-}
-
-table td.highlighted {
-  background-color:#999;
-}
