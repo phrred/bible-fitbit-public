@@ -42,8 +42,8 @@ File.readlines('db/seeds/groups.txt').each do |line|
 			state.parent = region
 			state.save
 			if !group.nil?
-			group.parent = state
-			group.save
+				group.parent = state
+				group.save
 			end
 		end
 	end
