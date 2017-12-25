@@ -5,7 +5,7 @@ class DashboardController < ApplicationController
 		@_ = Challenge.new()
 		user_id = session[:user_id]
 		@user = User.where(id: user_id).take
-		@all_ministry_names = Group.where(group_type: "ministry").order(:name).pluck(:name)
+		@all_groups = group_by_group_type()
 		last_read_entry = ReadEvent.where(user_id: session[:user_id]).order("updated_at DESC").first
 		if last_read_entry != nil
 			@last_book_read = last_read_entry.chapter.book
@@ -232,4 +232,13 @@ class DashboardController < ApplicationController
 			format.js
 		end
 	end
+
+	def group_by_group_type()
+		ministry = Group.where(group_type: "ministry").order(:name).pluck(:name)
+		state = Group.where(group_type: "state").order(:name).pluck(:name)
+		region = Group.where(group_type: "region").order(:name).pluck(:name)
+		grouped_options = [["Ministry", ministry], ["State", state], ["Region", region], ["Gender", ["Brothers", "Sisters"]]]
+		return grouped_options
+	end
+
 end
