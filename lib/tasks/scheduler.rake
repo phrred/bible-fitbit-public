@@ -1,24 +1,12 @@
-class ApplicationJob < ActiveJob::Base
-	#saturday check if challenges completed 
-  	def perform
-  		check_ending_challenges
-  	end
+desc "This task finishes challenges"
 
-	def is_user_in_group(user, group)
-		if user[:peer_class] == group
-			return true
-		end
-		user_group = user.ministry
-		while user_group != nil
-			if user_group == group
-				return true
-			end
-			user_group = user_group.parent
-		end
-		return false
-	end
-
-  	def check_ending_challenges
+task :update_challenges => :environment do
+  puts "Finishing Challenges..."
+  check_ending_challenges
+  puts "done."
+end
+def check_ending_challenges
+	if Date.today.sunday?
 		monday = Date.today.beginning_of_week
 		challenges = Challenge.where("start_time = ?", monday)
 		challenges.find_each do |challenge|
@@ -47,5 +35,18 @@ class ApplicationJob < ActiveJob::Base
 				challenge.update(winner: false)
 			end
 		end
-  	end
+	end
+end
+def is_user_in_group(user, group)
+	if user[:peer_class] == group
+		return true
+	end
+	user_group = user.ministry
+	while user_group != nil
+		if user_group == group
+			return true
+		end
+		user_group = user_group.parent
+	end
+	return false
 end

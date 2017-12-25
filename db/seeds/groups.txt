@@ -1,8 +1,8 @@
 West Coast, California, Berkeley Praxis
 West Coast, California, Berkeley College
 West Coast, California, Berkeley Element
-Middle America, Texas, Austin Praxis
-Middle America, Texas, Austin College
+Midwest, Texas, Austin Praxis
+Midwest, Texas, Austin College
 West Coast, California, Davis Praxis
 West Coast, California, Davis College
 Midwest, Minnesota, Minneapolis Praxis 

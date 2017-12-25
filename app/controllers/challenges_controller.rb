@@ -112,7 +112,7 @@ class ChallengesController < ApplicationController
 			receiver_number = 0
 			sender_sum = 0
 			receiver_sum = 0
-			entries = ChallengeReadEntry.where(challenge: challenge)
+			entries = ChallengeReadEntry.where(challenge: challenge, accepted: true)
 			if entries != nil
 				entries.each do |entry|
 					if is_user_in_group(@user, sender_group)
@@ -234,7 +234,20 @@ class ChallengesController < ApplicationController
 			create_challenge_read_entry(user, new_challenge)
 		end
 		user_challenge_read_entry = ChallengeReadEntry.where(challenge: new_challenge, user: @user)[0]
-		# user_challenge_read_entry.update(accepted: true)
+
+		user_read_entries = ReadEvent.where(user: @user).where("read_at >= ?",start_date)
+		chapters_to_add = []
+		user_read_entries.each do |read_event|
+			if valid_books.nil?
+				chapters_to_add.append(read_event.chapter.id)
+			else
+				if valid_books.include?(read_event.chapter.book)
+					chapters_to_add.append(read_event.chapter.id)
+				end
+			end
+		end
+
+		user_challenge_read_entry.update(accepted: true, chapters: chapters_to_add)
 		show()
 		respond_to do |format|
 			format.js
@@ -258,11 +271,25 @@ class ChallengesController < ApplicationController
 
 	def accept_challenge
 		challenge_request = ChallengeReadEntry.where(id: params[:challenge_request])
-		challenge_request.update(
-			accepted: true)
+		challenge = challenge_request.take.challenge
 		user_id = session[:user_id]
 		@user = User.where(id: user_id).take
 	  	@outstanding_challenges = ChallengeReadEntry.where(user: @user, accepted: nil)
+		user_read_entries = ReadEvent.where(user: @user).where("read_at >= ?",challenge[:start_time])
+		chapters_to_add = []
+		user_read_entries.each do |read_event|
+			if challenge[:valid_books] == []
+				chapters_to_add.append(read_event.chapter.id)
+			else
+				if challenge[:valid_books].include?(read_event.chapter.book)
+					chapters_to_add.append(read_event.chapter.id)
+				end
+			end
+		end
+		challenge_request.update(
+			accepted: true,
+			chapters: chapters_to_add)
+		@new_challenge = Challenge.new()
 		grab_current_challenges()
 
 		respond_to do |format|
@@ -270,6 +297,7 @@ class ChallengesController < ApplicationController
 		end
 	end
 	def reject_challenge
+		@new_challenge = Challenge.new()
 		challenge_request = ChallengeReadEntry.where(id: params[:challenge_request])
 		challenge_request.update(
 			accepted: false)
