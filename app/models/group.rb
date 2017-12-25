@@ -1,5 +1,5 @@
 class Group < ApplicationRecord
-	enum group_type: [:ministry, :peer_class]
+	enum group_type: [:ministry, :peer_class, :state, :region]
 	has_ancestry
 	acts_as_paranoid
 
