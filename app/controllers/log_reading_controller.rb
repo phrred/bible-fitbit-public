@@ -67,7 +67,7 @@ class LogReadingController < ApplicationController
     end
     readEntry = ChallengeReadEntry.where(user: user)
     if readEntry != nil
-      challenges = readEntry.map { |entry| entry.challenge.valid_books.include?(@displayed_book) }
+      challenges = readEntry.select { |entry| isValidChallengeEntry(entry, @displayed_book) }
     end
     chapters_read = []
     chapters.each { |chapter_num|
@@ -102,6 +102,15 @@ class LogReadingController < ApplicationController
       session[:warning] = 'These chapters have already been logged for ' + date.to_time.strftime('%a %b %d %Y') +": " + chapters_read.join(", ")
     end
   end
+
+  def isValidChallengeEntry(entry, displayed_book)
+    start_date = Date.today.beginning_of_week
+    challenge = entry.challenge
+    return start_date == challenge.start_time 
+    && challenge.accepted
+    && (challenge.valid_books.empty? || challenge.valid_books.include?(displayed_book))
+  end
+
 
   def resetBook
     @displayed_book = params[:book]
