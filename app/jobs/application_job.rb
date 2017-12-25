@@ -20,21 +20,23 @@ class ApplicationJob < ActiveJob::Base
 
   	def check_ending_challenges
 		monday = Date.today.beginning_of_week
-		challenges = Challenge.where("created_at >= ?", monday)
+		challenges = Challenge.where("start_time = ?", monday)
 		challenges.find_each do |challenge|
 			sender_group = challenge.sender_ministry
 			sender_number = 0
 			receiver_number = 0
 			sender_sum = 0
 			receiver_sum = 0
-			entries = ChallengeReadEntry.where(challenge: challenge).take
-			entries.each do |entry|
-				if is_user_in_group(entry.user, sender_group)
-					sender_number = sender_number + 1
-					sender_sum = sender_sum + entry[:chapters].size
-				else
-					receiver_number = receiver_number + 1
-					receiver_sum = receiver_sum + entry[:chapters].size
+			entries = ChallengeReadEntry.where(challenge: challenge, accepted: true)
+			if entries != nil
+				entries.each do |entry|
+					if is_user_in_group(entry.user, sender_group)
+						sender_number = sender_number + 1
+						sender_sum = sender_sum + entry[:chapters].size
+					else
+						receiver_number = receiver_number + 1
+						receiver_sum = receiver_sum + entry[:chapters].size
+					end
 				end
 			end
 			sender_final = sender_number != 0 ? sender_sum/sender_number.to_f : 0
