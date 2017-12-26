@@ -191,41 +191,66 @@ class DashboardController < ApplicationController
 
 	def comparison_values
 		other_params = params[:challenge]
-		group1_model = Group.where(name: other_params[:sender_ministry])[0]
-		group2_model = Group.where(name: other_params[:receiver_ministry])[0]
-		@group1 = group1_model.name
-		@group2 = group2_model.name
-		count_sums = {}
-		@all_ministry_names = Group.where(group_type: "ministry").order(:name).pluck(:name)
-		@all_users = User.all
+		if other_params[:sender_ministry] == "Brothers" || other_params[:sender_ministry] == "Sisters"
+			@group1 = other_params[:sender_ministry]
+		else 
+			group1_model = Group.where(name: other_params[:sender_ministry])[0]
+			@group1 = group1_model.name
+		end
+		if other_params[:receiver_ministry] == "Brothers" || other_params[:receiver_ministry] == "Sisters"
+			@group2 = other_params[:receiver_ministry]
+		else 
+			group2_model = Group.where(name: other_params[:receiver_ministry])[0]
+			@group2 = group2_model.name
+		end
 		year = Date.today.to_time.strftime('%Y').to_i
-		@all_users.each do |a_user|
-			if count_sums.key?(a_user.ministry.name)
-				count_sums[a_user.ministry.name] += a_user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
+		@group1_sum = 0
+		if group1_model.nil?
+			if @group1 == "Brothers"
+				users = User.where(gender: true)
+				p users
 			else
-				count_sums[a_user.ministry.name] = a_user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
+				user = User.where(gender: false)
+			end
+			if !users.nil?
+				users.each do |user|
+					@group1_sum += user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
+				end
+			end
+		else
+			group1_model.descendants.each do |group|
+				users = User.where(ministry: group.id)
+				if !users.nil?
+					users.each do |user|
+						@group1_sum += user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
+					end
+				end
 			end
 		end
-
-		@all_ministry_names.each do |name|
-			if !count_sums.key?(name)
-				count_sums[name] = 0
+		@group2_sum = 0
+		if group2_model.nil?
+			if @group1 == "Brothers"
+				users = User.where(gender: true)
+			else
+				user = User.where(gender: false)
+			end
+			if !users.nil?
+				users.each do |user|
+					@group1_sum += user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
+				end
+			end
+		else
+			group2_model.descendants.each do |group|
+				users = User.where(ministry: group.id)
+				if !users.nil?
+					users.each do |user|
+						@group2_sum += user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
+					end
+				end
 			end
 		end
-		@group1_sum = count_sums[@group1]
-		group1_model.descendants.each do |group|
-			@group1_sum += count_sums[group.name]
-		end
-		group1_model.ancestors.each do |group|
-			@group1_sum += count_sums[group.name]
-		end
-		@group2_sum = count_sums[@group2]
-		group2_model.descendants.each do |group|
-			@group2_sum += count_sums[group.name]
-		end
-		group2_model.ancestors.each do |group|
-			@group2_sum += count_sums[group.name]
-		end
+		p "here"
+		p @group1_sum
 		@title_text = @group1 + " vs. " + @group2
 		@y_axis_max = [@group1_sum, @group2_sum].max + 5
 		respond_to do |format|

@@ -39,7 +39,7 @@ class ProfileController < ApplicationController
     input_name = input[:name]
     input_ministry = Group.where(group_type: "ministry", name: input[:ministry]).take
     input_peer_class = Group.where(group_type: "peer_class", name: input[:peer_class]).take
-    input_gender = if input[:gender] == "male" then true else false end
+    input_gender = if input[:gender] == "Male" then true else false end
 
     if @user != nil
       @user.update!(
@@ -51,7 +51,6 @@ class ProfileController < ApplicationController
       )
       redirect_to action: "show", controller: "profile"
     else
-      p "creating new user"
       year = DateTime.now.year
       new_lifetime = Count.create(year: 0, count: 0)
       current_annual = Count.create!(year: Time.now.year, count: 0)
@@ -84,10 +83,11 @@ class ProfileController < ApplicationController
     peer_class = Group.where(group_type: "peer_class", name: user[:peer_class]).take
     ministry = Group.where(group_type: "ministry", name: user[:ministry]).take
     new_lifetime = Count.create(year: 0, count: 0)
+    user_gender = if user[:gender] == "Male" then true else false end
     @user = User.create!(
       name: user[:name],
       email: session[:email],
-      gender: user[:gender],
+      gender: user_gender,
       peer_class: peer_class,
       ministry: ministry,
       lifetime_count: new_lifetime
