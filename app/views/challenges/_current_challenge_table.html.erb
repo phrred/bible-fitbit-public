@@ -35,6 +35,16 @@ new Chart(document.getElementById("<%= "challengeChart" + challenge.id.to_s%>").
     title: {
       display: true,
       text: <%= @chart_labels[challenge]["title"].to_json.html_safe %>
+    },
+    legend: {
+        onClick: function (e) {
+          e.stopPropagation();
+        }
+    },
+    elements: {
+      line: {
+        tension: 0,
+      }
     }
   }
 });
