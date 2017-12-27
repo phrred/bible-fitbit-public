@@ -18,7 +18,13 @@
             <div class="Nav_logo">
               <%=link_to "Bible Fitbit", dashboard_path%>
             </div>
-            
+
+            <li class="Nav_item">
+              <%=link_to dashboard_path do %>
+                <span class="fa fa-home Nav_icon"></span>
+                Dashboard
+              <% end %>
+            </li> 
             <% if !@pending_challenge_requests.nil? and @pending_challenge_requests.size > 0 %>
               <li class="Nav_item">
                 <%=link_to challenges_path do %>
