@@ -208,7 +208,6 @@ class DashboardController < ApplicationController
 		if group1_model.nil?
 			if @group1 == "Brothers"
 				users = User.where(gender: true)
-				p users
 			else
 				user = User.where(gender: false)
 			end
@@ -229,14 +228,14 @@ class DashboardController < ApplicationController
 		end
 		@group2_sum = 0
 		if group2_model.nil?
-			if @group1 == "Brothers"
+			if @group2 == "Brothers"
 				users = User.where(gender: true)
 			else
 				user = User.where(gender: false)
 			end
 			if !users.nil?
 				users.each do |user|
-					@group1_sum += user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
+					@group2_sum += user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
 				end
 			end
 		else
@@ -249,8 +248,6 @@ class DashboardController < ApplicationController
 				end
 			end
 		end
-		p "here"
-		p @group1_sum
 		@title_text = @group1 + " vs. " + @group2
 		@y_axis_max = [@group1_sum, @group2_sum].max + 5
 		respond_to do |format|
