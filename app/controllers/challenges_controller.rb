@@ -182,6 +182,7 @@ class ChallengesController < ApplicationController
 		receiver_gender = challenge[:receiver_gender].size == 2 ? challenge[:receiver_gender][1] : nil
 		challenge[:valid_books].slice!(0)
 		valid_books = challenge[:valid_books].size > 0 ? challenge[:valid_books] : nil
+		title = challenge[:title]
 		start_date = Date.today
 		if start_date.cwday > 4
 			start_date + 7
@@ -196,7 +197,8 @@ class ChallengesController < ApplicationController
 			sender_peer: sender_class,
 			receiver_peer_id: receiver_class,
 			valid_books: valid_books,
-			start_time: start_date
+			start_time: start_date,
+			title: title
 			)
 
 		if !prev_challenge.empty?
@@ -215,7 +217,8 @@ class ChallengesController < ApplicationController
 			sender_peer: sender_class,
 			receiver_peer_id: receiver_class,
 			valid_books: valid_books,
-			start_time: start_date
+			start_time: start_date,
+			title: title
 		)
 		sender_recipients = []
 		User.where(ministry: sender_ministry).each do |user|

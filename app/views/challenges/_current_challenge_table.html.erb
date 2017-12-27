@@ -1,8 +1,13 @@
 <table>
 	<% @current_challenges.each_with_index do |challenge, index| %>
-		<tr class="trigger"> 
-			<td><%= challenge.sender_ministry.name%> <%= @sender_scores[index]%> chapters read on average</td>
-			<td><%= challenge.receiver_ministry.name %> <%=@receiver_scores[index]%> chapters read on average</td>
+		<tr class="trigger">
+    <% if !challenge.title.blank? %>
+         <td> <%= challenge.title %> </td>
+   <% end %>
+    </tr>
+    <tr class="trigger"> 
+			<td><%= challenge.sender_ministry.name%>: <%= @sender_scores[index]%> chapters read on average</td>
+			<td><%= challenge.receiver_ministry.name %>: <%=@receiver_scores[index]%> chapters read on average</td>
 		</tr>
 		<tr class="result">
 			<td colspan=2><canvas id="<%= "challengeChart" + challenge.id.to_s %>" width="800" height="400"></canvas></td>
@@ -12,6 +17,7 @@
 <script>
     $('tr.trigger').on('click', function() { 
        $(this).next('.result').fadeToggle(); 
+       $(this).next().next('.result').fadeToggle(); 
     });
 <% @current_challenges.each do |challenge| %>
 
