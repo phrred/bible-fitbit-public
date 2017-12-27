@@ -19,6 +19,8 @@ $(document).on("change", "#your_ministry", function() {
     $(document).ready(function() { $("#books").select2(); });
 </script>
 <%= simple_form_for @new_challenge, url: create_challenge_path, :method => :post, remote: true, html: {id: "form"} do |f| %>
+  <%= f.input :title, :label => "Challenge Name", :placeholder => "Default: Group 1 vs Group 2", input_html: {id: "challenge_title"} %>
+  <p class="strong">Please begin by inputting your side of the challenge.</p>
 	<%= f.input :sender_ministry, collection: @grouping_options, :label => 'Choose which ministry group you would like to compete as', value_method: lambda { |obj| return obj[:name] }, selected: @user_ministry, input_html: {id: "your_ministry"}%>
 	<%= f.input :sender_gender, label: "Would you like only " + @gender + " to compete?", as: :radio_buttons %>
 	<%= f.input :sender_peer, label: "Would you like only your peers class of " + @peer_class + " to compete?",  as: :radio_buttons%>
@@ -32,7 +34,6 @@ $(document).on("change", "#your_ministry", function() {
     <%= f.input :receiver_peer, collection: @other_peers, :label => "Would you like to select an opponent's peer class?", :include_blank => 'Optional', selected: nil, input_html: {id: "opp_class"}%>
 
   	<%= f.input :valid_books, collection: @books, :label => "Would you like to limit which books are allowed? If not, do not select any", label_method: lambda {|obj| return obj[:book]},value_method: lambda {|obj| return obj[:book]}, input_html: { multiple: "multiple", id: "books" }, selected: nil%>
-  	<%= f.input :title, :label => "Challenge Name (Default: Group1 vs Group 2)", input_html: {id: "challenge_title"} %>
 	<br>
 	<br>
   <div style="display:flex; align-items: center;">

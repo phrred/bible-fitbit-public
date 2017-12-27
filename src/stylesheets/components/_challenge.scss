@@ -1,5 +1,12 @@
 $challenge-sidebar-color: #eee;
 
+.trigger {
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 .Challenge {
   display: flex;
 
@@ -17,5 +24,50 @@ $challenge-sidebar-color: #eee;
   &_buttonContainer {
     text-align: center;
     margin-bottom: $margin;
+  }
+
+  &_table {
+    border-collapse: collapse;
+    width: 100%;
+
+    tr {
+      // background-color: red;
+
+      &:nth-child(odd) {
+        background-color: #eee;
+      }
+
+      td {
+        padding: $padding;
+      }
+    }
+  }
+
+  &_clusters {
+    display: flex;
+  }
+
+  &_cluster {
+    margin-right: $margin;
+    text-align: center;
+  }
+
+  &_teamName {
+    font-size: 18px;
+  }
+
+  &_score {
+    font-size: 40px;
+    font-weight: 600;
+  }
+
+  &_desc {
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+
+  .result {
+    margin-top: $margin;
   }
 }

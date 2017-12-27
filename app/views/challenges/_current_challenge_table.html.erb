@@ -1,21 +1,33 @@
-<table>
+<table class="Challenge_table">
 	<% @current_challenges.each_with_index do |challenge, index| %>
-		<tr class="trigger">
-    <% if !challenge.title.blank? %>
-         <td> <%= challenge.title %> </td>
-   <% end %>
+		<tr>
+      <td>
+        <div class="trigger">
+          <% if !challenge.title.blank? %>
+            <h3><%= challenge.title %></h3>
+          <% end %>
+          <div class="Challenge_clusters">
+      			<div class="Challenge_cluster">
+              <div class="Challenge_teamName"><%= challenge.sender_ministry.name%></div>
+              <div class="Challenge_score"><%= @sender_scores[index]%></div>
+              <div class="Challenge_desc">chapters read on average</div>
+            </div>
+      			<div class="Challenge_cluster">
+              <div class="Challenge_teamName"><%= challenge.receiver_ministry.name %></div>
+              <div class="Challenge_score"><%=@receiver_scores[index]%></div>
+              <div class="Challenge_desc">chapters read on average</div>
+      		  </div>
+          </div>
+        </div>
+    		<div class="result">
+    			<canvas id="<%= "challengeChart" + challenge.id.to_s %>" width="800" height="400"></canvas>
+    		</div>
+      </td>
     </tr>
-    <tr class="trigger"> 
-			<td><%= challenge.sender_ministry.name%>: <%= @sender_scores[index]%> chapters read on average</td>
-			<td><%= challenge.receiver_ministry.name %>: <%=@receiver_scores[index]%> chapters read on average</td>
-		</tr>
-		<tr class="result">
-			<td colspan=2><canvas id="<%= "challengeChart" + challenge.id.to_s %>" width="800" height="400"></canvas></td>
-		</tr>
 	<% end %>
 </table>
 <script>
-    $('tr.trigger').on('click', function() { 
+    $('div.trigger').on('click', function() { 
        $(this).next('.result').fadeToggle(); 
        $(this).next().next('.result').fadeToggle(); 
     });

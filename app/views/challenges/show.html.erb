@@ -14,14 +14,14 @@
     <% if !@old_challenges.empty? %>
       <div>
         <h2>Archived Challenges</h2>
-        <table>
-          	<% @old_challenges.each do |challenge| %>
-          		<tr> 
-          			<td><%= challenge.sender_ministry.name %></td>
-          			<td><%= challenge.receiver_ministry.name %></td>
-          			<td><%= challenge.winner ? challenge.sender_ministry.name : challenge.receiver_ministry.name %> Won</td>
-          		</tr>
-          	<% end %>
+        <table class="Challenge_table">
+        	<% @old_challenges.each do |challenge| %>
+        		<tr> 
+        			<td><%= challenge.sender_ministry.name %></td>
+        			<td><%= challenge.receiver_ministry.name %></td>
+        			<td><%= challenge.winner ? challenge.sender_ministry.name : challenge.receiver_ministry.name %> Won</td>
+        		</tr>
+        	<% end %>
         </table>
       </div>
     <% end %>
