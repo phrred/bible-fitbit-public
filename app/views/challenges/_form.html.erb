@@ -6,7 +6,11 @@ $(document).on("change", "#your_ministry", function() {
 	var opp_ministry = document.getElementById("opp_ministry").value;
 	$('#opp_ministry').empty();
 	remaining_groups.forEach(function(name) {
-		$('#opp_ministry').append("<option>".concat(name.toString(),"</option>"));
+		if (name == opp_ministry) {
+			$('#opp_ministry').append("<option selected='selected'>".concat(name.toString(),"</option>"));	
+		} else {
+			$('#opp_ministry').append("<option>".concat(name.toString(),"</option>"));
+		}
 	});
  });
     $(document).ready(function() { $("#your_ministry").select2(); });
@@ -32,12 +36,3 @@ $(document).on("change", "#your_ministry", function() {
 	<br>
   	<%= f.button :submit,  data: { disable_with: false }, class: 'Button' %>
 <% end %>
-<script>
-	function my_function() {
-	$('#opp_ministry').empty();
-	<% @ministry_names.each do |name| %>
-		$('#opp_ministry').append("<option>" + "<%= name.to_s%>" + "</option>");
-	<% end %>
-	}
-	my_function();
-</script>

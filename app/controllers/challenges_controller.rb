@@ -37,10 +37,10 @@ class ChallengesController < ApplicationController
 		@gender = @user.gender ? "brothers" : "sisters"
 		selected_ministry = @user.ministry
 		@grouping_options = [selected_ministry]
-		selected_ministry.ancestors.each do |ministry|
-			@ministry_names.delete(ministry.name)
-			@grouping_options << ministry
-		end
+		# selected_ministry.ancestors.each do |ministry|
+		# 	@ministry_names.delete(ministry.name)
+		# 	@grouping_options << ministry
+		# end
 
 		@ministry_names.delete(selected_ministry.name)
 		selected_ministry.descendants.each do |ministry|
@@ -73,10 +73,10 @@ class ChallengesController < ApplicationController
 		@gender = @user.gender ? "brothers" : "sisters"
 		selected_ministry = @user.ministry
 		@grouping_options = [selected_ministry]
-		selected_ministry.ancestors.each do |ministry|
-			@ministry_names.delete(ministry.name)
-			@grouping_options << ministry
-		end
+		# selected_ministry.ancestors.each do |ministry|
+		# 	@ministry_names.delete(ministry.name)
+		# 	@grouping_options << ministry
+		# end
 
 		@ministry_names.delete(selected_ministry.name)
 		selected_ministry.descendants.each do |ministry|
