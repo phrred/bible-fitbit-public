@@ -28,6 +28,10 @@ new Chart(document.getElementById("pace_chart").getContext('2d'), {
             beginAtZero:true,
             suggestedMax: <%=@suggested_max%>
           },
+          scaleLabel: {
+            display: true,
+            labelString: 'Average # of Books Read'
+        }
       }]
     }
   }

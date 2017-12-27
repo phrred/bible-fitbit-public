@@ -10,14 +10,14 @@ var comparisonChart = new Chart(document.getElementById("comparisonChart"), {
         {
           label: "0%",
           backgroundColor: "#191970",
-          data: [<%= @group1_sum.to_json.html_safe %>]
+          data: [<%= @group1_average.to_json.html_safe %>]
         }, {
           label: "10%",
           backgroundColor: "#191970",
-          data: [<%= @group2_sum.to_json.html_safe %>]
+          data: [<%= @group2_average.to_json.html_safe %>]
         }
       ]
-    },
+    },  
     options: {
       legend: { display: false },
       title: {
@@ -30,7 +30,11 @@ var comparisonChart = new Chart(document.getElementById("comparisonChart"), {
             beginAtZero:true,
             suggestedMin: 0,
             suggestedMax: <%=@y_axis_max%>
-          }
+          }, 
+          scaleLabel: {
+          display: true,
+          labelString: 'Average # of Books Read'
+      }
         }]
       }
     }
