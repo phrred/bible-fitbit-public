@@ -23,6 +23,11 @@ var book_percent_chart = new Chart(document.getElementById("book_percents"), {
       title: {
         display: true,
         text: 'What percent of Genesis have you read?'
+      },
+      legend: {
+        onClick: function (e) {
+          e.stopPropagation();
+        }
       }
     }
 });

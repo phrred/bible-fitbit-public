@@ -29,14 +29,14 @@ class DashboardController < ApplicationController
 
 		last_read_entry = ReadEvent.where(user_id: session[:user_id]).order("updated_at DESC").first
 		if last_read_entry != nil
-			@last_book_read = last_read_entry.chapter.book
-			last_book_shadowings = @user_shadowings.where(book: @last_book_read).take
+			@last_book_entered = last_read_entry.chapter.book
+			last_book_shadowings = @user_shadowings.where(book: @last_book_entered).take
 			last_book_chapters_read = last_book_shadowings.shadowing.count()
 			
-			book_chapter_count = Chapter.where(book: @last_book_read).count()
+			book_chapter_count = Chapter.where(book: @last_book_entered).count()
 			@percentage_of_last_book = last_book_chapters_read.to_f / book_chapter_count * 100.0
 		else
-			@percentage_of_last_book = "You need to read the bible"
+			@percentage_of_last_book = 0
 		end
 		see_book_percent_read()
 		how_many_reps()

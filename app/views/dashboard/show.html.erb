@@ -3,10 +3,10 @@
   <div>
   	Percentage of bible read: <%=@percentage_of_bible.round(2)%>%
   </div>
-  <% if not @last_book_read %>
+  <% if not @last_book_entered %>
     You have not read any books.
   <% else %>
-  	Percentage of <%=@last_book_read%> read: <%=@percentage_of_last_book%>%
+  	Percentage of <%=@last_book_entered%> read: <%=@percentage_of_last_book.round(2)%>%
   <% end %>
 
   <div class="Cards">
@@ -31,8 +31,12 @@
           title: {
             display: true,
             text: 'What percent of the bible have you read?'
+          },
+          legend: {
+            onClick: function (e) {
+            e.stopPropagation();
+            }
           }
-        }
     });
     </script>
 
