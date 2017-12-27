@@ -114,6 +114,7 @@ class DashboardController < ApplicationController
 			@book_repetitions[book].unshift(@book_repetitions[book].min)
 		end
 		@x_axis_max += 5
+		@graph_height = (@book_repetitions[@last_book_read].size * 40).to_s + "px"
 	end
 
 	def set_up_pace_chart
