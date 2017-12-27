@@ -21,7 +21,7 @@ function highlightTable() {
 };
 
 $(document).on("click", "#save_reading", function() {
-  if (confirm('Are you sure ?')) {
+  if (confirm('Are you sure you wish to save your changes?')) {
      var chapters_highlighted = []
      $('.record').each(function() {
       chapters_highlighted.push($(this).html().trim())
@@ -39,7 +39,7 @@ $(document).on("click", "#save_reading", function() {
 });
 
 $(document).on("click", "#reset_book", function() {
-   if (confirm('Are you sure ?')) {
+   if (confirm('Are you sure you wish to save your changes?')) {
     $.ajax({
      url: "resetBook",
      type: "POST",
@@ -53,7 +53,7 @@ $(document).on("click", "#reset_book", function() {
 });
 
 $(document).on("click", "#reset_bible", function() {
-   if (confirm('Are you sure ?')) {
+   if (confirm('Are you sure you wish to save your changes?')) {
      $.ajax({
      url: "resetBible",
      type: "POST",
