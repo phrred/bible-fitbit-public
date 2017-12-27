@@ -1,24 +1,25 @@
-West Coast, California, Berkeley Praxis
-West Coast, California, Berkeley College
-West Coast, California, Berkeley Element
+West Coast/NorCal, California, Berkeley Praxis
+West Coast/NorCal, California, Berkeley College
+West Coast/NorCal, California, Berkeley Element
 Midwest, Texas, Austin Praxis
 Midwest, Texas, Austin College
-West Coast, California, Davis Praxis
-West Coast, California, Davis College
+West Coast/NorCal, California, Davis Praxis
+West Coast/NorCal, California, Davis College
 Midwest, Minnesota, Minneapolis Praxis 
 Midwest, Minnesota, Minneapolis College
-West Coast, California, Riverside Praxis
-West Coast, California, Riverside College
-West Coast, California, San Diego Praxis
-West Coast, California, San Diego College
-West Coast, California,Santa Cruz
+West Coast/SoCal, California, Riverside Praxis
+West Coast/SoCal, California, Riverside College
+West Coast/SoCal, California, San Diego Praxis
+West Coast/SoCal, California, San Diego College
+West Coast/NorCal, California,Santa Cruz
 Asia, Taiwan, Hsinchu
-West Coast, California, Irvine
-West Coast, California, Santa Barbara
-West Coast, California, Los Angeles
+West Coast/SoCal, California, Irvine
+West Coast/SoCal, California, Santa Barbara
+West Coast/SoCal, California, Los Angeles
 West Coast, Washington, Seattle
 East Coast, Virginia, Fairfax
-East Coast,, New Jersey
+East Coast, New Jersey, Rutgers
 East Coast, Pennsylvania, Pittsburgh
 East Coast, Maryland, College Park
-East Coast,, North Carolina
+East Coast, North Carolina, Chapel Hill
+East Coast, North Carolina, Durham

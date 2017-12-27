@@ -30,35 +30,73 @@ end
 File.readlines('db/seeds/groups.txt').each do |line|
 	line = line.strip;
 	groups = line.split(',')
-	region_name = groups[0].strip
+	region_names = groups[0].strip.split('/')
+	region_name = region_names[0]
+	other_region_name = region_names[1]
 	state_name = groups[1].strip
 	group_name = groups[2].strip
 	region =  Group.find_by(name: region_name)
 	state =  Group.find_by(name: state_name)
 	group = Group.find_by(name: group_name)
+	other_region = Group.find_by(name: other_region_name)
+
 	if region.nil? && !region_name.blank?
 		region = Group.create!(name: region_name, group_type: "region")
 		if !state.nil?
 			state.parent = region
 			state.save
+			if !other_region.nil?
+				other_region.parent = state
+				other_region.save
+				if !group.nil?
+					group.parent = other_region
+					group.save
+				end
+			else
+				if !group.nil?
+					group.parent = state
+					group.save
+				end
+			end
+		end
+	end
+
+	if state.nil? && !state_name.blank?
+		state = Group.create!(name: state_name, group_type: "state")
+		state.parent = region
+		state.save
+		if !other_region.nil?
+				other_region.parent = state
+				other_region.save
+			if !group.nil?
+				group.parent = other_region
+				group.save
+			end
+		else
 			if !group.nil?
 				group.parent = state
 				group.save
 			end
 		end
 	end
-	if state.nil? && !state_name.blank?
-		state = Group.create!(name: state_name, group_type: "state")
-		state.parent = region
-		state.save
+
+	if other_region.nil? && !other_region_name.blank?
+		other_region = Group.create!(name: other_region_name, group_type: "region")
+		other_region.parent = state
 		if !group.nil?
-			group.parent = state
+			group.parent = other_region
 			group.save
 		end
+		other_region.save
 	end
+
 	if group.nil? && !group_name.blank?
 		group = Group.create!(name: group_name, group_type: "ministry")
-		group.parent = state
+		if !other_region.nil?
+			group.parent = other_region
+		else
+			group.parent = state
+		end	
 		group.save
 	end
 end
