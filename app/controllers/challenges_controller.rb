@@ -187,6 +187,26 @@ class ChallengesController < ApplicationController
 			start_date + 7
 		end
 		start_date = start_date.beginning_of_week
+
+		prev_challenge = Challenge.where(
+			sender_ministry: sender_ministry,
+			receiver_ministry: receiver_ministry,
+			sender_gender: sender_gender,
+			receiver_gender: receiver_gender,
+			sender_peer: sender_class,
+			receiver_peer_id: receiver_class,
+			valid_books: valid_books,
+			start_time: start_date
+			)
+
+		if !prev_challenge.empty?
+			@warning = "This challenge already exists"
+			create()
+			respond_to do |format|
+				format.js
+			end
+			return
+		end
 		new_challenge = Challenge.create!(
 			sender_ministry: sender_ministry,
 			receiver_ministry: receiver_ministry,
@@ -249,9 +269,6 @@ class ChallengesController < ApplicationController
 		user_challenge_read_entry.save
 		user_challenge_read_entry.update(accepted: true)
 		show()
-		respond_to do |format|
-			format.js
-		end
 		redirect_to challenges_path
 	end
 
