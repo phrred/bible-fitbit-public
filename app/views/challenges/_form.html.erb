@@ -27,7 +27,7 @@ $(document).on("change", "#your_ministry", function() {
   	</div>
     <%= f.input :receiver_peer, collection: @other_peers, :label => "Would you like to select an opponent's peer class?", :include_blank => 'Optional', selected: nil, input_html: {id: "opp_class"}%>
 
-  	<%= f.input :valid_books, collection: @books, :label => "Would you like to limit which books are allowed?", label_method: lambda {|obj| return obj[:book]},value_method: lambda {|obj| return obj[:book]}, input_html: { multiple: "multiple", id: "books" }, selected: nil%>
+  	<%= f.input :valid_books, collection: @books, :label => "Would you like to limit which books are allowed? If not, do not select any", label_method: lambda {|obj| return obj[:book]},value_method: lambda {|obj| return obj[:book]}, input_html: { multiple: "multiple", id: "books" }, selected: nil%>
 	<br>
 	<br>
   	<%= f.button :submit,  data: { disable_with: false }, class: 'Button' %>
