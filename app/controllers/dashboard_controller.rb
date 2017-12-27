@@ -205,6 +205,7 @@ class DashboardController < ApplicationController
 		end
 		year = Date.today.to_time.strftime('%Y').to_i
 		@group1_sum = 0
+		@group1_count = 0
 		if group1_model.nil?
 			if @group1 == "Brothers"
 				users = User.where(gender: true)
@@ -215,18 +216,22 @@ class DashboardController < ApplicationController
 				users.each do |user|
 					@group1_sum += user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
 				end
+				@group1_count += users.size
 			end
 		else
-			group1_model.descendants.each do |group|
+			group1_groups = [group1_model] + group1_model.descendants
+			group1_groups.each do |group|
 				users = User.where(ministry: group.id)
 				if !users.nil?
 					users.each do |user|
 						@group1_sum += user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
 					end
+					@group1_count += users.size
 				end
 			end
 		end
 		@group2_sum = 0
+		@group2_count = 0
 		if group2_model.nil?
 			if @group2 == "Brothers"
 				users = User.where(gender: true)
@@ -237,19 +242,26 @@ class DashboardController < ApplicationController
 				users.each do |user|
 					@group2_sum += user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
 				end
+				@group2_count += users.size
 			end
 		else
-			group2_model.descendants.each do |group|
+			group2_groups = [group2_model] + group2_model.descendants
+			group2_groups.each do |group|
 				users = User.where(ministry: group.id)
 				if !users.nil?
 					users.each do |user|
 						@group2_sum += user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
 					end
+					@group2_count += users.size
 				end
 			end
 		end
 		@title_text = @group1 + " vs. " + @group2
-		@y_axis_max = [@group1_sum, @group2_sum].max + 5
+		@group1_average = @group1_sum / @group1_count.to_f
+		@group1_average = @group1_average.nan? ? 0.0 : @group1_average
+		@group2_average = @group2_sum / @group2_count.to_f
+		@group2_average = @group2_average.nan? ? 0.0 : @group2_average
+		@y_axis_max = [@group1_average, @group2_average].max + 5
 		respond_to do |format|
 			format.js
 		end
