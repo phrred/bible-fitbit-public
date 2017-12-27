@@ -35,7 +35,10 @@ $(document).on("change", "#your_ministry", function() {
   	<%= f.input :title, :label => "Challenge Name (Default: Group1 vs Group 2)", input_html: {id: "challenge_title"} %>
 	<br>
 	<br>
+  <div style="display:flex; align-items: center;">
   	<%= f.button :submit,  data: { disable_with: false }, class: 'Button' %>
+    <% if @warning %>
+      <div style="margin-left: 20px; color: #D1495B;"><i class="fa fa-exclamation-circle" style="margin-right: 7.5px;"></i><%= @warning %></div>
+    <% end %>
+  </div>
 <% end %>
-
-<div style="background-color: #FFFF00"><%= @warning%></div>

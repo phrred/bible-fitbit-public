@@ -9,7 +9,7 @@ $challenge-sidebar-color: #eee;
 
   &_right {
     background-color: $challenge-sidebar-color;
-    height: calc(100vh - 75px);
+    min-height: calc(100vh - 75px);
     padding: $padding;
     width: 500px;
   }
