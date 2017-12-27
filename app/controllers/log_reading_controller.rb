@@ -79,6 +79,7 @@ class LogReadingController < ApplicationController
         if challenges != nil
           challenges.each { |challenge_entry|
             challenge_entry.chapters << chapter.id
+            challenge_entry.read_at << date
             challenge_entry.save
           }
         end
@@ -106,7 +107,7 @@ class LogReadingController < ApplicationController
   def isValidChallengeEntry(entry, displayed_book)
     start_date = Date.today.beginning_of_week
     challenge = entry.challenge
-    return start_date == challenge.start_time && entry.accepted && (challenge.valid_books.empty? || challenge.valid_books.include?(displayed_book))
+    return start_date == challenge.start_time && entry.accepted && (challenge.valid_books.nil? || challenge.valid_books.include?(displayed_book))
   end
 
 
