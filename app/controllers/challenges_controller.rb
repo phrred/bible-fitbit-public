@@ -182,8 +182,8 @@ class ChallengesController < ApplicationController
 		receiver_class = Group.where(group_type: "peer_class", name: challenge[:receiver_peer]).take
 		receiver_ministry = Group.where(group_type: "ministry", name: challenge[:receiver_ministry]).take
 		receiver_gender = challenge[:receiver_gender].size == 2 ? challenge[:receiver_gender][1] : nil
+		challenge[:valid_books].slice!(0)
 		valid_books = challenge[:valid_books].size > 0 ? challenge[:valid_books] : nil
-		valid_books.slice!(0)
 		start_date = Date.today
 		if start_date.cwday > 4
 			start_date + 7
@@ -239,6 +239,7 @@ class ChallengesController < ApplicationController
 		chapters_to_add = []
 		user_read_entries.each do |read_event|
 			if valid_books.nil?
+				p 'here'
 				chapters_to_add.append(read_event.chapter.id)
 			else
 				if valid_books.include?(read_event.chapter.book)
