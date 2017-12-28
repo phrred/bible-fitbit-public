@@ -7,17 +7,13 @@
   <% end %>
   <% end %>
 </select>
-<div class="chartWrapper">
-    <div class="chartAreaWrapper">
-		<canvas id="repetitions_chart" width="800" height=<%= @graph_height %>></canvas>
-	</div class="chartAreaWrapper">	
-</div class="chartWrapper">
+<canvas id="repetitions_chart" width="800"></canvas>
 <script>
     $(document).ready(function() { $("#book_dropdown2").select2(); });
 	var initial_labels = <%= @initial_repetition_labels.to_json.html_safe %>;
 	var initial_data = <%= @book_repetitions[@last_book_read].to_json.html_safe %>;
 	var book_repetitions_chart = new Chart(document.getElementById("repetitions_chart"), {
-	    type: 'horizontalBar',
+	    type: 'bar',
 	    data: {
 	      labels: initial_labels,
 	      datasets: [
@@ -37,15 +33,25 @@
 	      scales: {
 			xAxes: [{
 		      id: 'x-axis-0',
-		      scaleLabel: {
-		      	display: true,
-			      labelString: "Number of Reads"
-			  },
 		      ticks: {
+		      	min: 0,
+		      	max: 10,
 		        beginAtZero:true,
-		        suggestedMax: <%=@x_axis_max%>
+		        stepSize: 1
+	    		}
+		    }],
+		    yAxes: [{
+		    	scaleLabel: {
+	    		display: true,
+			      labelString: "Number of Reads"
+		    	},
+	    	 ticks: {
+		      	min: 0,
+		        beginAtZero:true,
+		        stepSize: 1,
+		        suggestedMax: <%=@y_axis_max%>
 	    		},
-	    }]
+		    }]
 	    }}
 	});
 	var book_repetitions = <%= @book_repetitions.to_json.html_safe %>;
@@ -61,6 +67,5 @@
 	  }
 	  book_repetitions_chart.data.labels = labels;
 	  book_repetitions_chart.update();
-	  $('#repetitions_chart').height(Math.max(450, book_repetitions[chosen_book].length * 18) + "px")
 	 });
 </script>

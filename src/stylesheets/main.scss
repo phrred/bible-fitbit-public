@@ -69,23 +69,6 @@ select {
   display: none;
 }
 
-.chartWrapper {
-    position: relative;
-}
-
-.chartWrapper > canvas {
-    position: absolute;
-    left: 0;
-    top: 0;
-    pointer-events:none;
-}
-
-.chartAreaWrapper {
-    height: 450px;
-    overflow-y: scroll;
-}
-
-
 @import 'components/button';
 @import 'components/card';
 @import 'components/challenge';

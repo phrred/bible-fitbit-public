@@ -96,15 +96,15 @@ class DashboardController < ApplicationController
 	end
 
 	def how_many_reps
-		@x_axis_max = 0
+		@y_axis_max = 0
 		@user_readings = ReadEvent.where(user: @user).group("chapter_id").count
 		@book_repetitions = {}
 		bible_books.each do |book|
 			@book_repetitions[book] = []
 			Chapter.where(book: book).pluck(:id).each do |id|
 				if !@user_readings.nil? and @user_readings.key?id
-					if @user_readings[id] > @x_axis_max
-						@x_axis_max = @user_readings[id]
+					if @user_readings[id] > @y_axis_max
+						@y_axis_max = @user_readings[id]
 					end
 					@book_repetitions[book] << @user_readings[id]
 				else
@@ -113,8 +113,7 @@ class DashboardController < ApplicationController
 			end
 			@book_repetitions[book].unshift(@book_repetitions[book].min)
 		end
-		@x_axis_max += 5
-		@graph_height = (@book_repetitions[@last_book_read].size * 40).to_s + "px"
+		@y_axis_max += 5
 	end
 
 	def set_up_pace_chart
