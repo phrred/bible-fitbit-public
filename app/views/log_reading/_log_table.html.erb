@@ -20,6 +20,13 @@
 
 <div>
   <input class="input" id="date_input" type="date" value="<%=Date.today%>">
-  <button id="save_reading" type="button" class="Button">Save</button>
+  <div style="display:flex; align-items: center;">
+    <button id="save_reading" type="button" class="Button">Save</button>
+    <% if @warning %>
+      <div style="margin-left: 20px; color: #D1495B;">
+        <i class="fa fa-exclamation-circle" style="margin-right: 7.5px;"></i><%= @warning %>
+      </div>
+    <% end %>
+  </div>
 
 </div>

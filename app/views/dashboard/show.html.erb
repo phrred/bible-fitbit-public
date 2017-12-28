@@ -56,7 +56,7 @@
     <div class="Card" id = "your_pace">
       <%= render partial: "your_pace" %>
     </div>
-    <div style="text-align:center">
+    <div class="Card" style="text-align:center">
       <div style="display:inline-block">
         <%= simple_form_for @_, url: comparison_values_path, :method => :post, remote: true, html: {id: "random"} do |f| %>
           <%= f.input :sender_ministry, collection: @all_groups, :label => "Group 1", selected: nil, as: :grouped_select, :group_method => :last, :group_label_method => :first, input_html: {id: "group1"}%>
@@ -74,7 +74,7 @@
       </div>
     </div>
 
-    <div id="anonymous_ranking">
+    <div class="Card" id="anonymous_ranking">
       <%= render partial: 'anonymous_ranking' %>
     </div>
   </div>
