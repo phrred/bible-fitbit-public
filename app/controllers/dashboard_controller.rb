@@ -55,10 +55,10 @@ class DashboardController < ApplicationController
 			pace_chart_start + 21]
 
 		@pace_chart_range_values = [
-			@your_pace[pace_chart_start],
-			@your_pace[pace_chart_start + 7],
-			@your_pace[pace_chart_start + 14],
-			@your_pace[pace_chart_start + 21]]
+			(@your_pace[pace_chart_start] / 7.0).round(2),
+			(@your_pace[pace_chart_start + 7] / 7.0).round(2),
+			(@your_pace[pace_chart_start + 14] / 7.0).round(2),
+			(@your_pace[pace_chart_start + 21] / 7.0).round(2)]
 
 		@initial_repetition_labels = Array.new(@book_repetitions[@last_book_read].size-1){|i| "Chapter " + String(i+1)}
 		@initial_repetition_labels.unshift(@last_book_read)
@@ -136,8 +136,7 @@ class DashboardController < ApplicationController
 			@your_pace[date] = 0
 			date = date - 7
 		end
-		p(@your_pace.keys)
-		@suggested_max = @your_pace.values.max + 5
+		@suggested_max = @your_pace.values.max/7 + 5
 	end
 
 	def past_pace
@@ -154,10 +153,10 @@ class DashboardController < ApplicationController
 			pace_chart_start + 21]
 
 		@pace_chart_range_values = [
-			@your_pace[pace_chart_start],
-			@your_pace[pace_chart_start + 7],
-			@your_pace[pace_chart_start + 14],
-			@your_pace[pace_chart_start + 21]]
+			(@your_pace[pace_chart_start] / 7.0).round(2),
+			(@your_pace[pace_chart_start + 7] / 7.0).round(2),
+			(@your_pace[pace_chart_start + 14] / 7.0).round(2),
+			(@your_pace[pace_chart_start + 21] / 7.0).round(2)]
 
 		respond_to do |format|
 			format.js
@@ -179,10 +178,10 @@ class DashboardController < ApplicationController
 			pace_chart_start + 21]
 
 		@pace_chart_range_values = [
-			@your_pace[pace_chart_start],
-			@your_pace[pace_chart_start + 7],
-			@your_pace[pace_chart_start + 14],
-			@your_pace[pace_chart_start + 21]]
+			(@your_pace[pace_chart_start] / 7.0).round(2),
+			(@your_pace[pace_chart_start + 7] / 7.0).round(2),
+			(@your_pace[pace_chart_start + 14] / 7.0).round(2),
+			(@your_pace[pace_chart_start + 21] / 7.0).round(2)]
 
 		respond_to do |format|
 			format.js
@@ -258,9 +257,9 @@ class DashboardController < ApplicationController
 		end
 		@title_text = @group1 + " vs. " + @group2
 		@group1_average = @group1_sum / @group1_count.to_f
-		@group1_average = @group1_average.nan? ? 0.0 : @group1_average
+		@group1_average = @group1_average.nan? ? 0.0 : @group1_average.round(2)
 		@group2_average = @group2_sum / @group2_count.to_f
-		@group2_average = @group2_average.nan? ? 0.0 : @group2_average
+		@group2_average = @group2_average.nan? ? 0.0 : @group2_average.round(2)
 		@y_axis_max = [@group1_average, @group2_average].max + 5
 		respond_to do |format|
 			format.js
