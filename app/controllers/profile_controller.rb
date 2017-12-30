@@ -25,7 +25,7 @@ class ProfileController < ApplicationController
       @user_peer_class = @user.peer_class.name
       @user_name = @user.name
       @user_email = @user.email
-      @user_gender = if @user.gender then "male" else "female" end
+      @user_gender = if @user.gender then "Male" else "Female" end
       session[:uid] = @user.id
     else
       @user = User.new
