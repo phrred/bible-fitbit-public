@@ -10,4 +10,5 @@ module ApplicationHelper
 	def bible_chapter_count
 		@@bible_chapter_count
 	end
+  
 end
