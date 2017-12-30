@@ -8,16 +8,16 @@ var comparisonChart = new Chart(document.getElementById("comparisonChart"), {
       labels: [<%= @group1.to_json.html_safe %>, <%= @group2.to_json.html_safe %>],
       datasets: [
         {
-          label: "0%",
+          label: <%= @group1.to_json.html_safe %>,
           backgroundColor: "#191970",
           data: [<%= @group1_average.to_json.html_safe %>]
         }, {
-          label: "10%",
+          label: <%= @group2.to_json.html_safe %>,
           backgroundColor: "#191970",
           data: [<%= @group2_average.to_json.html_safe %>]
         }
       ]
-    },  
+    },
     options: {
       legend: { display: false },
       title: {
@@ -30,7 +30,7 @@ var comparisonChart = new Chart(document.getElementById("comparisonChart"), {
             beginAtZero:true,
             suggestedMin: 0,
             suggestedMax: <%=@y_axis_max%>
-          }, 
+          },
           scaleLabel: {
           display: true,
           labelString: 'Average # of books'
