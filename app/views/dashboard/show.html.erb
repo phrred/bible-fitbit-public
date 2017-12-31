@@ -59,9 +59,8 @@
     <div class="Card" style="text-align:center">
       <div style="display:inline-block">
         <%= simple_form_for @_, url: comparison_values_path, :method => :post, remote: true, html: {id: "random"} do |f| %>
-          <%= f.input :sender_ministry, collection: @all_groups, :label => "Group 1", selected: nil, as: :grouped_select, :group_method => :last, :group_label_method => :first, input_html: {id: "group1"}%>
-          <%= f.input :receiver_ministry, collection: @all_groups, :label => "Group 2", selected: nil, as: :grouped_select, :group_method => :last, :group_label_method => :first,input_html: {id: "group2"}%>
-            <%= f.button :submit,  'Compare the Groups!',data: { disable_with: false }, class: 'Button' %>
+          <%= f.input :sender_ministry, collection: @all_groups, :label => "Group 1", selected: nil, as: :grouped_select, :group_method => :last, :group_label_method => :first, input_html: {id: "group1", :onchange=>'$(this.form).submit();'}, :selected => @group1 %>
+          <%= f.input :receiver_ministry, collection: @all_groups, :label => "Group 2", selected: nil, as: :grouped_select, :group_method => :last, :group_label_method => :first,input_html: {id: "group2", :onchange=>'$(this.form).submit();'}, :selected => @group2 %>
             <% end %>
         <script>
           $(document).ready(function() { $("#group1").select2(); });

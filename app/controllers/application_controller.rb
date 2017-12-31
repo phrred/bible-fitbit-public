@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   def current_user
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
     @pending_challenge_requests ||= ChallengeReadEntry.where(user: @current_user, accepted: nil)
+    @current_user
   end
 
   def verify_user
@@ -24,6 +25,5 @@ class ApplicationController < ActionController::Base
       redirect_to controller: 'login', action: 'show'
     end
   end
-
 
 end
