@@ -19,7 +19,7 @@ var book_percent_chart = new Chart(document.getElementById("book_percents"), {
         {
           label: "Percentages",
           backgroundColor: ["#3e95cd", "#8e5ea2"],
-          data: [initial_data, 100-initial_data]
+          data: [initial_data, (100-initial_data).toFixed(2)]
         }
       ]
     },
@@ -39,7 +39,7 @@ var book_percents = <%= @book_percentages.to_json.html_safe %>;
 $(document).on("change", "#book_dropdown1", function() {
   var dropdown = document.getElementById("book_dropdown1");
   var chosen_book = dropdown.options[dropdown.selectedIndex].text;
-  book_percent_chart.data.datasets[0].data = [book_percents[chosen_book], 100 - book_percents[chosen_book]];
+  book_percent_chart.data.datasets[0].data = [book_percents[chosen_book], (100 - book_percents[chosen_book]).toFixed(2)];
   book_percent_chart.options.title.text = "What percent of " + chosen_book + " have you read?";
   book_percent_chart.update();
  });

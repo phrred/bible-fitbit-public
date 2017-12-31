@@ -91,7 +91,7 @@ class DashboardController < ApplicationController
 		@book_percentages = {}
 		bible_books.each do |book|
 			chapters_read = UserShadowing.where(user_id: @user, book: book).take.shadowing.count
-			@book_percentages[book] = chapters_read.to_f/Chapter.where(book: book).count() * 100.0
+			@book_percentages[book] = (chapters_read.to_f/Chapter.where(book: book).count() * 100.0).round(2)
 		end
 	end
 

@@ -115,18 +115,20 @@ class ChallengesController < ApplicationController
 			entries = ChallengeReadEntry.where(challenge: challenge, accepted: true)
 			if entries != nil
 				entries.each do |entry|
-					if is_user_in_group(@user, sender_group)
-						entry[:read_at].each do |date|
-							@chart_data[challenge][date][0] += 1
+					if !entry.nil?
+						if is_user_in_group(@user, sender_group)
+							entry[:read_at].each do |date|
+								@chart_data[challenge][date][0] += 1
+							end
+							sender_number = sender_number + 1
+							sender_sum = sender_sum + entry[:chapters].size
+						else
+							entry[:read_at].each do |date|
+								@chart_data[challenge][date][1] += 1
+							end
+							receiver_number = reciever_number + 1
+							receiver_sum = receiver_sum + entry[:chapters].size
 						end
-						sender_number = sender_number + 1
-						sender_sum = sender_sum + entry[:chapters].size
-					else
-						entry[:read_at].each do |date|
-							@chart_data[challenge][date][1] += 1
-						end
-						receiver_number = reciever_number + 1
-						receiver_sum = receiver_sum + entry[:chapters].size
 					end
 				end
 			end
@@ -218,6 +220,7 @@ class ChallengesController < ApplicationController
 			receiver_peer_id: receiver_class,
 			valid_books: valid_books,
 			start_time: start_date,
+			end_time: start_date + 5,
 			title: title
 		)
 		sender_recipients = []
@@ -255,8 +258,7 @@ class ChallengesController < ApplicationController
 			create_challenge_read_entry(user, new_challenge)
 		end
 		user_challenge_read_entry = ChallengeReadEntry.where(challenge: new_challenge, user: @user)[0]
-
-		user_read_entries = ReadEvent.where(user: @user).where("read_at >= ?",start_date)
+		user_read_entries = ReadEvent.where(user: @user).where("read_at >= ? AND read_at < ?",start_date, start_date + 5)
 		user_read_entries.each do |read_event|
 			if valid_books.nil?
 				user_challenge_read_entry.chapters << read_event.chapter.id
@@ -290,20 +292,20 @@ class ChallengesController < ApplicationController
 	end
 
 	def accept_challenge
-		challenge_request = ChallengeReadEntry.where(id: params[:challenge_request])
-		challenge = challenge_request.take.challenge
+		challenge_request = ChallengeReadEntry.where(id: params[:challenge_request]).take
+		challenge = challenge_request.challenge
 		user_id = session[:user_id]
 		@user = User.where(id: user_id).take
 	  	@outstanding_challenges = ChallengeReadEntry.where(user: @user, accepted: nil)
-		user_read_entries = ReadEvent.where(user: @user).where("read_at >= ?",challenge[:start_time])
+		user_read_entries = ReadEvent.where(user: @user).where("read_at >= ? and read_at < ?",challenge[:start_time], challenge[:end_time])
 		user_read_entries.each do |read_event|
-			if challenge[:valid_books] == []
-				user_challenge_read_entry.chapters << read_event.chapter.id
-				user_challenge_read_entry.read_at << read_event.read_at
+			if challenge[:valid_books].nil? || challenge[:valid_books].empty?
+				challenge_request.chapters << read_event.chapter.id
+				challenge_request.read_at << read_event.read_at
 			else
 				if challenge[:valid_books].include?(read_event.chapter.book)
-					user_challenge_read_entry.chapters << read_event.chapter.id
-					user_challenge_read_entry.read_at << read_event.read_at
+					challenge_request.chapters << read_event.chapter.id
+					challenge_request.read_at << read_event.read_at
 				end
 			end
 		end
