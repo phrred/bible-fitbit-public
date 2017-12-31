@@ -13,10 +13,21 @@ class DashboardController < ApplicationController
 			@last_book_read = "Genesis"
 		end
 	end
+
 	def show
 		config_dashboard()
-		@group1 = Group.take(1)[0].name
-		@group2 = @group1
+    group1_model = current_user().ministry
+    @group1 = group1_model.name
+    if @group1.downcase == "berkeley college"
+      group2_model = Group.where(name: "Berkeley Praxis").take
+    else
+      group2_model = Group.where(name: "Berkeley College").take
+    end
+    @group2 = group2_model.name
+
+    @group1_average = group_average(group1_model, @group1)
+    @group2_average = group_average(group2_model, @group2)
+
 		@title_text = @group1 + " vs. " + @group2
 		@y_axis_max = 10
 
@@ -32,7 +43,7 @@ class DashboardController < ApplicationController
 			@last_book_entered = last_read_entry.chapter.book
 			last_book_shadowings = @user_shadowings.where(book: @last_book_entered).take
 			last_book_chapters_read = last_book_shadowings.shadowing.count()
-			
+
 			book_chapter_count = Chapter.where(book: @last_book_entered).count()
 			@percentage_of_last_book = last_book_chapters_read.to_f / book_chapter_count * 100.0
 		else
@@ -189,77 +200,58 @@ class DashboardController < ApplicationController
 		end
 	end
 
+  def group_average(group_model, group_name)
+		year = Date.today.to_time.strftime('%Y').to_i
+    sum = 0
+    count = 0
+    if group_model.nil?
+      if group_name == "Brothers"
+        users = User.where(gender: true)
+      else
+        users = User.where(gender: false)
+      end
+
+      if !users.nil?
+        users.each do |user|
+          sum += user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
+        end
+        count += users.size
+      end
+    else
+      groups = [group_model] + group_model.descendants
+      groups.each do |g|
+        users = User.where(ministry: g.id)
+        if !users.nil?
+          users.each do |user|
+            sum += user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
+          end
+          count += users.size
+        end
+      end
+    end
+    sum.to_f / count
+  end
+
 	def comparison_values
 		other_params = params[:challenge]
 		if other_params[:sender_ministry] == "Brothers" || other_params[:sender_ministry] == "Sisters"
 			@group1 = other_params[:sender_ministry]
-		else 
+		else
 			group1_model = Group.where(name: other_params[:sender_ministry])[0]
 			@group1 = group1_model.name
 		end
 		if other_params[:receiver_ministry] == "Brothers" || other_params[:receiver_ministry] == "Sisters"
 			@group2 = other_params[:receiver_ministry]
-		else 
+		else
 			group2_model = Group.where(name: other_params[:receiver_ministry])[0]
 			@group2 = group2_model.name
 		end
 		year = Date.today.to_time.strftime('%Y').to_i
-		@group1_sum = 0
-		@group1_count = 0
-		if group1_model.nil?
-			if @group1 == "Brothers"
-				users = User.where(gender: true)
-			else
-				user = User.where(gender: false)
-			end
-			if !users.nil?
-				users.each do |user|
-					@group1_sum += user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
-				end
-				@group1_count += users.size
-			end
-		else
-			group1_groups = [group1_model] + group1_model.descendants
-			group1_groups.each do |group|
-				users = User.where(ministry: group.id)
-				if !users.nil?
-					users.each do |user|
-						@group1_sum += user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
-					end
-					@group1_count += users.size
-				end
-			end
-		end
-		@group2_sum = 0
-		@group2_count = 0
-		if group2_model.nil?
-			if @group2 == "Brothers"
-				users = User.where(gender: true)
-			else
-				user = User.where(gender: false)
-			end
-			if !users.nil?
-				users.each do |user|
-					@group2_sum += user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
-				end
-				@group2_count += users.size
-			end
-		else
-			group2_groups = [group2_model] + group2_model.descendants
-			group2_groups.each do |group|
-				users = User.where(ministry: group.id)
-				if !users.nil?
-					users.each do |user|
-						@group2_sum += user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
-					end
-					@group2_count += users.size
-				end
-			end
-		end
 		@title_text = @group1 + " vs. " + @group2
-		@group1_average = @group1_sum / @group1_count.to_f
+		@group1_average = group_average(group1_model, @group1)
 		@group1_average = @group1_average.nan? ? 0.0 : @group1_average
-		@group2_average = @group2_sum / @group2_count.to_f
+
+		@group2_average = group_average(group2_model, @group2)
 		@group2_average = @group2_average.nan? ? 0.0 : @group2_average
 		@y_axis_max = [@group1_average, @group2_average].max + 5
 		respond_to do |format|
