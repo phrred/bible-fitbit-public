@@ -26,8 +26,6 @@ class DashboardController < ApplicationController
     @group2 = group2_model.name
 
     @group1_average = group_average(group1_model, @group1)
-    p "group1"
-    p @group1_average
     @group2_average = group_average(group2_model, @group2)
 
 		@title_text = @group1 + " vs. " + @group2
