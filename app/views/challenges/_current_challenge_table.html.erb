@@ -17,6 +17,16 @@
               <div class="Challenge_score"><%=@receiver_scores[index]%></div>
               <div class="Challenge_desc">chapters read on average</div>
       		  </div>
+            <div>
+              <div>
+                <% if !challenge.valid_books.nil? && !challenge.valid_books.empty? %>
+                <b>Valid Books:&nbsp</b><%= challenge.valid_books.join(", ") %>
+                <% end %>
+             </div>
+             <div>
+               <b> Challenge Dates:&nbsp</b><%= challenge.start_time.strftime('%a %b %d %Y')%> - <%= (challenge.end_time-1).strftime('%a %b %d %Y')%>
+             </div>
+            </div>
           </div>
         </div>
     		<div class="result">
