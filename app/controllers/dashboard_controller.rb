@@ -214,7 +214,7 @@ class DashboardController < ApplicationController
         users.each do |user|
         	annual_count = user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0]
         	if !annual_count.nil?
-	          sum += user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
+	          sum += annual_count.count
 	      end
         end
         count += users.size
@@ -227,7 +227,7 @@ class DashboardController < ApplicationController
           users.each do |user|
           	annual_count = user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0]
           	if !annual_count.nil?
-	            sum += user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
+	            sum += annual_count.count
 	        end
           end
           count += users.size

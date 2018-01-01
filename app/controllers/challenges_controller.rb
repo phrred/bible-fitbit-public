@@ -8,10 +8,12 @@ class ChallengesController < ApplicationController
 		@all_users = User.all
 		year = Date.today.to_time.strftime('%Y').to_i
 		@all_users.each do |a_user|
+			annual_count = a_user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0]
+			if !annual_count.nil?
 			if @comparison_data.key?(a_user.ministry.name)
-				@comparison_data[a_user.ministry.name] += a_user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
+				@comparison_data[a_user.ministry.name] += annual_count.count
 			else
-				@comparison_data[a_user.ministry.name] = a_user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0].count
+				@comparison_data[a_user.ministry.name] = annual_count.count
 			end
 		end
 
