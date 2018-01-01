@@ -81,7 +81,7 @@ class DashboardController < ApplicationController
 		User.all.each do |user|
 			user.annual_counts.each do |count_id|
 				rank = top_10_ids.index(count_id)
-				if rank != -1
+				if !rank.nil? && rank != -1
 					@top_10[rank] = {"gender"=>user.gender,"count"=>Count.where(id: count_id).take.count}
 					break
 				end
