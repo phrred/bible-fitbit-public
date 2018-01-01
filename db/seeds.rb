@@ -8,6 +8,13 @@
 
 require 'date'
 
+ Group.all.map { |g| g.really_destroy! }
+ User.all.map { |u| u.really_destroy! }
+ Count.all.map { |c| c.really_destroy! }
+ Chapter.all.map { |c| c.really_destroy! }
+ ChallengeReadEntry.all.map { |c| c.really_destroy! }
+ 
+
 if Group.find_by(name: "45+").nil?
 	Group.create!(name: "45+", group_type: "peer_class")
 end
