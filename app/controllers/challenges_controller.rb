@@ -119,7 +119,7 @@ class ChallengesController < ApplicationController
 			if entries != nil
 				entries.each do |entry|
 					if !entry.nil?
-						if is_user_in_group(@user, sender_group)
+						if is_user_in_group(entry.user, sender_group)
 							entry[:read_at].each do |date|
 								@chart_data[challenge][date][0] += 1
 							end
@@ -142,10 +142,10 @@ class ChallengesController < ApplicationController
 					@chart_data[challenge][key.tomorrow][0] += array[0]
 					@chart_data[challenge][key.tomorrow][1] += array[1]
 				end
-				array = [array[0]/sender_number, array[1]/receiver_number]
+				array = [(array[0]/sender_number).round(2), (array[1]/receiver_number).round(2)]
 			end
-			@sender_scores << sender_sum/sender_number
-			@receiver_scores << receiver_sum/receiver_number
+			@sender_scores << (sender_sum/sender_number).round(2)
+			@receiver_scores << (receiver_sum/receiver_number).round(2)
 			@current_challenges << challenge
 		end
 
