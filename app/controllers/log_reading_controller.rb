@@ -53,6 +53,10 @@ class LogReadingController < ApplicationController
   def update
     chapters = params[:record]
     date = params[:date]
+    if Date.parse(date) > Date.today
+      session[:warning] = 'Unable to log reading in the future'
+      return
+    end
     year = date.to_time.strftime('%Y').to_i
     @displayed_book = params[:book]
     user = User.find(session[:user_id])
