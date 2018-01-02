@@ -67,6 +67,8 @@ class LogReadingController < ApplicationController
       if annual_count.nil? || annual_count.empty?
         annual_count = Count.create!(count: 0, year: Time.current.year)
         user.annual_counts << annual_count.id
+      else
+        annual_count = annual_count[0]
       end
     end
     readEntry = ChallengeReadEntry.where(user: user)
