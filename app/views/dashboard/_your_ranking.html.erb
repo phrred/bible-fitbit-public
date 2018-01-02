@@ -5,7 +5,7 @@ You need to read <%= @next_ten_percent[0] - @user.lifetime_count.count %> chapte
   <canvas id="rankingChart" width="400" height="200"></canvas>
 </div>
 <script>
-var your_ranking = <%=@your_ranking_percentile.to_json.html_safe%>;
+var your_ranking = <%=@your_ranking_percentile.round(2).to_json.html_safe%>;
 var rankingChart = new Chart(document.getElementById("rankingChart").getContext('2d'), {
     type: 'bar',
     data: {

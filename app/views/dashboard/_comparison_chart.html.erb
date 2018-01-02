@@ -10,11 +10,11 @@ var comparisonChart = new Chart(document.getElementById("comparisonChart"), {
         {
           label: <%= @group1.to_json.html_safe %>,
           backgroundColor: "#191970",
-          data: [<%= @group1_average.to_json.html_safe %>]
+          data: [<%= @group1_average.round(2).to_json.html_safe %>]
         }, {
           label: <%= @group2.to_json.html_safe %>,
           backgroundColor: "#191970",
-          data: [<%= @group2_average.to_json.html_safe %>]
+          data: [<%= @group2_average.round(2).to_json.html_safe %>]
         }
       ]
     },
