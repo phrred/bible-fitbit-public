@@ -63,7 +63,11 @@ class LogReadingController < ApplicationController
       annual_count = Count.create!(count: 0, year: Time.current.year)
       user.annual_counts << annual_count.id
     else
-      annual_count = annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0]
+      annual_count = annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}
+      if annual_count.nil? || annual_count.empty?
+        annual_count = Count.create!(count: 0, year: Time.current.year)
+        user.annual_counts << annual_count.id
+      end
     end
     readEntry = ChallengeReadEntry.where(user: user)
     if readEntry != nil
