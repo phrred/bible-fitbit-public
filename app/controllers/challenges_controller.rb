@@ -247,6 +247,9 @@ class ChallengesController < ApplicationController
 		end
 
 		receiver_recipients = []
+		User.where(ministry: receiver_ministry).each do |user|
+			receiver_recipients << user
+		end
 		receiver_ministry.descendants.each do |ministry|
 			receiver_recipients << User.where(ministry: ministry).take
 		end
