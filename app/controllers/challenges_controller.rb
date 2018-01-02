@@ -129,7 +129,7 @@ class ChallengesController < ApplicationController
 							entry[:read_at].each do |date|
 								@chart_data[challenge][date][1] += 1
 							end
-							receiver_number = reciever_number + 1
+							receiver_number = receiver_number + 1
 							receiver_sum = receiver_sum + entry[:chapters].size
 						end
 					end
