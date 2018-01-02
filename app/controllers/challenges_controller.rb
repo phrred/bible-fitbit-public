@@ -109,44 +109,46 @@ class ChallengesController < ApplicationController
 		@chart_data = {}
 		ChallengeReadEntry.where(user: @user, accepted: true).each do |challenge_read_entry|
 			challenge = challenge_read_entry.challenge
-			initialize_chart_data(challenge)
-			sender_group = challenge.sender_ministry
-			sender_number = 0
-			receiver_number = 0
-			sender_sum = 0
-			receiver_sum = 0
-			entries = ChallengeReadEntry.where(challenge: challenge, accepted: true)
-			if entries != nil
-				entries.each do |entry|
-					if !entry.nil?
-						if is_user_in_group(entry.user, sender_group)
-							entry[:read_at].each do |date|
-								@chart_data[challenge][date][0] += 1
+			if challenge.winner.nil?
+				initialize_chart_data(challenge)
+				sender_group = challenge.sender_ministry
+				sender_number = 0
+				receiver_number = 0
+				sender_sum = 0
+				receiver_sum = 0
+				entries = ChallengeReadEntry.where(challenge: challenge, accepted: true)
+				if entries != nil
+					entries.each do |entry|
+						if !entry.nil?
+							if is_user_in_group(entry.user, sender_group)
+								entry[:read_at].each do |date|
+									@chart_data[challenge][date][0] += 1
+								end
+								sender_number = sender_number + 1
+								sender_sum = sender_sum + entry[:chapters].size
+							else
+								entry[:read_at].each do |date|
+									@chart_data[challenge][date][1] += 1
+								end
+								receiver_number = receiver_number + 1
+								receiver_sum = receiver_sum + entry[:chapters].size
 							end
-							sender_number = sender_number + 1
-							sender_sum = sender_sum + entry[:chapters].size
-						else
-							entry[:read_at].each do |date|
-								@chart_data[challenge][date][1] += 1
-							end
-							receiver_number = receiver_number + 1
-							receiver_sum = receiver_sum + entry[:chapters].size
 						end
 					end
 				end
-			end
-			sender_number = sender_number != 0 ? sender_number.to_f : 1.0
-			receiver_number = receiver_number != 0 ? receiver_number.to_f : 1.0
-			@chart_data[challenge].each do |key, array|
-				if !key.friday?
-					@chart_data[challenge][key.tomorrow][0] += array[0]
-					@chart_data[challenge][key.tomorrow][1] += array[1]
+				sender_number = sender_number != 0 ? sender_number.to_f : 1.0
+				receiver_number = receiver_number != 0 ? receiver_number.to_f : 1.0
+				@chart_data[challenge].each do |key, array|
+					if !key.friday?
+						@chart_data[challenge][key.tomorrow][0] += array[0]
+						@chart_data[challenge][key.tomorrow][1] += array[1]
+					end
+					array = [(array[0]/sender_number).round(2), (array[1]/receiver_number).round(2)]
 				end
-				array = [(array[0]/sender_number).round(2), (array[1]/receiver_number).round(2)]
+				@sender_scores << (sender_sum/sender_number).round(2)
+				@receiver_scores << (receiver_sum/receiver_number).round(2)
+				@current_challenges << challenge
 			end
-			@sender_scores << (sender_sum/sender_number).round(2)
-			@receiver_scores << (receiver_sum/receiver_number).round(2)
-			@current_challenges << challenge
 		end
 
 		@chart_data.keys.each do |challenge|
@@ -203,7 +205,8 @@ class ChallengesController < ApplicationController
 			receiver_peer_id: receiver_class,
 			valid_books: valid_books,
 			start_time: start_date,
-			title: title
+			title: title,
+			winner: nil
 			)
 
 		if !prev_challenge.empty?
