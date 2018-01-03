@@ -45,10 +45,10 @@ class ChallengesController < ApplicationController
 		# 	@grouping_options << ministry
 		# end
 
-		@ministry_names.delete(selected_ministry.name)
-		selected_ministry.descendants.each do |ministry|
-			@ministry_names.delete(ministry.name)
-		end
+		# @ministry_names.delete(selected_ministry.name)
+		# selected_ministry.descendants.each do |ministry|
+		# 	@ministry_names.delete(ministry.name)
+		# end
 
 		@old_challenges = []
 		monday = Date.today.beginning_of_week
@@ -81,10 +81,10 @@ class ChallengesController < ApplicationController
 		# 	@grouping_options << ministry
 		# end
 
-		@ministry_names.delete(selected_ministry.name)
-		selected_ministry.descendants.each do |ministry|
-			@ministry_names.delete(ministry.name)
-		end
+		# @ministry_names.delete(selected_ministry.name)
+		# selected_ministry.descendants.each do |ministry|
+		# 	@ministry_names.delete(ministry.name)
+		# end
 
 	end
 
@@ -181,15 +181,42 @@ class ChallengesController < ApplicationController
 		@user = User.where(id: user_id).take
 		challenge =  params[:challenge]
 
-		sender_class = challenge[:sender_peer] ? @user.peer_class : nil
+		p("HI")
+		p(challenge[:sender_peer])
+
+		sender_class = challenge[:sender_peer] == "true"? @user.peer_class : nil
 		sender_gender = challenge[:sender_gender] != "" ? @user.gender : nil
 		sender_ministry = Group.where(name: challenge[:sender_ministry]).take
 		receiver_class = Group.where(name: challenge[:receiver_peer]).take
 		receiver_ministry = Group.where(name: challenge[:receiver_ministry]).take
-		receiver_gender = challenge[:receiver_gender].size == 2 ? challenge[:receiver_gender][1] : nil
+		receiver_gender = challenge[:receiver_gender].size == 2 ? challenge[:receiver_gender][1] == "true": nil
 		challenge[:valid_books].slice!(0)
 		valid_books = challenge[:valid_books].size > 0 ? challenge[:valid_books] : nil
 		title = challenge[:title]
+
+		p(sender_ministry)
+		p(receiver_ministry)
+		p(sender_ministry == receiver_ministry)
+		p(sender_gender)
+		p(receiver_gender)
+		p(sender_gender == receiver_gender)
+		p(sender_class)
+		p(receiver_class)
+		p(sender_class == receiver_class)
+
+		if sender_ministry == receiver_ministry
+			if sender_class == receiver_class
+				if sender_gender == receiver_gender
+					@warning = "You cannot challenge yourself"
+					create()
+					respond_to do |format|
+						format.js
+					end
+					return
+				end
+			end
+		end
+
 		start_date = Date.today
 		if start_date.cwday > 4
 			start_date + 7
