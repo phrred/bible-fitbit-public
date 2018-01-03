@@ -281,7 +281,7 @@ class ChallengesController < ApplicationController
 		end
 
 		user_challenge_read_entry.save
-		# user_challenge_read_entry.update(accepted: true)
+		user_challenge_read_entry.update(accepted: true)
 		show()
 		redirect_to challenges_path
 	end
