@@ -191,8 +191,8 @@ class ChallengesController < ApplicationController
 		valid_books = challenge[:valid_books].size > 0 ? challenge[:valid_books] : nil
 		title = challenge[:title]
 		start_date = Date.today
-		if start_date.cwday > 4
-			start_date + 7
+		if start_date.cwday > 2
+			start_date = start_date + 7
 		end
 		start_date = start_date.beginning_of_week
 
@@ -281,7 +281,7 @@ class ChallengesController < ApplicationController
 		end
 
 		user_challenge_read_entry.save
-		user_challenge_read_entry.update(accepted: true)
+		# user_challenge_read_entry.update(accepted: true)
 		show()
 		redirect_to challenges_path
 	end
