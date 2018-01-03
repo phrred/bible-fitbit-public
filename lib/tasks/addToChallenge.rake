@@ -12,7 +12,10 @@ def add_to_challenge
 	 	receiver_gender = challenge.receiver_gender
 	 	receiver_class = challenge.receiver_peer_id
 	 	User.where(ministry: challenge.receiver_ministry).each do |user|
-			receiver_recipients << user
+	 		user_read_entry = ChallengeReadEntry.where(user: user, challenge: challenge)
+	 		if user_read_entry.nil? || user_read_entry.empty?
+				receiver_recipients << user
+			end
 		end
 		unless receiver_gender.nil?
 			receiver_recipients = receiver_recipients.select { |user| user.gender == receiver_gender }
