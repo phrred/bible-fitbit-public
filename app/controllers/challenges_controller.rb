@@ -205,7 +205,7 @@ class ChallengesController < ApplicationController
 		end
 
 		start_date = Date.today
-		if start_date.cwday > 2
+		if start_date.cwday > 3
 			start_date = start_date + 7
 		end
 		start_date = start_date.beginning_of_week
