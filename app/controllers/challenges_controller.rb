@@ -181,9 +181,6 @@ class ChallengesController < ApplicationController
 		@user = User.where(id: user_id).take
 		challenge =  params[:challenge]
 
-		p("HI")
-		p(challenge[:sender_peer])
-
 		sender_class = challenge[:sender_peer] == "true"? @user.peer_class : nil
 		sender_gender = challenge[:sender_gender] != "" ? @user.gender : nil
 		sender_ministry = Group.where(name: challenge[:sender_ministry]).take
@@ -193,16 +190,6 @@ class ChallengesController < ApplicationController
 		challenge[:valid_books].slice!(0)
 		valid_books = challenge[:valid_books].size > 0 ? challenge[:valid_books] : nil
 		title = challenge[:title]
-
-		p(sender_ministry)
-		p(receiver_ministry)
-		p(sender_ministry == receiver_ministry)
-		p(sender_gender)
-		p(receiver_gender)
-		p(sender_gender == receiver_gender)
-		p(sender_class)
-		p(receiver_class)
-		p(sender_class == receiver_class)
 
 		if sender_ministry == receiver_ministry
 			if sender_class == receiver_class
