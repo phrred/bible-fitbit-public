@@ -11,6 +11,10 @@ class ApplicationController < ActionController::Base
   end
 
   def verify_user
+    if request.user_agent =~ /Mobile|webOS/
+      redirect_to mobile_path
+      return
+    end
     if not current_user()
       redirect_to controller: 'login', action: 'show'
     end
