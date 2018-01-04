@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get 'log_reading/show'
+  get 'mobile', to: "mobile#show"
 
   get 'auth/:provider/callback', to: 'sessions#create'
   get 'auth/failure', to: redirect('/')
@@ -27,6 +28,7 @@ Rails.application.routes.draw do
 	resources :profile
   resource :log_reading, only: [:show]
 	resources :login
+  resources :mobile
   resources :challenges
 
 
