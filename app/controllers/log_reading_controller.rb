@@ -88,18 +88,22 @@ class LogReadingController < ApplicationController
         ReadEvent.create!(read_at: date, user: user , chapter: chapter)
         if challenges != nil
           challenges.each { |challenge_entry|
-            challenge_entry.chapters << chapter.id
-            challenge_entry.read_at << date
-            challenge_entry.save
+            if !challenge_entry.chapters.include? chapter.id
+              challenge_entry.chapters << chapter.id
+              challenge_entry.read_at << date
+              challenge_entry.save
+            end
           }
         end
         user_shadowing = UserShadowing.find_by(user: user, book: chapter.book)
         if user_shadowing != nil
-          user_shadowing.shadowing << chapter_num
-          user_shadowing.save
+          if !user_shadowing.shadowing.include? chapter_num.to_i
+            user_shadowing.shadowing << chapter_num
+            user_shadowing.save
+          end
         else
           user_shadowing = UserShadowing.create(user: user, book: chapter.book)
-          user_shadowing.shadowing << chapter_num
+          user_shadowing.shadowing << chapter_num.to_i
           user_shadowing.save
         end
       else
@@ -118,7 +122,7 @@ class LogReadingController < ApplicationController
     start_date = Date.today.beginning_of_week
     challenge = entry.challenge
     return start_date == challenge.start_time && entry.accepted && (challenge.valid_books.nil? || challenge.valid_books.include?(displayed_book))
-  end
+  end    
 
 
   def resetBook
