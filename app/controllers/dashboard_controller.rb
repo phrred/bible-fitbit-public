@@ -90,8 +90,14 @@ class DashboardController < ApplicationController
 	end
 
 	def generate_your_percentile
-		count_ids = Count.where(year: 0).order(:count).pluck(:id)
-		your_rank = count_ids.index(@user.lifetime_count.id)
+		count_ids = Count.where(year: Date.today.year).order(:count).pluck(:id)
+		your_rank = count_ids.index(@user.annual_counts[-1])
+        if !(your_rank.is_a? Integer)
+          	annual_count = Count.create!(count: 0, year: Time.current.year)
+  			count_ids = Count.where(year: Date.today.year).order(:count).pluck(:id)
+  			@user.annual_counts << annual_count.id
+			your_rank = count_ids.index(@user.annual_counts[-1])
+        end
 		@your_ranking_percentile = your_rank*100.0/([1,count_ids.size() - 1].max)
 		@next_percentile = @your_ranking_percentile == 100.0 ? 100.0 : (@your_ranking_percentile/10+1).floor*10.0
 		@next_percentile_id = (@next_percentile/100.0*([1.0, count_ids.size() - 1.0].max)).floor
