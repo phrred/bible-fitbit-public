@@ -4,6 +4,9 @@
 
 <div class="Container LogReading">
   <div>
+    Note: You can log your reading multiple times by highlighting the chapter again
+  </div>
+  <div>
     <%= simple_form_for(@selected_book, url: search_path, :method => :post, remote: true) do |f| %>
     	<%= f.input :book, collection: @book_names, :include_blank => 'Select Book', label: false, selected: @previous_book_name, :input_html => {:id => "book_dropdown", :onchange=>'$(this.form).submit();'} %>
     <% end %>

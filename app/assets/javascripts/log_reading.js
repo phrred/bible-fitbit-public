@@ -21,11 +21,11 @@ function highlightTable() {
 };
 
 $(document).on("click", "#save_reading", function() {
-  if (confirm('Are you sure you wish to save your changes?')) {
-     var chapters_highlighted = []
+  var chapters_highlighted = []
      $('.record').each(function() {
       chapters_highlighted.push($(this).html().trim())
      })
+  if (confirm('Are you sure you wish to save chapters: '+ chapters_highlighted + '?')) {
      $.ajax({
      url: "update",
      type: "POST",
@@ -39,7 +39,8 @@ $(document).on("click", "#save_reading", function() {
 });
 
 $(document).on("click", "#reset_book", function() {
-   if (confirm('Are you sure you wish to save your changes?')) {
+  var book = $("#book_dropdown").val()
+   if (confirm('Are you sure you wish to reset your reading progress for: ' + book + " ?")) {
     $.ajax({
      url: "resetBook",
      type: "POST",
@@ -53,7 +54,7 @@ $(document).on("click", "#reset_book", function() {
 });
 
 $(document).on("click", "#reset_bible", function() {
-   if (confirm('Are you sure you wish to save your changes?')) {
+   if (confirm('Are you sure you wish to reset your reading progress in the whole bible?')) {
      $.ajax({
      url: "resetBible",
      type: "POST",
