@@ -143,7 +143,8 @@ class ChallengesController < ApplicationController
 						@chart_data[challenge][key.tomorrow][0] += array[0]
 						@chart_data[challenge][key.tomorrow][1] += array[1]
 					end
-					array = [(array[0]/sender_number).round(2), (array[1]/receiver_number).round(2)]
+					@chart_data[challenge][key] = [(array[0]/sender_number).round(2), (array[1]/receiver_number).round(2)]
+
 				end
 				@sender_scores << (sender_sum/sender_number).round(2)
 				@receiver_scores << (receiver_sum/receiver_number).round(2)
