@@ -8,6 +8,7 @@
   <% end %>
 </select>
 <canvas id="book_percents" width="800" height="450"></canvas>
+<button id="reset_book" type="button" class="Button">Reset Book Reading Progress</button>
 <script>
 $(document).ready(function() { $("#book_dropdown1").select2(); });
 var initial_data = parseFloat(<%=@book_percentages[@last_book_read].to_json.html_safe%>);

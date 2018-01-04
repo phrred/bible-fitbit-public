@@ -21,8 +21,8 @@ Rails.application.routes.draw do
 	get "dashboard", to: "dashboard#show"
 	post "profile", to: "profile#update"
   post "update", to: "log_reading#update"
-  post "resetBook", to: "log_reading#resetBook"
-  post "resetBible", to: "log_reading#resetBible"
+  post "resetBook", to: "dashboard#resetBook"
+  post "resetBible", to: "dashboard#resetBible"
 
   resources :sessions, only: [:create, :destroy]
 	resources :profile
