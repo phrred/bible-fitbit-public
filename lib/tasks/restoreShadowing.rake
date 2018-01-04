@@ -13,8 +13,10 @@ namespace :restore_shadowing do
 		 	chapter = event.chapter
 		 	user_shadowing = UserShadowing.find_by(user:id, book: chapter.book)
 		 	if !user_shadowing.nil?
-			 	user_shadowing.shadowing << chapter.ch_num
-			 	user_shadowing.save
+		 		if !user_shadowing.shadowing.include? chapter.ch_num
+				 	user_shadowing.shadowing << chapter.ch_num
+				 	user_shadowing.save
+				 end
 			 end
 		 end
 	end
