@@ -1,0 +1,13 @@
+.Data {
+  text-align: center;
+  
+  &_smallTitle {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  &_number {
+    font-size: 50px;
+    font-weight: 600;
+  }
+}

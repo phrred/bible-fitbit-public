@@ -15,63 +15,58 @@
       <div class="MobileNotice_icon"><i class="fa fa-mobile"></i></div>
       We disabled Bible Fitbit on mobile browsers to encourage you to use Bible Fitbit on your computer instead of on your smartphone, as a way to help all of us regain back our humanity.
     </div>
-    <div class="app">
-      <% if !session[:user_id].nil? %>
-        <header>
-          <ul class="Nav">
-            <div class="Nav_items Nav_items-left">
-              <div class="Nav_logo">
-                <%=link_to "Bible Fitbit", dashboard_path%>
-              </div>
+    <% if !session[:user_id].nil? %>
+      <header>
+        <ul class="Nav">
+          <div class="Nav_logo">
+            <%=link_to "Bible Fitbit", dashboard_path%>
+          </div>
 
-              <li class="Nav_item">
-                <%=link_to dashboard_path do %>
-                  <span class="fa fa-home Nav_icon"></span>
-                  Dashboard
-                <% end %>
-              </li> 
-              <% if !@pending_challenge_requests.nil? and @pending_challenge_requests.size > 0 %>
-                <li class="Nav_item">
-                  <%=link_to challenges_path do %>
-                    <span class="fa fa-star Nav_icon"></span>
-                    Challenges
-                    <span class="Nav_count"><%= String(@pending_challenge_requests.size) %></span>
-                  <% end %>
-                </li> 
-              <% else %>
-                <li class="Nav_item">
-                  <%=link_to challenges_path do %>
-                    <span class="fa fa-star Nav_icon"></span>
-                    Challenges
-                  <% end %>
-                </li>
+          <li class="Nav_item">
+            <%=link_to dashboard_path do %>
+              <span class="fa fa-home Nav_icon"></span>
+              Dashboard
+            <% end %>
+          </li> 
+          <% if !@pending_challenge_requests.nil? and @pending_challenge_requests.size > 0 %>
+            <li class="Nav_item">
+              <%=link_to challenges_path do %>
+                <span class="fa fa-star Nav_icon"></span>
+                Challenges
+                <span class="Nav_count"><%= String(@pending_challenge_requests.size) %></span>
               <% end %>
-              <li class="Nav_item">
-                <%=link_to log_reading_path do %>
-                  <span class="fa fa-book Nav_icon"></span>
-                  Log Reading
-                <% end %>
-              </li> 
-              <li class="Nav_item">
-                <%=link_to profile_path do %>
-                  <span class="fa fa-user Nav_icon"></span>
-                  Profile
-                <% end %>
-              </li>
-            </div>
-            <div class="Nav_items Nav_items-right">
-              <!-- <li>Currently signed in as <%=@user_name%>.</li> -->
-              <li class="Nav_item">
-                <%=link_to signout_path do %>
-                  <span class="fa fa-sign-out Nav_icon"></span>
-                  Log Out
-                <% end %>
-              </li>
-            </div>
-          </ul>
-         
-        </header>
-      <% end %>
+            </li> 
+          <% else %>
+            <li class="Nav_item">
+              <%=link_to challenges_path do %>
+                <span class="fa fa-star Nav_icon"></span>
+                Challenges
+              <% end %>
+            </li>
+          <% end %>
+          <li class="Nav_item">
+            <%=link_to log_reading_path do %>
+              <span class="fa fa-book Nav_icon"></span>
+              Log Reading
+            <% end %>
+          </li> 
+          <li class="Nav_item">
+            <%=link_to profile_path do %>
+              <span class="fa fa-user Nav_icon"></span>
+              Profile
+            <% end %>
+          </li>
+          <li class="Nav_item">
+            <%=link_to signout_path do %>
+              <span class="fa fa-sign-out Nav_icon"></span>
+              Log Out
+            <% end %>
+          </li>
+        </ul>
+       
+      </header>
+    <% end %>
+    <div class="app">
   		<div class="container">
       	<% flash.each do |key, value| %>
         	<div class="alert alert-<%= key %>">

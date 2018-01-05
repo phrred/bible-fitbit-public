@@ -1,21 +1,14 @@
-$nav-height: 75px;
 $nav-count-length: 20px;
-
-body {
-  margin-top: $nav-height;
-}
 
 .Nav {
   position: fixed;
-  background-color: $primary-color;
-  height: $nav-height;
   top: 0;
   left: 0;
-  right: 0;
+  width: 300px;
   display: flex;
+  flex-direction: column;
   list-style: none;
-  align-items: center;
-  padding: 0 $padding;
+  padding: $padding * 2 $padding;
   justify-content: space-between;
 
   &_count {
@@ -48,7 +41,6 @@ body {
 
   &_items {
     display: flex;
-    align-items: center;
   }
 
   &_items-left,
@@ -61,11 +53,12 @@ body {
     a {
       color: white;
       text-decoration: none;
-      padding: ($padding / 3) ($padding / 2);
-      border-radius: 500px;
+      text-transform: uppercase;
+      font-size: 16px;
+      letter-spacing: 2px;
+      padding: $padding / 2;
       margin-right: $margin / 2;
       display: flex;
-      align-items: center;
       transition: $transition;
 
       &:hover {

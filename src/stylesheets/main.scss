@@ -6,12 +6,19 @@ $transition: all .3s;
 
 $primary-color: #4D5382;
 
+body {
+  background-image: url('gradient.png');
+  background-attachment: fixed;
+  background-size: cover;
+}
+
 * {
 	padding: 0;
 	margin: 0;
   font-family: Montserrat, sans-serif;
   font-size: 14px;
   box-sizing: border-box;
+  color: white;
 }
 
 h1 {
@@ -73,6 +80,11 @@ select {
   display: none;
 }
 
+.app {
+  margin-left: 300px;
+
+}
+
 @media (max-width:480px)  {
 
   .app {
@@ -102,10 +114,15 @@ select {
   }
 }
 
+.l-v-bottom-spaced {
+  margin-bottom: $margin;
+}
+
 @import 'components/button';
 @import 'components/card';
 @import 'components/challenge';
 @import 'components/container';
+@import 'components/data';
 @import 'components/log-reading';
 @import 'components/nav';
 @import 'components/login';

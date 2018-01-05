@@ -1,15 +1,21 @@
 <div class="Container">
-  <h1>Dashboard</h1>
-  <div>
-  	Percentage of bible read: <%=@percentage_of_bible.round(2)%>%
-  </div>
-  <% if not @last_book_entered %>
-    You have not read any books.
-  <% else %>
-  	Percentage of <%=@last_book_entered%> read: <%=@percentage_of_last_book.round(2)%>%
-  <% end %>
 
   <div class="Cards">
+
+    <div class="Card Card-column">
+      <div class="Data l-v-bottom-spaced">
+        <div class="Data_smallTitle">Percentage of bible read</div>
+        <div class="Data_number"><%=@percentage_of_bible.round(2)%>%</div>
+      </div>
+      <div class="Data">
+        <% if not @last_book_entered %>
+          You have not read any books.
+        <% else %>
+          <div class="Data_smallTitle">Percentage of <%=@last_book_entered%> read</div>
+          <div class="Data_number"><%=@percentage_of_last_book.round(2)%>%</div>
+        <% end %>
+      </div>
+    </div>
 
     <div class="Card">
       <canvas id="bible_percent" width="800" height="450"></canvas>

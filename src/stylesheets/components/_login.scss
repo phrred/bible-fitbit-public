@@ -6,14 +6,29 @@
   height: 100vh;
   text-align: center;
   color: white;
-  background: url('/app/assets/images/login.jpg');
-  background-color: $primary-color;
+  background-image: url('login.jpg');
+  background-size: cover;
   margin-top: -75px;
+
+  &_content {
+    z-index: 1;
+  }
 
   &_title {
     font-size: 54px;
     font-weight: 500;
     text-transform: uppercase;
     margin-bottom: $margin / 2;
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: black;
+    opacity: .4;
   }
 }
