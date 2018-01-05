@@ -29,7 +29,7 @@
                   <span class="fa fa-home Nav_icon"></span>
                   Dashboard
                 <% end %>
-              </li> 
+              </li>
               <% if !@pending_challenge_requests.nil? and @pending_challenge_requests.size > 0 %>
                 <li class="Nav_item">
                   <%=link_to challenges_path do %>
@@ -37,7 +37,7 @@
                     Challenges
                     <span class="Nav_count"><%= String(@pending_challenge_requests.size) %></span>
                   <% end %>
-                </li> 
+                </li>
               <% else %>
                 <li class="Nav_item">
                   <%=link_to challenges_path do %>
@@ -51,7 +51,7 @@
                   <span class="fa fa-book Nav_icon"></span>
                   Log Reading
                 <% end %>
-              </li> 
+              </li>
               <li class="Nav_item">
                 <%=link_to profile_path do %>
                   <span class="fa fa-user Nav_icon"></span>
@@ -59,27 +59,65 @@
                 <% end %>
               </li>
             </div>
-            <div class="Nav_items Nav_items-right">
-              <!-- <li>Currently signed in as <%=@user_name%>.</li> -->
-              <li class="Nav_item">
-                <%=link_to signout_path do %>
-                  <span class="fa fa-sign-out Nav_icon"></span>
-                  Log Out
-                <% end %>
-              </li>
-            </div>
-          </ul>
-         
-        </header>
-      <% end %>
-  		<div class="container">
-      	<% flash.each do |key, value| %>
-        	<div class="alert alert-<%= key %>">
-            <%= value %>
-        	</div>
-      	<% end %>
-      	<%= yield %>
-      </div>
+          <div class="Nav_items Nav_items-right">
+            <!-- <li>Currently signed in as <%=@user_name%>.</li> -->
+            <li class="Nav_item">
+              <%=link_to contact_path do %>
+                <span class="fa fa-question-circle Nav_icon"></span>
+                Contact Us
+              <% end %>
+            </li>
+            <li class="Nav_item">
+              <%=link_to signout_path do %>
+                <span class="fa fa-sign-out Nav_icon"></span>
+                Log Out
+              <% end %>
+            </li>
+          </div>
+        </ul>
+        <ul class="NavMobile">
+          <div class="NavMobile_items">
+            <li class="NavMobile_item">
+              <%=link_to dashboard_path do %>
+                <span class="fa fa-home NavMobile_icon"></span>
+                Dashboard
+              <% end %>
+            </li>
+            <li class="NavMobile_item">
+              <%=link_to challenges_path do %>
+                <span class="fa fa-star NavMobile_icon"></span>
+                Challenges
+              <% end %>
+            </li>
+            <li class="NavMobile_item">
+              <%=link_to log_reading_path do %>
+                <span class="fa fa-book NavMobile_icon"></span>
+                Log Reading
+              <% end %>
+            </li>
+            <li class="NavMobile_item">
+              <%=link_to profile_path do %>
+                <span class="fa fa-user NavMobile_icon"></span>
+                Profile
+              <% end %>
+            </li>
+            <li class="NavMobile_item">
+              <%=link_to signout_path do %>
+                <span class="fa fa-sign-out NavMobile_icon"></span>
+                Log Out
+              <% end %>
+            </li>
+          </div>
+        </ul>
+      </header>
+    <% end %>
+		<div class="container">
+    	<% flash.each do |key, value| %>
+      	<div class="alert alert-<%= key %>">
+          <%= value %>
+      	</div>
+    	<% end %>
+    	<%= yield %>
     </div>
   </body>
 </html>
