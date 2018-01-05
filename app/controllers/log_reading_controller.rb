@@ -64,17 +64,18 @@ class LogReadingController < ApplicationController
     annual_counts = user.annual_counts
     annual_count = nil
     if annual_counts.empty?
-      annual_count = Count.create!(count: 0, year: Time.current.year)
+      annual_count = Count.create!(count: 0, year: year)
       user.annual_counts << annual_count.id
     else
       annual_count = annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}
       if annual_count.nil? || annual_count.empty?
-        annual_count = Count.create!(count: 0, year: Time.current.year)
+        annual_count = Count.create!(count: 0, year: year)
         user.annual_counts << annual_count.id
       else
         annual_count = annual_count[0]
       end
     end
+    user.save
     readEntry = ChallengeReadEntry.where(user: user)
     if readEntry != nil
       challenges = readEntry.select { |entry| isValidChallengeEntry(entry, @displayed_book) }
@@ -112,7 +113,6 @@ class LogReadingController < ApplicationController
     }
     lifetime_count.save
      annual_count.save
-     user.save
     if chapters_read.any?
       session[:warning] = 'These chapters have already been logged for ' + date.to_time.strftime('%a %b %d %Y') +": " + chapters_read.join(", ")
     end
