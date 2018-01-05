@@ -1,6 +1,6 @@
 $(document).on("click", "#reset_book", function() {
   var book = $("#book_dropdown1").val()
-   if (confirm('Are you sure you wish to reset your reading progress for: ' + book + " ? This will not affect your total count.")) {
+   if (confirm('Are you sure you wish to clear your reading progress for: ' + book + " ? This will not affect your total count.")) {
     $.ajax({
      url: "resetBook",
      type: "POST",
@@ -14,7 +14,7 @@ $(document).on("click", "#reset_book", function() {
 });
 
 $(document).on("click", "#reset_bible", function() {
-   if (confirm('Are you sure you wish to reset your reading progress in the whole bible? This will not affect your total count.')) {
+   if (confirm('Are you sure you wish to clear your reading progress in the whole bible? This will not affect your total count.')) {
      $.ajax({
      url: "resetBible",
      type: "POST",
