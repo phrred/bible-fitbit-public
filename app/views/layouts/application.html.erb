@@ -62,6 +62,9 @@
               Log Out
             <% end %>
           </li>
+          <li class="Nav_item">
+            <%= User.find(session[:user_id]).name %>
+          </li>
         </ul>
        
       </header>
