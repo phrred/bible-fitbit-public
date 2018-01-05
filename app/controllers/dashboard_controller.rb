@@ -279,4 +279,23 @@ class DashboardController < ApplicationController
 		return grouped_options
 	end
 
+	 def resetBook
+    @displayed_book = params[:book]
+    user = User.find(session[:user_id])
+    user_shadowing = UserShadowing.find_by(user: user, book: @displayed_book)
+    if user_shadowing != nil
+      user_shadowing.shadowing = []
+      user_shadowing.save
+    end
+  end
+
+  def resetBible
+    user = User.find(session[:user_id])
+    user_shadowings = UserShadowing.where(user: user)
+    user_shadowings.each { |s|
+      s.shadowing = []
+      s.save
+    }
+  end
+
 end
