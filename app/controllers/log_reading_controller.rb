@@ -90,7 +90,9 @@ class LogReadingController < ApplicationController
         ReadEvent.create!(read_at: date, user: user , chapter: chapter)
         if challenges != nil
           challenges.each { |challenge_entry|
-            if !challenge_entry.chapters.include? chapter.id && challenge_entry.challenge.start_time <= date_as_date && challenge_entry.challenge.end_time > date_as_date
+            p '*' * 10
+            p challenge_entry.challenge.start_time <= date_as_date && challenge_entry.challenge.end_time > date_as_date
+            if !challenge_entry.chapters.include?(chapter.id) && challenge_entry.challenge.start_time <= date_as_date && challenge_entry.challenge.end_time > date_as_date
               challenge_entry.chapters << chapter.id
               challenge_entry.read_at << date
               challenge_entry.save
