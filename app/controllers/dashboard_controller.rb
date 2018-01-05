@@ -96,6 +96,7 @@ class DashboardController < ApplicationController
           	annual_count = Count.create!(count: 0, year: Time.current.year)
   			count_ids = Count.where(year: Date.today.year).order(:count).pluck(:id)
   			@user.annual_counts << annual_count.id
+  			@user.save
 			your_rank = count_ids.index(@user.annual_counts[-1])
         end
 		@your_ranking_percentile = your_rank*100.0/([1,count_ids.size() - 1].max)
