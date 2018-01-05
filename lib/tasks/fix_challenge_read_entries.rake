@@ -11,12 +11,12 @@ def fix_annual_count
 	 challenge_read_entries.each do |entry|
 	 	challenge = entry.challenge
 	 	to_delete = []
-	 	entry.read_at do |date, index|
+	 	entry.read_at.each_with_index do |date, index|
 	 		if date <= challenge.start_time
 	 			to_delete.unshift(index)
 	 		end
 	 	end
-	 	to_delete do |index|
+	 	to_delete.each do |index|
  			entry.read_at.delete_at(index)
  			entry.chapters.delete_at(index)
 	 	end
