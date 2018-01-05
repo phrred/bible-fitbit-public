@@ -69,6 +69,39 @@ select {
   display: none;
 }
 
+.MobileNotice {
+  display: none;
+}
+
+@media (max-width:480px)  {
+
+  .app {
+    display: none;
+  }
+
+  .MobileNotice {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: $padding * 2;
+    height: 100vh;
+    width: 100%;
+    background: $primary-color;
+    color: white;
+    font-size: 15px;
+    margin-top: -75px;
+    line-height: 1.5; 
+
+    &_icon {
+      line-height: 1;
+      font-size: 150px;
+      margin-bottom: $margin / 2;
+    }
+  }
+}
+
 @import 'components/button';
 @import 'components/card';
 @import 'components/challenge';
