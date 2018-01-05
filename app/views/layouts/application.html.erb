@@ -62,6 +62,12 @@
             <div class="Nav_items Nav_items-right">
               <!-- <li>Currently signed in as <%=@user_name%>.</li> -->
               <li class="Nav_item">
+                <%=link_to contact_path do %>
+                  <span class="fa fa-question-circle Nav_icon"></span>
+                  Contact Us 
+                <% end %>
+              </li>
+              <li class="Nav_item">
                 <%=link_to signout_path do %>
                   <span class="fa fa-sign-out Nav_icon"></span>
                   Log Out
@@ -72,13 +78,13 @@
          
         </header>
       <% end %>
-  		<div class="container">
-      	<% flash.each do |key, value| %>
-        	<div class="alert alert-<%= key %>">
+      <div class="container">
+        <% flash.each do |key, value| %>
+          <div class="alert alert-<%= key %>">
             <%= value %>
-        	</div>
-      	<% end %>
-      	<%= yield %>
+          </div>
+        <% end %>
+        <%= yield %>
       </div>
     </div>
   </body>

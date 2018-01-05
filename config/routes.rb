@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get 'auth/failure', to: redirect('/')
   get 'signout', to: 'sessions#destroy', as: 'signout'
 	get "profile", to: "profile#show"
+  get "contact", to: "contact#show"
   post "create_user", to: "profile#create"
   get "log_reading", to: "log_reading#show"
 	get "login", to: "login#show"
@@ -30,6 +31,7 @@ Rails.application.routes.draw do
 	resources :login
   resources :mobile
   resources :challenges
+  resources :contact
 
 
   root to: "login#show"
