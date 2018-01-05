@@ -53,7 +53,8 @@ class LogReadingController < ApplicationController
   def update
     chapters = params[:record]
     date = params[:date]
-    if Date.parse(date) > Date.today
+    date_as_date = Date.parse(date)
+    if date_as_date > Date.today
       session[:warning] = 'Unable to log reading in the future'
       return
     end
@@ -89,7 +90,7 @@ class LogReadingController < ApplicationController
         ReadEvent.create!(read_at: date, user: user , chapter: chapter)
         if challenges != nil
           challenges.each { |challenge_entry|
-            if !challenge_entry.chapters.include? chapter.id
+            if !challenge_entry.chapters.include? chapter.id && challenge_entry.challenge.start_time <= date_as_date && challenge_entry.challenge.end_time > date_as_date
               challenge_entry.chapters << chapter.id
               challenge_entry.read_at << date
               challenge_entry.save
