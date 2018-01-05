@@ -1,0 +1,21 @@
+.tooltip {
+  position: relative;
+  opacity: 1;
+  z-index: 101;
+  display: inline;
+}
+
+.tooltip_visible {
+  display: inline;
+}
+
+.tooltip_content {
+  display: none;
+  position: absolute;
+  white-space: normal;
+  background: #FFF;
+  border: 1px solid #EEE;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  border-radius: 3px;;
+  padding: 12.5px;
+}
