@@ -159,7 +159,7 @@ class ChallengesController < ApplicationController
 			@chart_labels[challenge]["y1_name"] = challenge.receiver_ministry.name
 			@chart_labels[challenge]["y0_data"] = []
 			@chart_labels[challenge]["y1_data"] = []
-			@chart_labels[challenge]["title"] = challenge.sender_ministry.name + " vs. " + challenge.receiver_ministry.name + " (Total Chapters to Date on Average per Person)"
+			@chart_labels[challenge]["title"] = challenge.sender_ministry.name + " vs. " + challenge.receiver_ministry.name
 
 			@chart_data[challenge].keys.each do |date|
 				@chart_labels[challenge]["x_labels"] << date.to_date
