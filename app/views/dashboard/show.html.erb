@@ -1,12 +1,12 @@
 <div class="Container">
   <h1>Dashboard</h1>
   <div>
-  	Percentage of bible read: <%=@percentage_of_bible.round(2)%>%
+  	Percentage of bible read: <%=(100 * @percentage_of_bible).round(2)%>%
   </div>
   <% if not @last_book_entered %>
     You have not read any books.
   <% else %>
-  	Percentage of <%=@last_book_entered%> read: <%= (100 * @percentage_of_last_book).round(2)%>%
+  	Percentage of <%=@last_book_entered%> read: <%=@percentage_of_last_book.round(2)%>%
   <% end %>
 
   <div class="Cards">
