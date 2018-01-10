@@ -34,7 +34,7 @@ class DashboardController < ApplicationController
 		@user_shadowings = UserShadowing.where(user_id: @user)
 		chapters_read = 0
 		@user_shadowings.each do |shadows|
-			chapters_read += shadows.shadowing.count()
+			chapters_read += shadows.shadowing.uniq.count()
 		end
 		@percentage_of_bible = chapters_read.to_f / bible_chapter_count
 
@@ -42,7 +42,7 @@ class DashboardController < ApplicationController
 		if last_read_entry != nil
 			@last_book_entered = last_read_entry.chapter.book
 			last_book_shadowings = @user_shadowings.where(book: @last_book_entered).take
-			last_book_chapters_read = last_book_shadowings.shadowing.count()
+			last_book_chapters_read = last_book_shadowings.shadowing.uniq.count()
 
 			book_chapter_count = Chapter.where(book: @last_book_entered).count()
 			@percentage_of_last_book = last_book_chapters_read.to_f / book_chapter_count * 100.0
