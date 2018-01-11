@@ -24,7 +24,7 @@
             {
               label: "Percentages",
               backgroundColor: ["#3e95cd", "#8e5ea2"],
-              data: [<%= (100*@percentage_of_bible).round(2).to_json.html_safe%>,<%=(100-@percentage_of_bible).round(2).to_json.html_safe%>]
+              data: [<%= (100*@percentage_of_bible).round(2).to_json.html_safe%>,<%=(100-100*@percentage_of_bible).round(2).to_json.html_safe%>]
             }
           ]
         },
