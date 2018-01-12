@@ -104,7 +104,7 @@ class DashboardController < ApplicationController
 		@next_percentile = @your_ranking_percentile == 100.0 ? 100.0 : (@your_ranking_percentile/10+1).floor*10.0
 		@next_percentile_id = (@next_percentile/100.0*([1.0, count_ids.size() - 1.0].max)).floor
 		@next_ten_percent = Count.where(id: count_ids[@next_percentile_id]).pluck(:count)
-		@your_annual_count = user_annual_count.count
+		@your_annual_count = user_annual_count[0].count
 	end
 
 	def see_book_percent_read
