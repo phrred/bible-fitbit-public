@@ -91,7 +91,8 @@ class DashboardController < ApplicationController
 
 	def generate_your_percentile
 		count_ids = Count.where(year: Date.today.year).order(:count).pluck(:id)
-		your_rank = count_ids.index(@user.annual_counts[-1])
+		user_annual_count = @user.annual_counts.map { |c| Count.find(c) }.select { |count| count.year == Time.current.year }
+		your_rank = count_ids.index(user_annual_count[0].id)
         if !(your_rank.is_a? Integer)
           	annual_count = Count.create!(count: 0, year: Time.current.year)
   			count_ids = Count.where(year: Date.today.year).order(:count).pluck(:id)
@@ -103,6 +104,7 @@ class DashboardController < ApplicationController
 		@next_percentile = @your_ranking_percentile == 100.0 ? 100.0 : (@your_ranking_percentile/10+1).floor*10.0
 		@next_percentile_id = (@next_percentile/100.0*([1.0, count_ids.size() - 1.0].max)).floor
 		@next_ten_percent = Count.where(id: count_ids[@next_percentile_id]).pluck(:count)
+		@your_annual_count = user_annual_count[0].count
 	end
 
 	def see_book_percent_read
