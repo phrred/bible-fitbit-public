@@ -23,8 +23,9 @@ class LogReadingController < ApplicationController
       user_shadowing = UserShadowing.find_by(user: user, book: @previous_book_name)
       @highlighted_chapters = []
       if user_shadowing != nil
-        @highlighted_chapters = user_shadowing.shadowing
+        @highlighted_chapters = user_shadowing.shadowing.uniq
       end
+      @num_read = chapterCount(user, @displayed_book)
     end
   	@selected_book = Chapter.new
   end
@@ -32,7 +33,6 @@ class LogReadingController < ApplicationController
   def search
   	userId = session[:user_id]
     user = User.find(userId)
-    @submitted_date = ReadEvent.new;
   	@selected_book =  params[:chapter][:book]
     @displayed_book = @selected_book
     last_read_event = ReadEvent.joins(:chapter).where(chapters: {book: @selected_book}).order("read_at").last
@@ -43,8 +43,9 @@ class LogReadingController < ApplicationController
   	user_shadowing = UserShadowing.find_by(user: user, book: @selected_book)
     @highlighted_chapters = []
     if user_shadowing != nil
-      @highlighted_chapters = user_shadowing.shadowing
+      @highlighted_chapters = user_shadowing.shadowing.uniq
     end
+    @num_read = chapterCount(user, @displayed_book)
   	respond_to do |format|
   		format.js
     end
@@ -116,6 +117,7 @@ class LogReadingController < ApplicationController
     }
     lifetime_count.save
      annual_count.save
+     @num_read = chapterCount(user, @displayed_book)
     if chapters_read.any?
       session[:warning] = 'These chapters have already been logged for ' + date.to_time.strftime('%a %b %d %Y') +": " + chapters_read.join(", ")
     end
@@ -127,4 +129,12 @@ class LogReadingController < ApplicationController
     return start_date == challenge.start_time && entry.accepted && (challenge.valid_books.nil? || challenge.valid_books.include?(displayed_book))
   end    
 
+  def chapterCount(user, book)
+    num_times = []
+    chapters = Chapter.where(book: book).order(:ch_num)
+    chapters.each do |c|
+      num_times << ReadEvent.where(user: user, chapter: c).count
+    end
+    return num_times
+  end
 end
