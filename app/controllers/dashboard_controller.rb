@@ -34,7 +34,7 @@ class DashboardController < ApplicationController
 		@user_shadowings = UserShadowing.where(user_id: @user)
 		chapters_read = 0
 		@user_shadowings.each do |shadows|
-			chapters_read += shadows.shadowing.count()
+			chapters_read += shadows.shadowing.uniq.count()
 		end
 		@percentage_of_bible = chapters_read.to_f / bible_chapter_count
 
@@ -42,7 +42,7 @@ class DashboardController < ApplicationController
 		if last_read_entry != nil
 			@last_book_entered = last_read_entry.chapter.book
 			last_book_shadowings = @user_shadowings.where(book: @last_book_entered).take
-			last_book_chapters_read = last_book_shadowings.shadowing.count()
+			last_book_chapters_read = last_book_shadowings.shadowing.uniq.count()
 
 			book_chapter_count = Chapter.where(book: @last_book_entered).count()
 			@percentage_of_last_book = last_book_chapters_read.to_f / book_chapter_count * 100.0
@@ -91,7 +91,8 @@ class DashboardController < ApplicationController
 
 	def generate_your_percentile
 		count_ids = Count.where(year: Date.today.year).order(:count).pluck(:id)
-		your_rank = count_ids.index(@user.annual_counts[-1])
+		user_annual_count = @user.annual_counts.map { |c| Count.find(c) }.select { |count| count.year == Time.current.year }
+		your_rank = count_ids.index(user_annual_count[0].id)
         if !(your_rank.is_a? Integer)
           	annual_count = Count.create!(count: 0, year: Time.current.year)
   			count_ids = Count.where(year: Date.today.year).order(:count).pluck(:id)
@@ -103,6 +104,7 @@ class DashboardController < ApplicationController
 		@next_percentile = @your_ranking_percentile == 100.0 ? 100.0 : (@your_ranking_percentile/10+1).floor*10.0
 		@next_percentile_id = (@next_percentile/100.0*([1.0, count_ids.size() - 1.0].max)).floor
 		@next_ten_percent = Count.where(id: count_ids[@next_percentile_id]).pluck(:count)
+		@your_annual_count = user_annual_count[0].count
 	end
 
 	def see_book_percent_read

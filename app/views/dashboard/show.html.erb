@@ -1,7 +1,7 @@
 <div class="Container">
   <h1>Dashboard</h1>
   <div>
-  	Percentage of bible read: <%=@percentage_of_bible.round(2)%>%
+  	Percentage of bible read: <%=(100 * @percentage_of_bible).round(2)%>%
   </div>
   <% if not @last_book_entered %>
     You have not read any books.
@@ -24,7 +24,7 @@
             {
               label: "Percentages",
               backgroundColor: ["#3e95cd", "#8e5ea2"],
-              data: [<%= @percentage_of_bible.round(2).to_json.html_safe%>,<%=(100-@percentage_of_bible).round(2).to_json.html_safe%>]
+              data: [<%= (100*@percentage_of_bible).round(2).to_json.html_safe%>,<%=(100-100*@percentage_of_bible).round(2).to_json.html_safe%>]
             }
           ]
         },

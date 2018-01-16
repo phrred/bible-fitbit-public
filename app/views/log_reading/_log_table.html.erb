@@ -10,7 +10,10 @@
     <tr>
       <% row.each do |num| %>
         <td class = "<%= @highlighted_chapters.include?(num) ? 'highlighted' : '' %>"> 
-          <%= num %>
+          <div class = "chapterNumber"><%= num %></div>
+          <% if @num_read[num-1] != 0 %>
+            <div>(Read <%=@num_read[num-1]%>x)</div>
+            <%end%>
         </td>
       <% end %>
     </tr>

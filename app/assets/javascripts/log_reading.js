@@ -22,7 +22,7 @@ function highlightTable() {
 
 $(document).on("click", "#save_reading", function() {
   var chapters_highlighted = []
-     $('.record').each(function() {
+     $('.record > .chapterNumber').each(function() {
       chapters_highlighted.push($(this).html().trim())
      })
   if (confirm('Are you sure you wish to save chapters: '+ chapters_highlighted + '?')) {

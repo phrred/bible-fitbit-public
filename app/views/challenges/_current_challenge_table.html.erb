@@ -69,6 +69,18 @@ new Chart(document.getElementById("<%= "challengeChart" + challenge.id.to_s%>").
           e.stopPropagation();
         }
     },
+    scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero:true,
+            suggestedMin: 0,
+          },
+          scaleLabel: {
+          display: true,
+          labelString: 'Total Chapters Read to Date on Average per Person'
+      }
+        }]
+    },
     elements: {
       line: {
         tension: 0,
