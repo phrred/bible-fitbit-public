@@ -23,3 +23,11 @@ East Coast, Pennsylvania, Pittsburgh
 East Coast, Maryland, College Park
 East Coast, North Carolina, Chapel Hill
 East Coast, North Carolina, Durham
+West Coast/NorCal, California, Berkeley HG Zone
+West Coast/NorCal, California, Berkeley Klesis
+West Coast/NorCal, California, Berkeley A2F
+West Coast/NorCal, California, Berkeley IGSM
+West Coast/NorCal, California, Berkeley Praxis HG1: Matthew / John
+West Coast/NorCal, California, Berkeley Praxis HG2: Joong / Chris / Patrick/ James
+West Coast/NorCal, California, Berkeley Praxis HG1: Ahmi
+West Coast/NorCal, California, Berkeley Praxis HG2: Jeannie

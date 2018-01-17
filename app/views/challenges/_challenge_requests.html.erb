@@ -1,26 +1,38 @@
+<div class="Challenge_buttonContainer">
+      <%= link_to "Create a Challenge", create_challenge_path, class: "Button" %>
+</div>
 <h4>Outstanding Challenge Requests</h4>
 <table>
 	<% @outstanding_challenges.each_with_index do |challenge_requests, index| %>
 		<tr class="challenge_invite"> 
 			<td>
-              <div class="tooltip" style="height: 100%">
-                <div class="tooltip_content">
-                  <h6>Title: <%= challenge_requests.challenge.title %></h6>
-                  <div><b>Challenge Dates:</b>&nbsp<%= challenge_requests.challenge.start_time.strftime('%a %b %d %Y')%> - <%= (challenge_requests.challenge.end_time-1).strftime('%a %b %d %Y')%></div>
-                  <div>
-                  	<% if !challenge_requests.challenge.valid_books.nil? && !challenge_requests.challenge.valid_books.empty? %>
-	                <b>Valid Books:&nbsp</b> <%= challenge_requests.challenge.valid_books.join(", ") %>
-	                <% end %>
-            	  </div>
-                </div>
-              </div>
-              </div>
-            </td>
-			<td><%= challenge_requests.challenge.sender_ministry.name%> vs </td>
+        <div class="tooltip" style="height: 100%">
+          <div class="tooltip_content">
+            <div>
+              <% if !challenge_requests.challenge.title.blank? %>
+              <h6>Title: <%= challenge_requests.challenge.title %></h6>
+              <% end %>
+            </div>
+            <div>
+              <b>Dates:</b>&nbsp<%= challenge_requests.challenge.start_time.strftime('%D')%> - <%= (challenge_requests.challenge.end_time-1).strftime('%D')%>
+            </div>
+            <div>
+            	<% if !challenge_requests.challenge.valid_books.nil? && !challenge_requests.challenge.valid_books.empty? %>
+                 <b>Valid Books:&nbsp</b> <%= challenge_requests.challenge.valid_books.join(", ") %>
+              <% else %> 
+                 <b>Valid Books:</b> All
+               <% end %>
+      	   </div>
+          </div>
+        </div>
+        </div>
+      </td>
+			<td><%= challenge_requests.challenge.sender_ministry.name%></td>
+      <td>&nbsp vs &nbsp </td>
 			<td><%= challenge_requests.challenge.receiver_ministry.name %></td>
 			<td>
 
-<%= simple_form_for challenge_requests, url: accept_challenge_path, :method => :post, remote: true, html: {id: "random"} do |f| %>
+<%= simple_form_for challenge_requests, url: accept_challenge_path, :method => :post, remote: true, html: {id: "accept"} do |f| %>
   	<%= hidden_field_tag(:challenge_request, challenge_requests.id) %>
 
   	<%= f.button :submit, '✓', data: {disable_with: false }, class: 'Button Button-small' %>
@@ -29,7 +41,7 @@
 			</td>
 			<td>
 
-<%= simple_form_for @new_challenge, url: reject_challenge_path, :method => :post, remote: true, html: {id: "random"} do |f| %>
+<%= simple_form_for @new_challenge, url: reject_challenge_path, :method => :post, remote: true, html: {id: "reject"} do |f| %>
   	<%= hidden_field_tag(:challenge_request, challenge_requests.id) %>
   	<%= f.button :submit, '☓', data: { disable_with: false }, class: 'Button Button-small' %>
   	<% end %>

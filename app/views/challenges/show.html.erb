@@ -28,12 +28,7 @@
   </div>
   
   <div id="challenge_requests" class="Challenge_right">
-    <div class="Challenge_buttonContainer">
-      <%= link_to "Create a Challenge", create_challenge_path, class: "Button" %>
-    </div>
-    <% if !@outstanding_challenges.nil? and @outstanding_challenges.size > 0 %>
-      <%= render partial: 'challenge_requests' %>
-    <% end %>
+    <%= render partial: 'challenge_requests' %>
   </div>
 
 </div>

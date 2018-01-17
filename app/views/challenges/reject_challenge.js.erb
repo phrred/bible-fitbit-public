@@ -1,1 +1,10 @@
 $("#challenge_requests").html("<%= escape_javascript(render partial: 'challenge_requests')%>");
+
+$(document).ready(function () {
+    fadeTime = 100
+    $(".challenge_invite").hover(function() {
+        $(".tooltip_content").fadeIn(fadeTime).css("display", "block");
+    }, function() {
+        $(".tooltip_content").fadeOut(fadeTime, function() {$(this).css("marginLeft", "");});
+    });
+});
