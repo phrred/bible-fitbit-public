@@ -16,6 +16,8 @@ Rails.application.routes.draw do
   post "accept_challenge", to: "challenges#accept_challenge"
   post "reject_challenge", to: "challenges#reject_challenge"
   get "create_challenge", to: "challenges#create"
+  get "challenges2", to: "challenges#challenges2"
+  post "create2", to: "challenges#create2"
   post "search", to: "log_reading#search"
   post "future_pace", to: "dashboard#future_pace"
   post "past_pace", to: "dashboard#past_pace"

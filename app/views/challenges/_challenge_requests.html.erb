@@ -27,9 +27,9 @@
         </div>
         </div>
       </td>
-			<td><%= challenge_requests.challenge.sender_ministry.name%></td>
+			<td><%= challenge_requests.challenge.your_team.map {|u| User.find(u).name} %></td>
       <td>&nbsp vs &nbsp </td>
-			<td><%= challenge_requests.challenge.receiver_ministry.name %></td>
+			<td><%= challenge_requests.challenge.opp_team.map {|u| User.find(u).name} %></td>
 			<td>
 
 <%= simple_form_for challenge_requests, url: accept_challenge_path, :method => :post, remote: true, html: {id: "accept"} do |f| %>

@@ -4,19 +4,8 @@ class ChallengesController < ApplicationController
 		@group1 = Group.take(1)[0].name
 		@group2 = @group1
 		@title_text = @group1 + " vs. " + @group2
-		@comparison_data = {}
 		@all_users = User.all
 		year = Date.today.to_time.strftime('%Y').to_i
-		@all_users.each do |a_user|
-			annual_count = a_user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == year}[0]
-			if !annual_count.nil?
-				if @comparison_data.key?(a_user.ministry.name)
-					@comparison_data[a_user.ministry.name] += annual_count.count
-				else
-					@comparison_data[a_user.ministry.name] = annual_count.count
-				end
-			end
-		end
 
 	  	@books = Chapter.order("created_at DESC").all.uniq{ |c| c.book }.reverse
 		user_id = session[:user_id]
@@ -31,11 +20,6 @@ class ChallengesController < ApplicationController
 		@ministry_names = Group.where(group_type: "ministry").order(:name).pluck(:name)
 		@all_ministry_names = Group.where(group_type: "ministry").order(:name).pluck(:name)
 
-		@all_ministry_names.each do |name|
-			if !@comparison_data.key?(name)
-				@comparison_data[name] = 0
-			end
-		end
 
 		@gender = @user.gender ? "brothers" : "sisters"
 		selected_ministry = @user.ministry
@@ -62,6 +46,146 @@ class ChallengesController < ApplicationController
 
 		grab_current_challenges()
 
+	end
+
+	def challenges2
+		# test_user = User.create!(
+		# 	email: "test1@gmail.com",
+		# 	name: "test1",
+		# 	ministry: Group.take(),
+		# 	peer_class: Group.take(),
+		# 	lifetime_count: Count.take()
+		# 	)
+
+      	@new_challenge = Challenge.new()
+		@all_da_users = User.where.not(id: session[:user_id])
+		@books = Chapter.order("created_at DESC").all.uniq{ |c| c.book }.reverse
+	end
+
+	def create_challenge_read_entry(user, challenge)
+		ChallengeReadEntry.create!(
+			challenge: challenge,
+			user: user)
+	end
+
+	def create2
+		@new_challenge = Challenge.new()
+		user_id = session[:user_id]
+		@user = User.where(id: user_id).take
+		challenge =  params[:challenge]
+		p(challenge)
+
+		sender_class = nil
+		sender_gender = nil
+		sender_ministry = nil
+		receiver_class = nil
+		receiver_ministry = nil
+		receiver_gender = nil
+		challenge[:valid_books].slice!(0)
+		valid_books = challenge[:valid_books].size > 0 ? challenge[:valid_books] : nil
+		your_teammates = challenge[:your_team]
+		your_teammates.slice!(0)
+		your_teammates.append(user_id)
+		opp_teammates = challenge[:opp_team]
+		opp_teammates.slice!(0)
+
+		if opp_teammates.size() == 0
+			@warning = "No one on the other team"
+			challenges2()
+			respond_to do |format|
+				format.js
+			end
+			return	
+		end
+
+		p(your_teammates & opp_teammates)
+
+		if your_teammates & opp_teammates != []
+			on_both_teams = your_teammates & opp_teammates
+			on_both_teams = on_both_teams.map { |u| User.find(u)}
+			on_both_teams = on_both_teams.map {|u| u.name}
+			@warning = "Some people are on both teams" + on_both_teams.join(',')
+			challenges2()
+			respond_to do |format|
+				format.js
+			end
+			return			
+		end
+		title = challenge[:title]
+
+		start_date = Date.today
+		if start_date.cwday > 3
+			start_date = start_date + 7
+		end
+		start_date = start_date.beginning_of_week
+
+		prev_challenge = Challenge.where(
+			sender_ministry: sender_ministry,
+			receiver_ministry: receiver_ministry,
+			sender_gender: sender_gender,
+			receiver_gender: receiver_gender,
+			sender_peer: sender_class,
+			receiver_peer_id: receiver_class,
+			valid_books: valid_books,
+			start_time: start_date,
+			title: title,
+			winner: nil,
+			your_team: your_teammates,
+			opp_team: opp_teammates
+			)
+
+		if !prev_challenge.empty?
+			@warning = "This challenge already exists"
+			challenges2()
+			respond_to do |format|
+				format.js
+			end
+			return
+		end
+
+		new_challenge = Challenge.create!(
+			sender_ministry: sender_ministry,
+			receiver_ministry: receiver_ministry,
+			sender_gender: sender_gender,
+			receiver_gender: receiver_gender,
+			sender_peer: sender_class,
+			receiver_peer_id: receiver_class,
+			valid_books: valid_books,
+			start_time: start_date,
+			end_time: start_date + 5,
+			title: title,
+			your_team: your_teammates,
+			opp_team: opp_teammates
+			)
+		sender_recipients = your_teammates.map { |u| User.find(u) }
+		
+		sender_recipients.each do |user|
+			create_challenge_read_entry(user, new_challenge)
+		end
+
+		receiver_recipients = opp_teammates.map {|u| User.find(u) }
+
+		receiver_recipients.each do |user|
+			create_challenge_read_entry(user, new_challenge)
+		end
+		user_challenge_read_entry = ChallengeReadEntry.where(challenge: new_challenge, user: @user)[0]
+		user_read_entries = ReadEvent.where(user: @user).where("read_at >= ? AND read_at < ?",start_date, start_date + 5)
+		user_read_entries.each do |read_event|
+			if valid_books.nil?
+				user_challenge_read_entry.chapters << read_event.chapter.id
+				user_challenge_read_entry.read_at << read_event.read_at
+			else
+				if valid_books.include?(read_event.chapter.book)
+					user_challenge_read_entry.chapters << read_event.chapter.id
+					user_challenge_read_entry.read_at << read_event.read_at
+				end
+			end
+		end
+
+		user_challenge_read_entry.update(accepted: true)
+		user_challenge_read_entry.save
+		show()
+		redirect_to challenges_path
 	end
 
 	def create
@@ -111,7 +235,7 @@ class ChallengesController < ApplicationController
 			challenge = challenge_read_entry.challenge
 			if challenge.winner.nil?
 				initialize_chart_data(challenge)
-				sender_group = challenge.sender_ministry
+				sender_group = challenge.your_team
 				sender_number = 0
 				receiver_number = 0
 				sender_sum = 0
@@ -120,7 +244,7 @@ class ChallengesController < ApplicationController
 				if entries != nil
 					entries.each do |entry|
 						if !entry.nil?
-							if is_user_in_group(entry.user, sender_group)
+							if sender_group.include?(entry.user.id)
 								entry[:read_at].each do |date|
 									@chart_data[challenge][date][0] += 1
 								end
@@ -155,11 +279,11 @@ class ChallengesController < ApplicationController
 		@chart_data.keys.each do |challenge|
 			@chart_labels[challenge] = {}
 			@chart_labels[challenge]["x_labels"] = []
-			@chart_labels[challenge]["y0_name"] = challenge.sender_ministry.name
-			@chart_labels[challenge]["y1_name"] = challenge.receiver_ministry.name
+			@chart_labels[challenge]["y0_name"] = challenge.your_team.include?(user_id) ? "Your Team" : "Opp Team"
+			@chart_labels[challenge]["y1_name"] = challenge.opp_team.include?(user_id) ? "Your Team" : "Opp Team"
 			@chart_labels[challenge]["y0_data"] = []
 			@chart_labels[challenge]["y1_data"] = []
-			@chart_labels[challenge]["title"] = challenge.sender_ministry.name + " vs. " + challenge.receiver_ministry.name
+			@chart_labels[challenge]["title"] = challenge.title
 
 			@chart_data[challenge].keys.each do |date|
 				@chart_labels[challenge]["x_labels"] << date.to_date
@@ -169,12 +293,6 @@ class ChallengesController < ApplicationController
 				@chart_labels[challenge]["y1_data"] << value_array[1]
  			end
  		end
-	end
-
-	def create_challenge_read_entry(user, challenge)
-		ChallengeReadEntry.create!(
-			challenge: challenge,
-			user: user)
 	end
 
 	def create_challenge
@@ -295,8 +413,10 @@ class ChallengesController < ApplicationController
 			end
 		end
 
-		user_challenge_read_entry.save
 		user_challenge_read_entry.update(accepted: true)
+		user_challenge_read_entry.save
+		new_challenge.update(your_team: sender_recipients.map {|u| u.id})
+		new_challenge.update(opp_team: sender_recipients.map {|u| u.id})
 		show()
 		redirect_to challenges_path
 	end
@@ -333,8 +453,9 @@ class ChallengesController < ApplicationController
 				end
 			end
 		end
-		challenge_request.save
 		challenge_request.update(accepted: true)
+		challenge_request.save
+
 		@new_challenge = Challenge.new()
 		grab_current_challenges()
 

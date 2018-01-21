@@ -8,13 +8,20 @@
           <% end %>
           <div class="Challenge_clusters">
       			<div class="Challenge_cluster">
-              <div class="Challenge_teamName"><%= challenge.sender_ministry.name%></div>
+              <% if challenge.your_team.include?(@user.id) %>
+                <div class="Challenge_teamName">Your Team</div>
+              <% else %>
+                <div class="Challenge_teamName">Opp Team</div>
+              <% end %>
               <div class="Challenge_score"><%= @sender_scores[index]%></div>
               <div class="Challenge_desc">chapters read on average</div>
             </div>
       			<div class="Challenge_cluster">
-              <div class="Challenge_teamName"><%= challenge.receiver_ministry.name %></div>
-              <div class="Challenge_score"><%=@receiver_scores[index]%></div>
+             <% if challenge.your_team.include?(@user.id) %>
+                <div class="Challenge_teamName">Opp Team</div>
+              <% else %>
+                <div class="Challenge_teamName">Your Team</div>
+              <% end %>              <div class="Challenge_score"><%=@receiver_scores[index]%></div>
               <div class="Challenge_desc">chapters read on average</div>
       		  </div>
             <div>

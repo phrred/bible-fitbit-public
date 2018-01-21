@@ -30,6 +30,8 @@ ActiveRecord::Schema.define(version: 20171227164823) do
   end
 
   create_table "challenges", force: :cascade do |t|
+    t.integer "your_team", default: [], array: true
+    t.integer "opp_team", default: [], array: true
     t.bigint "sender_ministry_id"
     t.bigint "receiver_ministry_id"
     t.text "valid_books", default: [], array: true

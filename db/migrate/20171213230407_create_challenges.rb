@@ -1,6 +1,8 @@
 class CreateChallenges < ActiveRecord::Migration[5.1]
   def change
     create_table :challenges do |t|
+      t.integer :your_team, array: true, default: []
+      t.integer :opp_team, array: true, default: []
       t.references :sender_ministry, :allow_nil => true
       t.references :receiver_ministry, :allow_nil => true
       t.references
