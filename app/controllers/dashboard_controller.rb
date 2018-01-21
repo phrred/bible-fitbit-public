@@ -23,7 +23,7 @@ class DashboardController < ApplicationController
     @annual_count = @user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == @year}[0].count
 
     @beginning_of_week = Date.today.beginning_of_week
-    @count = ReadEvent.where("user_id=? AND read_at > ?", @user.id, @beginning_of_week).count
+    @count = ReadEvent.where("user_id=? AND read_at >= ?", @user.id, @beginning_of_week).count
 
     group1_model = current_user().ministry
     @group1 = group1_model.name
