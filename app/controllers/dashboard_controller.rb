@@ -36,48 +36,48 @@ class DashboardController < ApplicationController
     @group1_average = group_average(group1_model, @group1)
     @group2_average = group_average(group2_model, @group2)
 
-		@title_text = @group1 + " vs. " + @group2
-		@y_axis_max = 10
+	@title_text = @group1 + " vs. " + @group2
+	@y_axis_max = 10
 
-		@user_shadowings = UserShadowing.where(user_id: @user)
-		chapters_read = 0
-		@user_shadowings.each do |shadows|
-			chapters_read += shadows.shadowing.uniq.count()
-		end
-		@percentage_of_bible = chapters_read.to_f / bible_chapter_count
+	@user_shadowings = UserShadowing.where(user_id: @user)
+	chapters_read = 0
+	@user_shadowings.each do |shadows|
+		chapters_read += shadows.shadowing.uniq.count()
+	end
+	@percentage_of_bible = chapters_read.to_f / bible_chapter_count
 
-		last_read_entry = ReadEvent.where(user_id: session[:user_id]).order("updated_at DESC").first
-		if last_read_entry != nil
-			@last_book_entered = last_read_entry.chapter.book
-			last_book_shadowings = @user_shadowings.where(book: @last_book_entered).take
-			last_book_chapters_read = last_book_shadowings.shadowing.uniq.count()
+	last_read_entry = ReadEvent.where(user_id: session[:user_id]).order("updated_at DESC").first
+	if last_read_entry != nil
+		@last_book_entered = last_read_entry.chapter.book
+		last_book_shadowings = @user_shadowings.where(book: @last_book_entered).take
+		last_book_chapters_read = last_book_shadowings.shadowing.uniq.count()
 
-			book_chapter_count = Chapter.where(book: @last_book_entered).count()
-			@percentage_of_last_book = last_book_chapters_read.to_f / book_chapter_count * 100.0
-		else
-			@percentage_of_last_book = 0
-		end
-		see_book_percent_read()
-		how_many_reps()
-		set_up_pace_chart()
- 		generate_your_percentile()
- 		generate_top_10()
+		book_chapter_count = Chapter.where(book: @last_book_entered).count()
+		@percentage_of_last_book = last_book_chapters_read.to_f / book_chapter_count * 100.0
+	else
+		@percentage_of_last_book = 0
+	end
+	see_book_percent_read()
+	how_many_reps()
+	set_up_pace_chart()
+	generate_your_percentile()
+	generate_top_10()
 
-		pace_chart_start = Date.today.beginning_of_week - 21
-		while !@your_pace.key?(pace_chart_start)
-			pace_chart_start += 7
-		end
-		@pace_chart_range_labels = [
-			pace_chart_start,
-			pace_chart_start + 7,
-			pace_chart_start + 14,
-			pace_chart_start + 21]
+	pace_chart_start = Date.today.beginning_of_week - 21
+	while !@your_pace.key?(pace_chart_start)
+		pace_chart_start += 7
+	end
+	@pace_chart_range_labels = [
+		pace_chart_start,
+		pace_chart_start + 7,
+		pace_chart_start + 14,
+		pace_chart_start + 21]
 
-		@pace_chart_range_values = [
-			(@your_pace[pace_chart_start] / 7.0).round(2),
-			(@your_pace[pace_chart_start + 7] / 7.0).round(2),
-			(@your_pace[pace_chart_start + 14] / 7.0).round(2),
-			(@your_pace[pace_chart_start + 21] / 7.0).round(2)]
+	@pace_chart_range_values = [
+		(@your_pace[pace_chart_start] / 7.0).round(2),
+		(@your_pace[pace_chart_start + 7] / 7.0).round(2),
+		(@your_pace[pace_chart_start + 14] / 7.0).round(2),
+		(@your_pace[pace_chart_start + 21] / 7.0).round(2)]
 
 		@initial_repetition_labels = Array.new(@book_repetitions[@last_book_read].size-1){|i| "Chapter " + String(i+1)}
 		@initial_repetition_labels.unshift(@last_book_read)
@@ -137,7 +137,7 @@ class DashboardController < ApplicationController
 	def see_book_percent_read
 		@book_percentages = {}
 		bible_books.each do |book|
-			chapters_read = UserShadowing.where(user_id: @user, book: book).take.shadowing.count
+			chapters_read = UserShadowing.where(user_id: @user, book: book).take.shadowing.uniq.count
 			@book_percentages[book] = (chapters_read.to_f/Chapter.where(book: book).count() * 100.0).round(2)
 		end
 	end
