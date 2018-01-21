@@ -53,7 +53,7 @@ class ProfileController < ApplicationController
       redirect_to action: "show", controller: "profile"
     else
       year = DateTime.now.year
-      new_lifetime = Count.create(year: 0, count: 0)
+      new_lifetime = Count.create!(year: 0, count: 0)
       current_annual = Count.create!(year: Time.now.year, count: 0)
       @user = User.create(
         name: input_name,
@@ -93,8 +93,6 @@ class ProfileController < ApplicationController
       ministry: ministry,
       lifetime_count: new_lifetime
     )
-    ministry.members << @user
-    peer_class.members << @user
     session[:uid] = @user.id
 
   end
