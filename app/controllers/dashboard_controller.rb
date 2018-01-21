@@ -84,6 +84,25 @@ class DashboardController < ApplicationController
 	end
 
 	def generate_top_10
+    @beginning_of_week = Date.today.beginning_of_week
+    @beginning_of_month = Date.today.beginning_of_month
+    @top_10_week = Array.new()
+    @top_10_month = Array.new()
+
+    top_10_week_id_count = ReadEvent.where("read_at >= ?", @beginning_of_week).group(:user_id).count.sort_by{|uid, week_count| week_count}.reverse[0...10]
+    top_10_week_id_count.each do |uid, count|
+      user = User.find(uid)
+      entry = {"gender" => user.gender, "count" => count, "ministry" => user.ministry.name}
+      @top_10_week.append(entry)
+    end
+
+    top_10_month_id_count = ReadEvent.where("read_at >= ?", @beginning_of_month).group(:user_id).count.sort_by{|uid, month_count| month_count}.reverse[0...10]
+    top_10_month_id_count.each do |uid, count|
+      user = User.find(uid)
+      entry = {"gender" => user.gender, "count" => count, "ministry" => user.ministry.name}
+      @top_10_month.append(entry)
+    end
+
 		@top_10 = Array.new(10)
 		top_10_ids = Count.where(year: Date.today.year).order(:count).reverse_order.limit(10).pluck(:id)
 		User.all.each do |user|
