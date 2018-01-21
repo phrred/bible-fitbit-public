@@ -1,9 +1,9 @@
 <div style="text-align:center">
       <div style="display:inline-block">
-		Top 10 Individual Leaderboard for <%= Date.today.year %>
+		Top 10 Individual Leaderboard for this week. 
 		<table>
 		<% i = 1 %>
-		<% @top_10.each do |ranker| %>
+		<% @top_10_week.each do |ranker| %>
 			<% if ranker.nil? %>
 			<% break %>
 			<% end %>

@@ -55,6 +55,8 @@ class DashboardController < ApplicationController
  		generate_your_percentile()
  		generate_top_10()
 
+    
+
 		pace_chart_start = Date.today.beginning_of_week - 21
 		while !@your_pace.key?(pace_chart_start)
 			pace_chart_start += 7
@@ -75,10 +77,30 @@ class DashboardController < ApplicationController
 		@initial_repetition_labels.unshift(@last_book_read)
 	end
 
+  def _insert_into_top_10(top_10, user, count)
+      (0..9).each do |i|
+        if top_10[i] == nil or top_10[:count] < count 
+          entry = {"gender" => user.gender, "count" => count, "ministry" => user.ministry.name}
+          top_10.insert(i, entry)[0...-1]
+          break
+        end
+      end
+  end
+
 	def generate_top_10
+    @beginning_of_week = Date.today.beginning_of_week
+    @beginning_of_month = Date.today.beginning_of_month
+    @top_10_week = Array.new()
+    @top_10_month = Array.new()
+
 		@top_10 = Array.new(10)
 		top_10_ids = Count.where(year: Date.today.year).order(:count).reverse_order.limit(10).pluck(:id)
 		User.all.each do |user|
+      week_count = ReadEvent.where("user_id=? AND read_at >= ?", @user.id, @beginning_of_week).count
+      month_count = ReadEvent.where("user_id=? AND read_at >= ?", @user.id, @beginning_of_month).count
+      _insert_into_top_10(@top_10_week, user, week_count)
+      _insert_into_top_10(@top_10_month, user, month_count)
+
 			user.annual_counts.each do |count_id|
 				rank = top_10_ids.index(count_id)
 				if !rank.nil? && rank != -1
