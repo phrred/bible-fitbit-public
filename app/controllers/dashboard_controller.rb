@@ -17,8 +17,7 @@ class DashboardController < ApplicationController
 	def show
 		config_dashboard()
 
-    now = Time.new
-    @year = now.year
+    @year = Time.now.year
     @lifetime_count = @user.lifetime_count.count
     @annual_count = @user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == @year}[0].count
 
