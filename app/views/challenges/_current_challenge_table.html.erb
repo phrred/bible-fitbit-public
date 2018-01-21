@@ -33,6 +33,18 @@
              <div>
                <b> Challenge Dates:&nbsp</b><%= challenge.start_time.strftime('%a %b %d %Y')%> - <%= (challenge.end_time-1).strftime('%a %b %d %Y')%>
              </div>
+             <div>
+                <b> Chapters You've Read For This Challenge:&nbsp</b><%= @my_contributions[challenge]%>
+             </div>
+             <div>
+                <b> Valid Books:&nbsp</b><%= challenge.valid_books.nil? ? "All" : challenge.valid_books.join(', ') %>
+             </div>
+              <div>
+                <b> Your Team:&nbsp</b><%= challenge.your_team.include?(@user_id) ? @challenge_users[challenge][1].join(', ') : @challenge_users[challenge][0].join(', ') %>
+             </div>
+             <div>
+                <b> Opp Team:&nbsp</b><%= challenge.your_team.include?(@user_id) ? @challenge_users[challenge][0].join(', ') : @challenge_users[challenge][1].join(', ') %>
+             </div>
             </div>
           </div>
         </div>

@@ -213,6 +213,9 @@ class ChallengesController < ApplicationController
 	end
 
 	def initialize_chart_data(challenge)
+		@challenge_users[challenge] = []
+		@challenge_users[challenge].push(challenge.your_team.map{|u| User.find(u).name})
+		@challenge_users[challenge].push(challenge.opp_team.map{|u| User.find(u).name})
 		date = challenge.start_time
 		@chart_data[challenge] = {}
 		while date.saturday? != true
@@ -230,9 +233,12 @@ class ChallengesController < ApplicationController
 		user_id = session[:user_id]
 		@user = User.where(id: user_id).take
 		monday = Date.today.beginning_of_week
+		@my_contributions = {}
 		@chart_data = {}
+		@challenge_users = {}
 		ChallengeReadEntry.where(user: @user, accepted: true).each do |challenge_read_entry|
 			challenge = challenge_read_entry.challenge
+			@my_contributions[challenge] = challenge_read_entry.chapters.size
 			if challenge.winner.nil?
 				initialize_chart_data(challenge)
 				sender_group = challenge.your_team
