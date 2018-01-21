@@ -16,6 +16,14 @@ class DashboardController < ApplicationController
 
 	def show
 		config_dashboard()
+
+    @year = Time.now.year
+    @lifetime_count = @user.lifetime_count.count
+    @annual_count = @user.annual_counts.map { |c| Count.find(c) }.select{ |c| c.year == @year}[0].count
+
+    @beginning_of_week = Date.today.beginning_of_week
+    @count = ReadEvent.where("user_id=? AND read_at >= ?", @user.id, @beginning_of_week).count
+
     group1_model = current_user().ministry
     @group1 = group1_model.name
     if @group1.downcase == "berkeley college"
