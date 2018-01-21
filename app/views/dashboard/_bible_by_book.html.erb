@@ -1,0 +1,47 @@
+<canvas id="bible_by_book_chart" width="800"></canvas>
+<script>
+	var initial_labels = <%= bible_books.to_json.html_safe %>;
+	var initial_data = <%= @book_percentages.values %>;
+	var book_repetitions_chart = new Chart(document.getElementById("bible_by_book_chart"), {
+	    type: 'bar',
+	    data: {
+	      labels: initial_labels,
+	      datasets: [
+	        {
+	          label: "What percent read",
+	          backgroundColor: ["#45B39D"],
+	          data: initial_data
+	        }
+	      ]
+	    },
+	    options: {
+	      legend: { display: false },
+	      title: {
+	        display: true,
+	        text: 'What percent of each book you have read'
+	      },
+	      scales: {
+			xAxes: [{
+		      id: 'x-axis-0',
+		      ticks: {
+		      	min: 0,
+		      	max: 10,
+		        beginAtZero:true,
+		        stepSize: 1
+	    		}
+		    }],
+		    yAxes: [{
+		    	scaleLabel: {
+	    		display: true,
+			      labelString: "Percent Read"
+		    	},
+	    	 ticks: {
+		      	min: 0,
+		        beginAtZero:true,
+		        stepSize: 10,
+		        suggestedMax: <%=100%>
+	    		},
+		    }]
+	    }}
+	});
+</script>

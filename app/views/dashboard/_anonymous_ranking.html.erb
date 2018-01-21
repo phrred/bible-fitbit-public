@@ -10,7 +10,7 @@
 			<tr bgcolor=<%= ranker["gender"] ? "#AED6F1".to_json.html_safe : "#FF83FF".to_json.html_safe %> >
 				<td bgcolor=<%= ranker["gender"] ? "#AED6F1".to_json.html_safe : "#FF83FF".to_json.html_safe %>> 
 					<div style='display: block; height: 20px; width: 200px; background: <%= ranker["gender"] ? "#AED6F1".to_json.html_safe : "#FF83FF".to_json.html_safe %>'>
-						<%= i.to_s + ". " + ranker['ministry'] %>
+						<%= i.to_s + ". " + (ranker["gender"] ? "A Brother in " : "A Sister in ") + ranker['ministry'] %>
 						<% i += 1 %>
 					</div>
 				</td>
