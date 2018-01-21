@@ -55,8 +55,6 @@ class DashboardController < ApplicationController
  		generate_your_percentile()
  		generate_top_10()
 
-    
-
 		pace_chart_start = Date.today.beginning_of_week - 21
 		while !@your_pace.key?(pace_chart_start)
 			pace_chart_start += 7
