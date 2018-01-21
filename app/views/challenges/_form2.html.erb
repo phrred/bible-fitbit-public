@@ -1,0 +1,23 @@
+<script>
+	$(document).read(function)() { $("#your_team")}.select2(); });
+	$(document).read(function)() { $("#opp_team")}.select2(); });
+    $(document).ready(function() { $("#books").select2(); });
+</script>
+<%= simple_form_for @new_challenge, url: create2_path, :method => :post, remote: true, html: {id: "form"} do |f| %>
+  <%= f.input :title, :label => "Challenge Name", :placeholder => "Default: Group 1 vs Group 2", input_html: {id: "challenge_title"} %>
+  <p class="strong">Please begin by inputting your side of the challenge.</p>
+	<%= f.input :your_team, collection: @all_da_users, :label => 'Choose who you would like to be on your team', value_method: lambda { |obj| return obj[:id] }, selected: nil, input_html: {multiple: "multiple", id: "your_team"}%>
+	<br>
+	<p class="strong">Now enter your opponents information.</p>
+	<%= f.input :opp_team, collection: @all_da_users, :label => "Your opponent's ministry group", value_method: lambda { |obj| return obj[:id] }, selected: nil, input_html: {multiple: "multiple", id: "opp_team"}%>
+
+  	<%= f.input :valid_books, collection: @books, :label => "Would you like to limit which books are allowed? If not, do not select any", label_method: lambda {|obj| return obj[:book]},value_method: lambda {|obj| return obj[:book]}, input_html: { multiple: "multiple", id: "books" }, selected: nil%>
+	<br>
+	<br>
+  <div style="display:flex; align-items: center;">
+  	<%= f.button :submit,  data: { disable_with: false }, class: 'Button' %>
+    <% if @warning %>
+      <div style="margin-left: 20px; color: #D1495B;"><i class="fa fa-exclamation-circle" style="margin-right: 7.5px;"></i><%= @warning %></div>
+    <% end %>
+  </div>
+<% end %>
